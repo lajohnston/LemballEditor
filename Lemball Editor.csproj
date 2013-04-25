@@ -1,0 +1,324 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B148C6F3-DDA0-4A56-AD95-54412D619278}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>LemballEditor</RootNamespace>
+    <AssemblyName>Lemball Editor</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <StartupObject>LemballEditor.Program</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="VsrCompiler, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\VsrCompiler.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="app\views\LevelBrowser\LevelBrowser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelBrowser\LevelBrowser.Designer.cs">
+      <DependentUpon>LevelBrowser.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\LevelBrowser\LevelGroupItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelBrowser\LevelGroupSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelBrowser\MoveLevel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelBrowser\MoveLevel.Designer.cs">
+      <DependentUpon>MoveLevel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\LevelPackProperties\LevelPackProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelPackProperties\LevelPackProperties.Designer.cs">
+      <DependentUpon>LevelPackProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\LevelProperties\EditLevelProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelProperties\LevelProperties.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="app\views\LevelProperties\LevelProperties.Designer.cs">
+      <DependentUpon>LevelProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\LevelProperties\NumericalTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\EditConnectionsMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\NodeEditMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\MovingObjectMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\TileEditMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\HoldingObjectMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\PlacingNewObjectMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\EditingMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\EditingModes\DefaultMode.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\ImageCache.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\AmmoGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\BalloonGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\BalloonPostGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\ChangeLiftArea.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\ObjectGraphics\ChangeLiftArea.Designer.cs">
+      <DependentUpon>ChangeLiftArea.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\Level\ObjectGraphics\CatapultGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\NodeGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\SwitchGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\RotatableObjectGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\MovingObjectGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\MineGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\LeverGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\GateGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\FlagGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\EnemyGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\EntranceGraphic.cs" />
+    <Compile Include="app\views\Level\ObjectGraphics\LiftGraphic.cs" />
+    <Compile Include="app\views\Level\MapPanelInputHandling.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\MapPanelIsoConversions.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\ObjectPalette\ObjectListItem.cs" />
+    <Compile Include="app\views\ObjectPalette\ObjectsList.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="app\views\ObjectPalette\ObjectsList.Designer.cs">
+      <DependentUpon>ObjectsList.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\Settings\Settings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="app\views\Settings\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\TilePalette\TilePaletteSelector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="app\views\TilePalette\TilePaletteSelector.Designer.cs">
+      <DependentUpon>TilePaletteSelector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\views\TilePalette\TilePaletteIcon.cs" />
+    <Compile Include="app\views\TilePalette\TilePalette.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\Level\ObjectGraphics\ObjectGraphic.cs" />
+    <Compile Include="app\models\LevelGroup.cs" />
+    <Compile Include="app\models\LevelPack.cs" />
+    <Compile Include="app\models\Level.cs" />
+    <Compile Include="app\models\LevelCompiler.cs" />
+    <Compile Include="app\models\LevelPackFullException.cs" />
+    <Compile Include="app\models\Objects\Ammo.cs" />
+    <Compile Include="app\models\Objects\Balloons\BlueBalloon.cs" />
+    <Compile Include="app\models\Objects\Balloons\GreenBalloon.cs" />
+    <Compile Include="app\models\Objects\Balloons\RedBalloon.cs" />
+    <Compile Include="app\models\Objects\Balloons\YellowBalloon.cs" />
+    <Compile Include="app\models\Objects\Catapult.cs" />
+    <Compile Include="app\models\Objects\Balloons\Balloon.cs" />
+    <Compile Include="app\models\Objects\Balloons\BalloonPost.cs" />
+    <Compile Include="app\models\Objects\Gate.cs" />
+    <Compile Include="app\models\Objects\Lift.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\models\Objects\RotatableObject.cs" />
+    <Compile Include="app\models\Objects\Lever.cs" />
+    <Compile Include="app\models\Objects\MovingObject.cs" />
+    <Compile Include="app\models\Objects\MovingPlatform.cs" />
+    <Compile Include="app\models\Objects\Node.cs" />
+    <Compile Include="app\models\Objects\Enemy.cs" />
+    <Compile Include="app\models\Objects\RedFlag.cs" />
+    <Compile Include="app\models\Objects\Flag.cs" />
+    <Compile Include="app\models\Objects\Mine.cs" />
+    <Compile Include="app\models\Objects\Entrance.cs" />
+    <Compile Include="app\models\Objects\LevelObject.cs" />
+    <Compile Include="app\models\Objects\Switch.cs" />
+    <Compile Include="app\models\TileCoordinate.cs" />
+    <Compile Include="app\views\Level\TileImage.cs" />
+    <Compile Include="app\views\Level\MapPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="app\views\MainInterface.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="app\views\MainInterface.Designer.cs">
+      <DependentUpon>MainInterface.cs</DependentUpon>
+    </Compile>
+    <Compile Include="app\models\MapTile.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="app\views\LevelBrowser\LevelBrowser.resx">
+      <DependentUpon>LevelBrowser.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\LevelPackProperties\LevelPackProperties.resx">
+      <DependentUpon>LevelPackProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\LevelProperties\LevelProperties.resx">
+      <DependentUpon>LevelProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\MainInterface.resx">
+      <DependentUpon>MainInterface.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\Level\ObjectGraphics\ChangeLiftArea.resx">
+      <DependentUpon>ChangeLiftArea.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\ObjectPalette\ObjectsList.resx">
+      <DependentUpon>ObjectsList.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\Settings\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="app\views\TilePalette\TilePaletteSelector.resx">
+      <DependentUpon>TilePaletteSelector.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\mouseOverTile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\nullTile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="assets\nullObjectImage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\blankLevel.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\selectedTile.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

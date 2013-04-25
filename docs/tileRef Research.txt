@@ -1,0 +1,10 @@
+uint{16}	tileRef1
+uint{16}	tileRef2
+
+tileRef 1 is always 0x09 or 0x0A, except for Mayhem level_02 ('Vortex') which is 0x07 and Taxing level_15 which is 0x06
+
+
+Grass can be 9 or 10
+Lego can be 7, 9 or 10
+Snow can be 6, 9, or 10
+Space can be 9 or 10

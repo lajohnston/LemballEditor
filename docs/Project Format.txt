@@ -1,0 +1,19 @@
+char{4}		'LPPR'
+
+uint{4}		compiler version (major, year, month, release)
+
+xml block	// Contains the XML level pack
+{
+uint{4}		size of uncompressed xml data in bytes
+uint{4}		size of data block in bytes
+data{}		compressed xml data
+char{4}		' END'
+}
+
+tile data	// contains levels as XML files
+{
+uint{4}		size of uncompressed xml data in bytes
+uint{4}		size of data block in bytes
+data{}		compressed tile data
+char{4}		' END'
+}

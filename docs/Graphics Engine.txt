@@ -1,0 +1,12 @@
+Current Engine:
+
+Each tile:
+MapPanel asks Level for list of objects that should be drawn on a particular tile
+Level asks each object whether it is overlapping the tile, and if so adds it to the list.
+MapPanel tells object to draw itself. It gets its isoPosition, converts it to a screenPosition, then sends this data to the object to draw itself
+
+
+New system:
+Each tile:
+MapPanel asks Level for list of objects that should be drawn on a particular tile
+Level asks each object for a 'DrawnObject' object. If the object overlaps a particular tile, the LevelObject returns this DrawnObject object which contains a bitmap of the object and its draw offset in relation to the specified tile
