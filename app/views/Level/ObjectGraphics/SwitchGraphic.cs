@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
+﻿using LemballEditor.Model;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
@@ -10,23 +6,17 @@ namespace LemballEditor.View.Level.ObjectGraphics
     /// <summary>
     /// Represents a drawn entrance
     /// </summary>
-    abstract class SwitchGraphic : ObjectGraphic
+    internal abstract class SwitchGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        protected abstract Switch SwitchObject { get;}
+        protected abstract Switch SwitchObject { get; }
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get
-            {
-                return SwitchObject;
-            }
-        }
+        public override LevelObject LevelObject => SwitchObject;
 
         /// <summary>
         /// 
@@ -52,7 +42,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
                 MainInterface.StartSwitchConnectionMode(SwitchObject);
             };
 
-            menu.MenuItems.Add(addConnection);
+            _ = menu.MenuItems.Add(addConnection);
         }
     }
 }

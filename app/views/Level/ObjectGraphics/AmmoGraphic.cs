@@ -1,56 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn entrance
     /// </summary>
-    class AmmoGraphic : ObjectGraphic
+    internal class AmmoGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Ammo ammo;
+        private readonly Ammo ammo;
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return ammo; }
-        }
+        public override LevelObject LevelObject => ammo;
 
         /// <summary>
         /// The object's image
         /// </summary>
-        private static Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("ammo");
+        private static readonly Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("ammo");
 
         /// <summary>
         /// Accessor to the object image
         /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image;
-            }
-        }
+        public override Bitmap Image => image;
 
         /// <summary>
         /// The draw offset of the object's graphic
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(4, 11);
-            }
-        }
+        public override Point DrawOffset => new Point(4, 11);
 
         /// <summary>
         /// 

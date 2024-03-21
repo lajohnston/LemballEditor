@@ -1,11 +1,8 @@
-﻿using System;
+﻿using LemballEditor.View;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using LemballEditor.Model;
 using System.Xml;
-using LemballEditor.View;
-using LemballEditor.View.Level;
-using System.Windows.Forms;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -23,36 +20,18 @@ namespace LemballEditor.Model
         /// <summary>
         /// The number of x tiles in the map (number of tiles from top of isometric diamond to right point)
         /// </summary>
-        public int MapSizeX
-        {
-            get
-            {
-                return levelTiles.GetUpperBound(0) + 1;
-            }
-        }
+        public int MapSizeX => levelTiles.GetUpperBound(0) + 1;
 
         /// <summary>
         /// The number of y tiles in the map (tiles from the top of the isometric diamond to the left point)
         /// </summary>
-        public int MapSizeY
-        {
-            get
-            {
-                return levelTiles.GetUpperBound(1) + 1;
-            }
-        }
+        public int MapSizeY => levelTiles.GetUpperBound(1) + 1;
 
         /// <summary>
         /// Stores all the in-game objects in the level
         /// </summary>
         private List<LevelObject> levelObjects;
-        public LevelObject[] LevelObjects
-        {
-            get
-            {
-                return levelObjects.ToArray();
-            }
-        }
+        public LevelObject[] LevelObjects => levelObjects.ToArray();
 
         /// <summary>
         /// Returns the number of objects that can be added to the level
@@ -68,7 +47,9 @@ namespace LemballEditor.Model
                 foreach (LevelObject gameObject in levelObjects)
                 {
                     if (gameObject.IsIncludedInObjectLimit())
+                    {
                         count++;
+                    }
                 }
 
                 // Return the number of objects left within the limit
@@ -122,17 +103,16 @@ namespace LemballEditor.Model
         /// <summary>
         /// The level's name
         /// </summary>
-        private String name;
-        public String Name
+        private string name;
+        public string Name
         {
-            get
-            { 
-                return name;
-            }
+            get => name;
             set
             {
                 if (value.Length == 0 || value.Length > 31)
+                {
                     throw new ArgumentException();
+                }
 
                 name = value;
             }
@@ -158,13 +138,16 @@ namespace LemballEditor.Model
         /// </summary>
         private ushort FreeId
         {
-            get {
+            get
+            {
                 // Search each object until a free id value is found
                 for (ushort id = 0; id < ushort.MaxValue; id++)
                 {
                     // If object with the id doesn't exist, return the id
                     if (GetObject(id) == null)
+                    {
                         return id;
+                    }
                 }
 
                 // No free ids were found
@@ -193,7 +176,7 @@ namespace LemballEditor.Model
                 return count;
             }
         }
-        
+
         /// <summary>
         /// The types of terrain
         /// </summary>
@@ -217,8 +200,8 @@ namespace LemballEditor.Model
         /// <param name="terrainType">The terrain type of the level</param>
         public Level(TerrainTypes terrainType)
         {
-            this.TerrainType = TerrainTypes.Grass;
-            
+            TerrainType = TerrainTypes.Grass;
+
             // Create a blank map
             CreateNewMap(64, 64, 521);
 
@@ -241,8 +224,8 @@ namespace LemballEditor.Model
                 // Load level values
                 name = xmlData.GetAttribute("name");
                 SetTimeLimit(Convert.ToUInt16(xmlData.GetAttribute("time_limit")));
-                NumberOfFlagsRequiredToWin = (FlagsRequired) Enum.Parse(typeof(FlagsRequired), xmlData.GetAttribute("flags_required"));
-                TerrainType = (TerrainTypes) Enum.Parse(typeof(TerrainTypes), xmlData.GetAttribute("terrain"), true);
+                NumberOfFlagsRequiredToWin = (FlagsRequired)Enum.Parse(typeof(FlagsRequired), xmlData.GetAttribute("flags_required"));
+                TerrainType = (TerrainTypes)Enum.Parse(typeof(TerrainTypes), xmlData.GetAttribute("terrain"), true);
 
                 // Load tiles
                 int xTiles = Convert.ToInt32(xmlData.GetAttribute("xTiles"));
@@ -255,7 +238,7 @@ namespace LemballEditor.Model
             }
 
             // Load each object
-            LoadObjects((XmlElement) xmlData.SelectSingleNode("objects"));
+            LoadObjects((XmlElement)xmlData.SelectSingleNode("objects"));
         }
 
         /// <summary>
@@ -282,12 +265,12 @@ namespace LemballEditor.Model
             XmlElement objectsNode = xmlDoc.CreateElement("objects");
             foreach (LevelObject gameObject in levelObjects)
             {
-                XmlElement element = xmlDoc.CreateElement("object");
-                objectsNode.AppendChild(gameObject.CompileXml(xmlDoc));
+                _ = xmlDoc.CreateElement("object");
+                _ = objectsNode.AppendChild(gameObject.CompileXml(xmlDoc));
             }
 
             // Append objects node
-            level.AppendChild(objectsNode);
+            _ = level.AppendChild(objectsNode);
 
             // Return xml data
             return level;
@@ -305,7 +288,9 @@ namespace LemballEditor.Model
             {
                 // If the object's id matches the paramter, return the object
                 if (levelObject.Id == id)
+                {
                     return levelObject;
+                }
             }
 
             // Object wasn't found
@@ -323,10 +308,12 @@ namespace LemballEditor.Model
 
             // Set the object's id
             newObject.Id = FreeId;
-            
+
             // If the object is a balloon
             if (newObject is Balloon)
+            {
                 OnBalloonCreation((Balloon)newObject);
+            }
 
             // Update object limit counter
             MainInterface.OnObjectCountChange();
@@ -356,11 +343,12 @@ namespace LemballEditor.Model
         {
             foreach (LevelObject gameObject in gameObjects)
             {
-                if (gameObject is BalloonPost)
+                if (gameObject is BalloonPost post)
                 {
-                    BalloonPost post = (BalloonPost)gameObject;
                     if (post.Colour == colour)
+                    {
                         return post;
+                    }
                 }
             }
 
@@ -411,7 +399,7 @@ namespace LemballEditor.Model
             }
             return count;
         }
-        
+
         /// <summary>
         /// Deletes an object from the level
         /// </summary>
@@ -419,13 +407,15 @@ namespace LemballEditor.Model
         public void DeleteObject(LevelObject gameObject)
         {
             // Remove object
-            levelObjects.Remove(gameObject);
+            _ = levelObjects.Remove(gameObject);
 
             // Inform switches and pressure pads that object has been deleted
             foreach (LevelObject levelObject in levelObjects)
             {
                 if (levelObject is Switch)
+                {
                     ((Switch)levelObject).DeleteConnection(gameObject.Id);
+                }
             }
 
             // Notify GUI
@@ -447,7 +437,9 @@ namespace LemballEditor.Model
             foreach (LevelObject gameObject in levelObjects)
             {
                 if (gameObject.OverlapsTile(tileCoordinate))
+                {
                     objectsOnTile.Add(gameObject);
+                }
             }
 
             // To do: order objects based on position
@@ -470,7 +462,9 @@ namespace LemballEditor.Model
             foreach (LevelObject gameObject in levelObjects)
             {
                 if (gameObject.OverlapsTile(tileCoordinate))
+                {
                     objectsOnTile.Add(gameObject);
+                }
             }
 
             // To do: order objects based on position
@@ -487,7 +481,7 @@ namespace LemballEditor.Model
         {
             XmlDocument xmlDoc = new XmlDocument();
             XmlElement levelXml = CompileXML(xmlDoc);
-            
+
             using (MemoryStream memStream = new MemoryStream())
             {
                 BinaryEditor binary = new BinaryEditor(memStream);
@@ -508,9 +502,11 @@ namespace LemballEditor.Model
             foreach (XmlElement objectElement in objectsNode)
             {
                 LevelObject loadedObject = LevelObject.New(objectElement);
-                
+
                 if (loadedObject == null)
+                {
                     throw new InvalidDataException("Invalid object");
+                }
 
                 levelObjects.Add(loadedObject);
             }
@@ -526,7 +522,9 @@ namespace LemballEditor.Model
         {
             // Ensure tile file size matches the size of the xTile and yTile attributes
             if (xTiles * yTiles * 6 != tileData.Length)
+            {
                 throw new InvalidDataException("Invalid tile file size");
+            }
 
             // Open streams to read tile data
             using (MemoryStream tileStream = new MemoryStream(tileData))
@@ -548,7 +546,7 @@ namespace LemballEditor.Model
                         }
                     }
                 }
-            }   
+            }
         }
 
         /// <summary>
@@ -558,19 +556,13 @@ namespace LemballEditor.Model
         public void SetTimeLimit(ushort value)
         {
             // If the time limit is equal or above 10 minutes
-            if (value >= 600)
-                TimeLimit = 600;
-            else
-                TimeLimit = value;
+            TimeLimit = value >= 600 ? (ushort)600 : value;
         }
 
         public bool HasUnlimitedTimeLimit()
         {
             // If timeLimit = 600, return true, otherwise return false
-            if (TimeLimit == 600)
-                return true;
-            else
-                return false;
+            return TimeLimit == 600;
         }
 
         /// <summary>
@@ -581,10 +573,7 @@ namespace LemballEditor.Model
         /// <returns></returns>
         private MapTile GetTile(ushort xTile, ushort yTile)
         {
-            if (xTile >= MapSizeX || yTile >= MapSizeY)
-                return null;
-            else
-                return levelTiles[xTile, yTile];
+            return xTile >= MapSizeX || yTile >= MapSizeY ? null : levelTiles[xTile, yTile];
         }
 
         /// <summary>
@@ -594,10 +583,7 @@ namespace LemballEditor.Model
         /// <returns></returns>
         private MapTile GetTile(TileCoordinate coordinate)
         {
-            if (coordinate == null)
-                return null;
-            else
-                return GetTile(coordinate.xTile, coordinate.yTile);
+            return coordinate == null ? null : GetTile(coordinate.xTile, coordinate.yTile);
         }
 
         /// <summary>
@@ -643,10 +629,7 @@ namespace LemballEditor.Model
             MapTile mapTile = GetTile(tile);
 
             // If maptile doesn't exists, return 0, otherwise return it's elevation
-            if (mapTile == null)
-                return 0;
-            else
-                return mapTile.Elevation;
+            return mapTile == null ? 0 : mapTile.Elevation;
         }
 
         /// <summary>
@@ -689,11 +672,15 @@ namespace LemballEditor.Model
         {
             // Check number of tiles
             if (xSize * ySize > MAX_TILES)
+            {
                 throw new Exception("Max tiles exceeded");
+            }
 
             // Check tile dimension
             if (xSize > MAX_TILE_DIMENSION || ySize > MAX_TILE_DIMENSION)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
 
             // Map array is an array of MapTiles
@@ -738,7 +725,9 @@ namespace LemballEditor.Model
             {
                 // If object is a flag and belongs to playerOne, increment count
                 if (levelObject is Flag && ((Flag)levelObject).isPlayerOne())
-                        count++;
+                {
+                    count++;
+                }
             }
 
             // Return number of flags

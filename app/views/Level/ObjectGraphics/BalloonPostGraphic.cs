@@ -1,37 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn balloon
     /// </summary>
-    class BalloonPostGraphic : ObjectGraphic
+    internal class BalloonPostGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private BalloonPost post;
+        private readonly BalloonPost post;
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return post; }
-        }
+        public override LevelObject LevelObject => post;
 
         /// <summary>
         /// 
         /// </summary>
-        private static Bitmap bluePost = ImageCache.GetObjectImage("post_blue");
-        private static Bitmap greenPost = ImageCache.GetObjectImage("post_green");
-        private static Bitmap redPost = ImageCache.GetObjectImage("post_red");
-        private static Bitmap yellowPost = ImageCache.GetObjectImage("post_yellow");
+        private static readonly Bitmap bluePost = ImageCache.GetObjectImage("post_blue");
+        private static readonly Bitmap greenPost = ImageCache.GetObjectImage("post_green");
+        private static readonly Bitmap redPost = ImageCache.GetObjectImage("post_red");
+        private static readonly Bitmap yellowPost = ImageCache.GetObjectImage("post_yellow");
 
         /// <summary>
         /// 
@@ -59,13 +52,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// 
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(16, 38);
-            }
-        }
+        public override Point DrawOffset => new Point(16, 38);
 
         /// <summary>
         /// 

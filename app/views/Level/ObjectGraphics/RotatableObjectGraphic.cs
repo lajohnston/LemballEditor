@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
+﻿using LemballEditor.Model;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
@@ -10,7 +6,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
     /// <summary>
     /// 
     /// </summary>
-    abstract class RotatableObjectGraphic : ObjectGraphic
+    internal abstract class RotatableObjectGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
@@ -38,7 +34,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
             MenuItem rotate = new MenuItem("Rotate");
             rotate.Click += delegate { RotatableObject.Rotate(); };
 
-            menu.MenuItems.Add(rotate);
+            _ = menu.MenuItems.Add(rotate);
 
             // Add base items
             //base.AddMenuItems(menu, mapPanel.LoadedLevel);

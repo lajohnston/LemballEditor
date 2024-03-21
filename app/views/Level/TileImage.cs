@@ -1,10 +1,7 @@
-﻿using System.Text;
-using System;
+﻿using System;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Drawing.Imaging;
 using System.Xml;
-using System.IO;
 
 namespace LemballEditor.View.Level
 {
@@ -21,7 +18,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// Stores the null tile, which is returned if the tileRef does not appear in the archive
         /// </summary>
-        private static Bitmap nullTile = new Bitmap(LemballEditor.Properties.Resources.nullTile);
+        private static readonly Bitmap nullTile = new Bitmap(LemballEditor.Properties.Resources.nullTile);
 
         /// <summary>
         /// The draw offset points to the top left pixel of the 2D boundary that surrounds the isometric tile.
@@ -49,7 +46,7 @@ namespace LemballEditor.View.Level
 
             if (tileNode.HasAttribute("image_ref"))
             {
-                String imageRef = tileNode.GetAttribute("image_ref");
+                string imageRef = tileNode.GetAttribute("image_ref");
                 XmlElement referencedTile = (XmlElement)tileNode.ParentNode.SelectSingleNode("tile[@ref=" + imageRef + "]");
                 LoadImage(referencedTile);
             }
@@ -79,20 +76,24 @@ namespace LemballEditor.View.Level
             setImage(ImageCache.loadBitmap(tileNode));
 
             // Initialise the Point object that stores the draw offset of the tile
-            drawOffset = new Point(0, 0);
-
-            // Use the xOffset attribute value if present, otherwise calculate the xOffset from the image's width
-            if (tileNode.HasAttribute("xOffset"))
-                drawOffset.X = Convert.ToInt32(tileNode.GetAttribute("xOffset"));
-            else
-                drawOffset.X = (int) Math.Ceiling((decimal)(image.Width - 32) / 2);
+            drawOffset = new Point(0, 0)
+            {
+                // Use the xOffset attribute value if present, otherwise calculate the xOffset from the image's width
+                X = tileNode.HasAttribute("xOffset")
+                ? Convert.ToInt32(tileNode.GetAttribute("xOffset"))
+                : (int)Math.Ceiling((decimal)(image.Width - 32) / 2)
+            };
 
             // Use the yOffset attribute value if present, otherwise calculate the yOffset from the image's height
             if (tileNode.HasAttribute("yOffset"))
+            {
                 drawOffset.Y = Convert.ToInt32(tileNode.GetAttribute("yOffset"));
+            }
             else
+            {
                 // Calculate the yOffset automatically
                 drawOffset.Y = image.Height - 16;
+            }
         }
 
         /// <summary>
@@ -159,11 +160,8 @@ namespace LemballEditor.View.Level
         {
             int elevation = MAX_ELEVATION - image.Height + 16;
 
-            if (elevation < 0)
-                return 0;
-            else
-                return (byte) elevation;
+            return elevation < 0 ? (byte)0 : (byte)elevation;
         }
     }
-    
+
 }

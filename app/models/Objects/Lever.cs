@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
-using System.Windows.Forms;
-using System.Drawing;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -13,18 +9,12 @@ namespace LemballEditor.Model
         /// <summary>
         /// The xml node name
         /// </summary>
-        public const String XML_NODE_NAME = "switch";
+        public const string XML_NODE_NAME = "switch";
 
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.BOMG;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.BOMG;
 
         /// <summary>
         /// Creates a new switch
@@ -67,11 +57,11 @@ namespace LemballEditor.Model
             XmlElement objectElement = xmlDoc.CreateElement(XML_NODE_NAME);
 
             // Set position
-            base.CompileXml(objectElement);
+            _ = base.CompileXml(objectElement);
 
             // Create connections
             XmlElement connectionsNode = xmlDoc.CreateElement("connections");
-            objectElement.AppendChild(connectionsNode);
+            _ = objectElement.AppendChild(connectionsNode);
 
             foreach (int idref in connectedObjectIds)
             {
@@ -79,11 +69,11 @@ namespace LemballEditor.Model
                 //XmlElement connectionElement = connection.MakeXmlNode(xmlDoc);
                 XmlElement connection = xmlDoc.CreateElement("object");
                 connection.SetAttribute("idref", idref.ToString());
-                    
+
                 // Add to the connection node
-                connectionsNode.AppendChild(connection);
+                _ = connectionsNode.AppendChild(connection);
             }
-            
+
             return objectElement;
         }
 
@@ -121,7 +111,7 @@ namespace LemballEditor.Model
         protected override void CompileConnection(BinaryEditor binary, LevelObject levelObject)
         {
             // Type of object
-            int objectTypeNumber = 0;
+            int objectTypeNumber;
 
             /*
             Lift = 1,
@@ -131,13 +121,13 @@ namespace LemballEditor.Model
             */
 
             if (levelObject is Lift)
+            {
                 objectTypeNumber = 1;
-            else if (levelObject is Gate)
-                objectTypeNumber = 3;
-            else if (levelObject is MovingPlatform)
-                objectTypeNumber = 4;
+            }
             else
-                throw new NotImplementedException();
+            {
+                objectTypeNumber = levelObject is Gate ? 3 : levelObject is MovingPlatform ? 4 : throw new NotImplementedException();
+            }
 
             // Append object type number
             binary.Append((short)objectTypeNumber);
@@ -167,6 +157,6 @@ namespace LemballEditor.Model
             return highest;
         }
         */
- 
+
     }
 }

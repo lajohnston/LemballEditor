@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
+﻿using System.Drawing;
 using System.Xml;
-using System.Windows.Forms;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -14,7 +9,7 @@ namespace LemballEditor.Model
     /// </summary>
     public class Node : LevelObject
     {
-        public const String XML_NODE_NAME = "node";
+        public const string XML_NODE_NAME = "node";
 
         /// <summary>
         /// The maximum number of nodes that can exist for each level
@@ -24,13 +19,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.EDON;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.EDON;
 
         public Node(ushort isoX, ushort isoY)
             : base(0, isoX, isoY)
@@ -48,9 +37,9 @@ namespace LemballEditor.Model
 
         public void ShiftPosition(uint isoX, uint isoY)
         {
-            Point newPosition = new Point (
-                (int) (IsoPosition.X + isoX),
-                (int) (IsoPosition.Y + isoY)
+            Point newPosition = new Point(
+                (int)(IsoPosition.X + isoX),
+                (int)(IsoPosition.Y + isoY)
                 );
 
             base.IsoPosition = newPosition;

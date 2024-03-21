@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
@@ -10,47 +7,32 @@ namespace LemballEditor.View.Level.ObjectGraphics
     /// <summary>
     /// Represents a drawn entrance
     /// </summary>
-    class EntranceGraphic : ObjectGraphic
+    internal class EntranceGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Entrance entrance;
+        private readonly Entrance entrance;
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return entrance; }
-        }
+        public override LevelObject LevelObject => entrance;
 
         /// <summary>
         /// The object's image
         /// </summary>
-        private static Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("entrance");
+        private static readonly Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("entrance");
 
         /// <summary>
         /// Accessor to the object image
         /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image;
-            }
-        }
+        public override Bitmap Image => image;
 
         /// <summary>
         /// The entrance's draw offset
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(48, 116);
-            }
-        }
+        public override Point DrawOffset => new Point(48, 116);
 
         /// <summary>
         /// 
@@ -81,7 +63,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
             {
                 // Add the number to the menu item
                 MenuItem value = new MenuItem(i.ToString());
-                lemmings.MenuItems.Add(value);
+                _ = lemmings.MenuItems.Add(value);
 
                 // The number of lemmings this menu item represents
                 switch (i)
@@ -113,7 +95,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
                 }
             }
 
-            menu.MenuItems.Add(lemmings);
+            _ = menu.MenuItems.Add(lemmings);
         }
 
 

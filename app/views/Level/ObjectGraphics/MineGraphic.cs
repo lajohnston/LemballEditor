@@ -1,56 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn enemy
     /// </summary>
-    class MineGraphic : ObjectGraphic
+    internal class MineGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Mine mine;
+        private readonly Mine mine;
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return mine; }
-        }
+        public override LevelObject LevelObject => mine;
 
         /// <summary>
         /// The object's image
         /// </summary>
-        private static Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("mine");
+        private static readonly Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("mine");
 
         /// <summary>
         /// Accessor to the object image
         /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image;
-            }
-        }
+        public override Bitmap Image => image;
 
         /// <summary>
         /// 
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(2, 3);
-            }
-        }  
+        public override Point DrawOffset => new Point(2, 3);
 
         /// <summary>
         /// 

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
 namespace LemballEditor.View
 {
@@ -14,25 +11,13 @@ namespace LemballEditor.View
             /// </summary>
             public Model.LevelGroupTypes SelectedLevelGroup
             {
-                get
-                {
-                    return ((LevelGroupItem)SelectedItem).LevelGroupType;
-                }
-                set
-                {
-                    SelectedIndex = (int)value;
-                }
+                get => ((LevelGroupItem)SelectedItem).LevelGroupType;
+                set => SelectedIndex = (int)value;
             }
 
             public override int SelectedIndex
             {
-                set
-                {
-                    if (value > -1 && value < (int)Model.LevelGroupTypes.Mayhem)
-                        base.SelectedIndex = value;
-                    else
-                        base.SelectedIndex = 0;
-                }
+                set => base.SelectedIndex = value > -1 && value < (int)Model.LevelGroupTypes.Mayhem ? value : 0;
             }
 
             /// <summary>
@@ -44,10 +29,10 @@ namespace LemballEditor.View
                 DropDownStyle = ComboBoxStyle.DropDownList;
 
                 // Add level groups
-                Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Fun));
-                Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Tricky));
-                Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Taxing));
-                Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Mayhem));
+                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Fun));
+                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Tricky));
+                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Taxing));
+                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Mayhem));
 
                 // Select the Fun level group
                 SelectedIndex = 0;

@@ -1,32 +1,23 @@
-﻿using System;
+﻿using LemballEditor.Model;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Windows.Forms;
-using LemballEditor.View.Level.ObjectGraphics;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private class EditConnectionsMode : EditingMode
         {
             /// <summary>
             /// The switch that is having its connections edited
             /// </summary>
-            private Switch switchObject;
+            private readonly Switch switchObject;
 
             /// <summary>
             /// The objects connected to the switch
             /// </summary>
-            private List<LevelObject> ConnectedObjects
-            {
-                get
-                {
-                    return Program.LoadedLevel.GetObjectsConnectedToSwitch(switchObject);  
-                }
-            }
+            private List<LevelObject> ConnectedObjects => Program.LoadedLevel.GetObjectsConnectedToSwitch(switchObject);
 
             /// <summary>
             /// The idref of the object whose connection to the switch is selected
@@ -122,10 +113,10 @@ namespace LemballEditor.View.Level
                         MenuItem connect = new MenuItem("Add connection this object");
                         connect.Click += delegate
                         {
-                            switchObject.AddConnection(levelObject);
+                            _ = switchObject.AddConnection(levelObject);
                         };
 
-                        menu.MenuItems.Add(connect);
+                        _ = menu.MenuItems.Add(connect);
                     }
                     else
                     {
@@ -135,19 +126,23 @@ namespace LemballEditor.View.Level
                             switchObject.DeleteConnection(levelObject.Id);
 
                             if (levelObject.Id == SelectedConnectionIdref)
+                            {
                                 SelectedConnectionIdref = null;
+                            }
                         };
 
-                        menu.MenuItems.Add(delete);
+                        _ = menu.MenuItems.Add(delete);
                     }
                 }
-                    // If object cannot be connect to
+                // If object cannot be connect to
                 else
                 {
                     // Display disable menu item
-                    MenuItem cannotConnect = new MenuItem("Cannot connect to this type of object");
-                    cannotConnect.Enabled = false;
-                    menu.MenuItems.Add(cannotConnect);
+                    MenuItem cannotConnect = new MenuItem("Cannot connect to this type of object")
+                    {
+                        Enabled = false
+                    };
+                    _ = menu.MenuItems.Add(cannotConnect);
                 }
 
                 // Show menu
@@ -166,12 +161,12 @@ namespace LemballEditor.View.Level
                 // Detect each connection
                 foreach (LevelObject levelObject in ConnectedObjects)
                 {
-                    if (LineIntersectsRectangle (
+                    if (LineIntersectsRectangle(
                             switchPos,
                             mapPanel.ConvertIsoXYtoScreenXY(levelObject.IsoPosition),
-                            new Rectangle (
-                                position.X - CLICK_AREA / 2,
-                                position.Y - CLICK_AREA / 2,
+                            new Rectangle(
+                                position.X - (CLICK_AREA / 2),
+                                position.Y - (CLICK_AREA / 2),
                                 CLICK_AREA,
                                 CLICK_AREA)
                           )
@@ -203,7 +198,7 @@ namespace LemballEditor.View.Level
                 };
 
                 // Add exit button to menu
-                menu.MenuItems.Add(exit);
+                _ = menu.MenuItems.Add(exit);
 
                 // Show menu
                 menu.Show(Program.MainInterface, position);
@@ -247,11 +242,7 @@ namespace LemballEditor.View.Level
                 foreach (LevelObject levelObject in ConnectedObjects)
                 {
                     // Determine what pen to use to draw the connection, depending on whether it is selected or not
-                    Pen pen = null;
-                    if (levelObject.Id == SelectedConnectionIdref)
-                        pen = selected;
-                    else
-                        pen = unselected;
+                    Pen pen = levelObject.Id == SelectedConnectionIdref ? selected : unselected;
 
                     // Draw line
                     g.DrawLine(pen, switchPos, mapPanel.ConvertIsoXYtoScreenXY(levelObject.IsoPosition));
@@ -269,7 +260,7 @@ namespace LemballEditor.View.Level
             {
                 // Get the object the mouse is over, if any
                 LevelObject mouseOverObject = mapPanel.GetObjectMouseIsOver(mapPanel.CursorPosition);
-                
+
                 // The default pen to use to draw the new connection
                 Pen pen = new Pen(Color.White, 3);
 
@@ -310,19 +301,27 @@ namespace LemballEditor.View.Level
 
                 // Top
                 if (LinesIntersect(a0, a1, tl, tr))
+                {
                     return true;
+                }
 
                 // Bottom
                 if (LinesIntersect(a0, a1, bl, br))
+                {
                     return true;
+                }
 
                 // Left side
                 if (LinesIntersect(a0, a1, tl, bl))
+                {
                     return true;
+                }
 
                 // Right side
                 if (LinesIntersect(a0, a1, tr, br))
+                {
                     return true;
+                }
 
                 // No intersection
                 return false;
@@ -345,8 +344,8 @@ namespace LemballEditor.View.Level
                 // detM = determinant of M, the matrix whose elements are
                 // the coefficients of the parametric equations of lines
                 // containing segments A and B.
-                int detM = (a1.X - a0.X) * (b1.Y - b0.Y)
-                         - (b1.X - b0.X) * (a1.Y - a0.Y);
+                int detM = ((a1.X - a0.X) * (b1.Y - b0.Y))
+                         - ((b1.X - b0.X) * (a1.Y - a0.Y));
 
                 // special case: A and B are parallel.
                 // when A and B are parallel, 
@@ -359,21 +358,26 @@ namespace LemballEditor.View.Level
                     {
                         // true if A and B are in the same vertical line.
                         if (a0.X == b0.X)
+                        {
                             // true when some bounds on Ay 
                             // are in the bounds of By.
                             return (b0.Y <= a0.Y && a0.Y <= b1.Y)
                                    || (b0.Y <= a1.Y && a1.Y <= b1.Y);
+                        }
 
                         // different vertical lines, no intersection.
-                        else return false;
+                        else
+                        {
+                            return false;
+                        }
                     }
 
                     // for parallel lines to overlap, they need the 
                     // same y-intercept. integer relations to 
                     // y-intercepts of A and B are as follows.
-                    int a_offset = ((a1.X - a0.X) * a0.Y - (a1.Y - a0.Y) * a0.X)
+                    int a_offset = (((a1.X - a0.X) * a0.Y) - ((a1.Y - a0.Y) * a0.X))
                                * (b1.X - b0.X);
-                    int b_offset = ((b1.X - b0.X) * b0.Y - (b1.Y - b0.Y) * b0.X)
+                    int b_offset = (((b1.X - b0.X) * b0.Y) - ((b1.Y - b0.Y) * b0.X))
                                * (a1.X - a0.X);
 
                     // true only when A_y_intercept == B_y_intercept.
@@ -386,22 +390,24 @@ namespace LemballEditor.View.Level
                     }
                     // different y intercepts; no intersection.
                     else
+                    {
                         return false;
+                    }
                 }
 
                 // nMitc[0] = numerator_of_M_inverse_times_c0
                 // nMitc[1] = numerator_of_M_inverse_times_c1
                 int[] nMitc = {
-                    (b0.X - a0.X) * (b1.Y - b0.Y) + (b0.Y - a0.Y) * (b0.X - b1.X),
-                    (b0.X - a0.X) * (a0.Y - a1.Y) + (b0.Y - a0.Y) * (a1.X - a0.X)
+                    ((b0.X - a0.X) * (b1.Y - b0.Y)) + ((b0.Y - a0.Y) * (b0.X - b1.X)),
+                    ((b0.X - a0.X) * (a0.Y - a1.Y)) + ((b0.Y - a0.Y) * (a1.X - a0.X))
                 };
 
                 // true if an intersection between two non-parallel lines
                 // occurs between the given segment points.
-                return ((0 <= nMitc[0] && nMitc[0] <= detM)
-                        && (0 >= nMitc[1] && nMitc[1] >= -detM)) ||
-                       ((0 >= nMitc[0] && nMitc[0] >= detM)
-                        && (0 <= nMitc[1] && nMitc[1] <= -detM));
+                return (0 <= nMitc[0] && nMitc[0] <= detM
+                        && 0 >= nMitc[1] && nMitc[1] >= -detM) ||
+                       (0 >= nMitc[0] && nMitc[0] >= detM
+                        && 0 <= nMitc[1] && nMitc[1] <= -detM);
             }
 
         }

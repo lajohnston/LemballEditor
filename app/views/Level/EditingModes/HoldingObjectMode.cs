@@ -1,28 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LemballEditor.Model;
-using System.Drawing;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level.ObjectGraphics;
+using System.Drawing;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private abstract class HoldingObjectMode : EditingMode
         {
             /// <summary>
             /// 
             /// </summary>
-            public LevelObject selectedObject 
-            {
-                get
-                {
-                    return selectedObjectImage.LevelObject;
-                }
-            }
+            public LevelObject selectedObject => selectedObjectImage.LevelObject;
 
-            public ObjectGraphic selectedObjectImage { get; private set;}
+            public ObjectGraphic selectedObjectImage { get; private set; }
 
             /// <summary>
             /// 
@@ -34,7 +25,7 @@ namespace LemballEditor.View.Level
             {
                 //this.selectedObject = levelObject;
 
-                this.selectedObjectImage = objectImage;
+                selectedObjectImage = objectImage;
 
             }
 

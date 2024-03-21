@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
+﻿using LemballEditor.Model;
+using System;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
@@ -10,17 +7,14 @@ namespace LemballEditor.View.Level.ObjectGraphics
     /// <summary>
     /// Represents a drawn entrance
     /// </summary>
-    abstract class MovingObjectGraphic : ObjectGraphic
+    internal abstract class MovingObjectGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
         protected abstract MovingObject MovingObject { get; }
 
-        public override LevelObject LevelObject
-        {
-            get { return MovingObject; }
-        }
+        public override LevelObject LevelObject => MovingObject;
 
         /// <summary>
         /// 
@@ -42,7 +36,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
             MenuItem editPath = new MenuItem("Edit path");
             editPath.Click += new EventHandler(editPath_Click);
 
-            menu.MenuItems.Add(editPath);
+            _ = menu.MenuItems.Add(editPath);
         }
 
         /// <summary>

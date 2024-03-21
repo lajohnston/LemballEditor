@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.View.Level;
+﻿using System.Drawing;
 
 namespace LemballEditor.View
 {
@@ -10,7 +6,7 @@ namespace LemballEditor.View
     /// Represents an icon in a tile palette. Handles the drawing of the tile, its highlighting
     /// if it is selected, and whether it has been clicked on.
     /// </summary>
-    class TilePaletteIcon 
+    internal class TilePaletteIcon
     {
         /// <summary>
         /// The icon's position and visible size
@@ -20,7 +16,7 @@ namespace LemballEditor.View
         /// <summary>
         /// The tileRef the icon points to
         /// </summary>
-        private uint tileRef;
+        private readonly uint tileRef;
 
         /// <summary>
         /// Creates a new TilePaletteIcon with the specified area and tileRef
@@ -58,7 +54,7 @@ namespace LemballEditor.View
         /// </summary>
         /// <param name="g">The graphics object to draw on</param>
         /// <param name="isSelected">Indicates whether the current icon is selected</param>
-        
+
         /*
         public void draw(Graphics g, bool isSelected)
         {

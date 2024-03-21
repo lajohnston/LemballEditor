@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level.ObjectGraphics;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         /// <summary>
         /// Whether the left mouse button is being held
@@ -53,30 +52,18 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The keys that were being held at the last update
         /// </summary>
-        private List<Keys> heldKeys;
+        private readonly List<Keys> heldKeys;
 
         /// <summary>
         /// Returns the isometric coordinate of the mouse cursor
         /// </summary>
         /// <returns></returns>
-        private Point MouseIsoPosition
-        {
-            get
-            {
-                return ConvertScreenXYtoIsoXY(CursorPosition.X, CursorPosition.Y);
-            }
-        }
+        private Point MouseIsoPosition => ConvertScreenXYtoIsoXY(CursorPosition.X, CursorPosition.Y);
 
         /// <summary>
         /// 
         /// </summary>
-        public TileCoordinate MouseOverTileCoords
-        {
-            get
-            {
-                return ConvertScreenXYtoTileXY(CursorPosition.X, CursorPosition.Y);
-            }
-        }
+        public TileCoordinate MouseOverTileCoords => ConvertScreenXYtoTileXY(CursorPosition.X, CursorPosition.Y);
 
         /// <summary>
         /// The tile coordinate the cursor was over at the last update
@@ -118,7 +105,7 @@ namespace LemballEditor.View.Level
         /// <param name="e"></param>
         protected override void OnKeyUp(KeyEventArgs e)
         {
-            heldKeys.Remove(e.KeyCode);
+            _ = heldKeys.Remove(e.KeyCode);
         }
 
         /// <summary>
@@ -129,10 +116,12 @@ namespace LemballEditor.View.Level
         {
             // Store key in list
             if (!heldKeys.Contains(e.KeyCode))
+            {
                 heldKeys.Add(e.KeyCode);
+            }
 
             // Get the current cursor isometric coordinate
-            TileCoordinate mouseIso = ConvertScreenXYtoTileXY(CursorPosition.X, CursorPosition.Y);
+            _ = ConvertScreenXYtoTileXY(CursorPosition.X, CursorPosition.Y);
 
             // Scroll east
             if (e.KeyCode == Keys.Down && firstViewTile.xTile + mapViewTileDimensions.Width < LoadedLevel.MapSizeX)
@@ -174,7 +163,7 @@ namespace LemballEditor.View.Level
         public void MapPanel_MouseEnter(object sender, EventArgs e)
         {
             mouseIsOverPanel = true;
-            this.Focus();
+            _ = Focus();
         }
 
         /// <summary>
@@ -221,10 +210,14 @@ namespace LemballEditor.View.Level
         {
             // Set the mouseDown variable to true
             if (e.Button == MouseButtons.Left)
+            {
                 leftMouseDown = true;
+            }
 
             if (e.Button == MouseButtons.Right)
+            {
                 rightMouseDown = true;
+            }
 
             // Stores the new position of the mouse. The mousePosition variable is only set with each update
             leftClickPosition = new Point(e.X, e.Y);
@@ -242,18 +235,26 @@ namespace LemballEditor.View.Level
                 if (PositionIsOnMap(leftClickPosition))
                 {
                     if (e.Button == MouseButtons.Left)
+                    {
                         editingMode.LeftClickOnMap(leftClickPosition, heldKeys);
+                    }
                     else if (e.Button == MouseButtons.Right)
+                    {
                         editingMode.RightClickOnMap(leftClickPosition, heldKeys);
+                    }
                 }
             }
             else
             {
                 // User has clicked on an object
                 if (e.Button == MouseButtons.Left)
+                {
                     editingMode.LeftClickOnObject(clickObject, leftClickPosition, heldKeys);
+                }
                 else if (e.Button == MouseButtons.Right)
+                {
                     editingMode.RightClickOnObject(clickObject, leftClickPosition, heldKeys);
+                }
             }
         }
 
@@ -284,9 +285,13 @@ namespace LemballEditor.View.Level
                 {
                     // Mouse wheel has been scrolled up
                     if (mouseWheelDelta > 0)
+                    {
                         editingMode.MouseWheelScrolledUp(heldKeys);
+                    }
                     else
+                    {
                         editingMode.MouseWheelScrolledDown(heldKeys);
+                    }
                 }
 
                 // Reset mouse delta
@@ -295,14 +300,18 @@ namespace LemballEditor.View.Level
 
             // User is holding down the mouse button while moving the cursor
             if (leftMouseDrag)
+            {
                 editingMode.LeftMouseDragged(leftClickPosition, CursorPosition);
-    
+            }
+
             // User is holding down the mouse button
             if (leftMouseDown)
+            {
                 editingMode.LeftMouseHeld(CursorPosition);
+            }
 
             // Repaint
-            this.Invalidate();
+            Invalidate();
         }
 
         /// <summary>

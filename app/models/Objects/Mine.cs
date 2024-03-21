@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
-using System.Xml;
-using System.Windows.Forms;
+﻿using System.Xml;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -12,23 +6,17 @@ namespace LemballEditor.Model
     /// <summary>
     /// Land mine
     /// </summary>
-    class Mine : LevelObject
+    internal class Mine : LevelObject
     {
-        public const String XML_NODE_NAME = "mine";
+        public const string XML_NODE_NAME = "mine";
 
 
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.ENIM;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.ENIM;
 
-      
+
 
         public Mine(ushort id, ushort isoX, ushort isoY)
             : base(id, isoX, isoY)
@@ -47,7 +35,7 @@ namespace LemballEditor.Model
         public override void CompileVsrBinary(BinaryEditor binary, Level level, ushort? id)
         {
             // Id
-            binary.Append((short) 0);
+            binary.Append((short)0);
 
             // Position
             base.AppendPosition(binary);
@@ -62,7 +50,7 @@ namespace LemballEditor.Model
             XmlElement element = xmlDoc.CreateElement("mine");
 
             // Set position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Return element
             return element;

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LemballEditor.Model;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Forms;
 using System.Xml;
 using VsrCompiler;
@@ -17,7 +13,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// An array of level groups
         /// </summary>
-        private LevelGroup[] levelGroups;
+        private readonly LevelGroup[] levelGroups;
 
         /// <summary>
         /// True if the level pack is for the full version of Lemmings Paintball
@@ -28,7 +24,7 @@ namespace LemballEditor.Model
         /// The name of the person who made the level pack
         /// </summary>
         //private String authorName;
-        
+
         /// <summary>
         /// Creates a new level pack
         /// </summary>
@@ -51,23 +47,29 @@ namespace LemballEditor.Model
         /// Initialises a level pack from the data in a level pack file
         /// </summary>
         /// <param name="reader"></param>
-        public LevelPack (BinaryReader reader)
+        public LevelPack(BinaryReader reader)
         {
             // Check magic number to ensure it is a project file
-            String header = new String(reader.ReadChars(4));
+            string header = new string(reader.ReadChars(4));
 
             if (header != "LPPR")
             {
                 // If it is a compiled level pack
                 if (header == "LPLP")
+                {
                     throw new InvalidDataException("This is a compiled level pack, and cannot be opened for re-editing");
+                }
                 else
+                {
                     throw new InvalidDataException("This is not a Lemball Editor project file");
+                }
             }
 
             // Ensure project version is not higher than the program version
             if (Program.CompareVersion(reader.ReadBytes(4)) > 0)
+            {
                 throw new InvalidDataException("This project file requires a newer version of Lemball Editor to open");
+            }
 
             // Extract xml data
             byte[] xml = ExtractNextBlock(reader);
@@ -97,7 +99,9 @@ namespace LemballEditor.Model
                     // Check number of level groups
                     XmlNodeList groups = root.SelectNodes("group");
                     if (groups.Count != 5)
+                    {
                         throw new InvalidDataException("XML data error: invalid number of level groups");
+                    }
 
                     // Load each level group
                     levelGroups = new LevelGroup[5];
@@ -154,7 +158,7 @@ namespace LemballEditor.Model
                 // Add the level to the destination group
                 dest.AppendLevel(level);
             }
-                // If the destination group has run out of capacity
+            // If the destination group has run out of capacity
             else
             {
                 throw new LevelGroupFullException();
@@ -239,7 +243,7 @@ namespace LemballEditor.Model
             {
                 // Search group for level
                 int number = group.GetLevelNumber(level);
-                
+
                 // If level was found, return the group type
                 if (number != -1)
                 {
@@ -308,7 +312,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// Compiles the Lembedit project file, which allows further editing in future
         /// </summary>
-        public void SaveProjectFile(String filePath)
+        public void SaveProjectFile(string filePath)
         {
             using (MemoryStream memStream = new MemoryStream())
             {
@@ -341,7 +345,7 @@ namespace LemballEditor.Model
         /// <param name="binary"></param>
         /// <param name="data"></param>
         /// <param name="compress"></param>
-        private void CompileDataBlock (BinaryEditor binary, byte[] data, bool compress)
+        private void CompileDataBlock(BinaryEditor binary, byte[] data, bool compress)
         {
             // Compile compressed data block
             if (compress)
@@ -389,8 +393,10 @@ namespace LemballEditor.Model
             // Extract data
             byte[] data = reader.ReadBytes(dataSize);
 
-            if (new String(reader.ReadChars(4)) != " END")
+            if (new string(reader.ReadChars(4)) != " END")
+            {
                 throw new InvalidDataException();
+            }
 
             // If data is compressed
             if (uncompressedSize > 0)
@@ -416,7 +422,7 @@ namespace LemballEditor.Model
             XmlElement root = xmlDoc.CreateElement("level_pack");
             //root.SetAttribute("lembedit_version", Program.GetVersionString());
             //root.SetAttribute("full_version", FullVersion.ToString());
-            xmlDoc.AppendChild(root);
+            _ = xmlDoc.AppendChild(root);
 
             // Add each level group
             for (int groupNumber = 0; groupNumber < 5; groupNumber++)
@@ -424,7 +430,7 @@ namespace LemballEditor.Model
                 LevelGroup levelGroup = levelGroups[groupNumber];
 
                 // Append levelGroup node to root
-                root.AppendChild(levelGroup.CompileXML(xmlDoc, groupNumber));
+                _ = root.AppendChild(levelGroup.CompileXML(xmlDoc, groupNumber));
             }
 
             // Save uncompressed XML data to separate file (debug)
@@ -447,7 +453,7 @@ namespace LemballEditor.Model
 
                 // Compress data
                 //BinaryEditor.Compress(ref data);
-                
+
                 // Return XML data
                 return data;
             }
@@ -468,7 +474,9 @@ namespace LemballEditor.Model
 
             // Compress level data
             if (compress)
+            {
                 levelData = BinaryEditor.Compress(levelData);
+            }
 
             // Create level pack stream
             BinaryEditor levelPack = new BinaryEditor(new MemoryStream());
@@ -487,9 +495,13 @@ namespace LemballEditor.Model
 
             // Size of uncompressed level data (0 if not compressed)
             if (compress)
+            {
                 levelPack.Append(uncompressedSize);
+            }
             else
+            {
                 levelPack.Append(0);
+            }
 
             // Size of data chunk (if compressed, its compressed size)
             levelPack.Append(levelData.Length);
@@ -500,7 +512,9 @@ namespace LemballEditor.Model
 
             // Save level pack (debug)
             if (Program.DebugMode)
+            {
                 levelPack.SaveToFile(@".\levelPack.dat");
+            }
 
             // Return memory stream
             return levelPack.getStream();
@@ -529,11 +543,7 @@ namespace LemballEditor.Model
                 // levelDataStream.SaveToFile(@".\projectTileData.dat");
 
                 // Get level data as a byte array
-                byte[] levelData;
-                if (compress)
-                    levelData = levelDataStream.GetCompressedData();
-                else
-                    levelData = levelDataStream.GetData();
+                byte[] levelData = compress ? levelDataStream.GetCompressedData() : levelDataStream.GetData();
 
                 // Return the level data
                 return levelData;

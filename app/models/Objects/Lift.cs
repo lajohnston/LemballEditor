@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
-using System.Drawing;
 
 namespace LemballEditor.Model
 {
@@ -11,10 +9,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// 
         /// </summary>
-        public override ObjectBlocks ObjectBlock
-        {
-            get { return ObjectBlocks.TFIL; }
-        }
+        public override ObjectBlocks ObjectBlock => ObjectBlocks.TFIL;
 
         /// <summary>
         /// How lifts can be activated
@@ -75,7 +70,7 @@ namespace LemballEditor.Model
                 {
                     for (ushort y = 0; y < yTileSize; y++)
                     {
-                        tiles.Add(new TileCoordinate((ushort)(OnTile.xTile + x),(ushort)(OnTile.yTile + y)));
+                        tiles.Add(new TileCoordinate((ushort)(OnTile.xTile + x), (ushort)(OnTile.yTile + y)));
                     }
                 }
 
@@ -89,36 +84,18 @@ namespace LemballEditor.Model
         private ushort startHeight;
         public ushort StartHeight
         {
-            get
-            {
-                return startHeight;
-            }
-            set
-            {
-                if (value > 88)
-                    throw new ArgumentOutOfRangeException();
-                else
-                    startHeight = value;
-            }
+            get => startHeight;
+            set => startHeight = value > 88 ? throw new ArgumentOutOfRangeException() : value;
         }
-        
+
         /// <summary>
         /// The height of the lift after it has been activated
         /// </summary>
         private ushort endHeight;
         public ushort EndHeight
         {
-            get
-            {
-                return endHeight;
-            }
-            set
-            {
-                if (value > 88)
-                    throw new ArgumentOutOfRangeException();
-                else
-                    endHeight = value;
-            }
+            get => endHeight;
+            set => endHeight = value > 88 ? throw new ArgumentOutOfRangeException() : value;
         }
 
         /// <summary>
@@ -126,13 +103,13 @@ namespace LemballEditor.Model
         /// </summary>
         /// <param name="id"></param>
         public Lift(ushort id)
-            :this(id, 0, 0, 1, 1)
+            : this(id, 0, 0, 1, 1)
         {
 
         }
 
         public Lift(ushort id, ushort isoX, ushort isoY, ushort xTileSize, ushort yTileSize)
-            :base(id, isoX, isoY)
+            : base(id, isoX, isoY)
         {
             this.xTileSize = xTileSize;
             this.yTileSize = yTileSize;
@@ -154,7 +131,9 @@ namespace LemballEditor.Model
             foreach (TileCoordinate tile in tileCoordinates)
             {
                 if (tile.Equals(tileCoordinate))
+                {
                     return true;
+                }
             }
 
             return false;
@@ -179,7 +158,7 @@ namespace LemballEditor.Model
         public override void CompileVsrBinary(VsrCompiler.BinaryEditor binary, Level level, ushort? id)
         {
             // Id
-            binary.Append((ushort)base.Id);
+            binary.Append(Id);
 
             // 1 = keeps going up and down once activated
             binary.Append((short)0);
@@ -193,11 +172,11 @@ namespace LemballEditor.Model
 
             // Default height
             binary.Append((short)StartHeight);
-            
+
             // XY2 (bottom right of lift's area)
             // Get the size of the lift in pixels
-            int xSizePx = 8 + (xTileSize - 1) * 16;
-            int ySizePx = 8 + (yTileSize - 1) * 16;
+            int xSizePx = 8 + ((xTileSize - 1) * 16);
+            int ySizePx = 8 + ((yTileSize - 1) * 16);
 
             binary.Append((short)(IsoPosition.X + xSizePx));
             binary.Append((short)(IsoPosition.Y + ySizePx));
@@ -206,8 +185,8 @@ namespace LemballEditor.Model
             binary.Append((short)StartHeight);
 
             // Lowest and highest height
-            binary.Append((short) Math.Min(startHeight, endHeight));
-            binary.Append((short) Math.Max(startHeight, endHeight));
+            binary.Append((short)Math.Min(startHeight, endHeight));
+            binary.Append((short)Math.Max(startHeight, endHeight));
 
             // Null
             binary.Append((short)0);

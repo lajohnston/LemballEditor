@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.View.Level.ObjectGraphics;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Windows.Forms;
-using LemballEditor.View.Level.ObjectGraphics;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private class MovingObjectMode : HoldingObjectMode
         {
@@ -29,7 +25,7 @@ namespace LemballEditor.View.Level
 
             public override void LeftMouseUp(Point position)
             {
-                base.PlaceObject(position);
+                _ = base.PlaceObject(position);
                 mapPanel.StartDefaultEditingMode();
             }
         }

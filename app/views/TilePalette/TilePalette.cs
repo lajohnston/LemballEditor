@@ -1,9 +1,7 @@
-﻿using System;
+﻿using LemballEditor.View.Level;
 using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using LemballEditor.View.Level;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace LemballEditor.View
 {
@@ -11,13 +9,13 @@ namespace LemballEditor.View
     /// Displays a selection of tiles according to their type. The tiles are divided into
     /// pages, which the user can navigate through
     /// </summary>
-    class TilePalette : TabPage
+    internal class TilePalette : TabPage
     {
         /// <summary>
         /// The maximum tile row width of pixels
         /// </summary>
         private const int MAX_ROW_WIDTH = 150;
-        
+
         /// <summary>
         /// The minimum height for each row
         /// </summary>
@@ -31,23 +29,23 @@ namespace LemballEditor.View
         /// <summary>
         /// A list of all the tiles that were drawn in the last update
         /// </summary>
-        private List<TilePaletteIcon> drawnIcons;
+        private readonly List<TilePaletteIcon> drawnIcons;
 
         /// <summary>
         /// The tile types that this tilePallette displays
         /// </summary>
-        private ImageCache.TileTypes[] tileTypes;
+        private readonly ImageCache.TileTypes[] tileTypes;
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <param name="tileTypes"></param>
-        public TilePalette(String name, ImageCache.TileTypes[] tileTypes) : base (name)
+        public TilePalette(string name, ImageCache.TileTypes[] tileTypes) : base(name)
         {
             this.tileTypes = tileTypes;
             base.BackColor = Color.White;
-            this.DoubleBuffered = true;
+            DoubleBuffered = true;
 
             drawnIcons = new List<TilePaletteIcon>();
             MouseDown += new MouseEventHandler(TilePalettePage_MouseClick);
@@ -58,7 +56,7 @@ namespace LemballEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="mouse"></param>
-        public void TilePalettePage_MouseClick (object sender, MouseEventArgs mouse)
+        public void TilePalettePage_MouseClick(object sender, MouseEventArgs mouse)
         {
             Point click = new Point(mouse.X, mouse.Y + TilePaletteSelector.scrollValue);
 
@@ -87,7 +85,7 @@ namespace LemballEditor.View
             }
 
             // Refresh display
-            this.Invalidate();
+            Invalidate();
         }
 
         /// <summary>
@@ -132,7 +130,7 @@ namespace LemballEditor.View
             Bitmap cropped = browserTmp.Clone(rect, browserTmp.PixelFormat);
             return cropped;
         }
-        
+
         /// <summary>
         /// 
         /// </summary>
@@ -194,7 +192,7 @@ namespace LemballEditor.View
                 // The the tile
                 Point drawPosition = new Point(tilePosition.X, tilePosition.Y + (rowHeight - tileSize.Height));
                 tileImage.DrawTile(g, drawPosition, false);
-                
+
                 // Add the image to the drawn icons list
                 Rectangle clickArea = new Rectangle(drawPosition, tileSize);
                 drawnIcons.Add(new TilePaletteIcon(clickArea, tileImage.tileRef));
@@ -214,7 +212,7 @@ namespace LemballEditor.View
             Graphics g = e.Graphics;
 
             // Draw the rendered browser
-            g.DrawImage(TilePaletteSelector.browser, new Point(0, 0- TilePaletteSelector.scrollValue));
+            g.DrawImage(TilePaletteSelector.browser, new Point(0, 0 - TilePaletteSelector.scrollValue));
         }
     }
 }

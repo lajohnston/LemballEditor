@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level.ObjectGraphics;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         /// <summary>
         /// EditingModes define what should occur when the user performs certain actions. It also handles any special graphical
@@ -79,9 +77,13 @@ namespace LemballEditor.View.Level
                 /* If shift is held, the elevation for the active tiles will only be altered if the alteration
                  * can occur for all the active tiles, otherwise all tiles are checked and altered individually */
                 if (heldKeys.Contains(Keys.ShiftKey))
+                {
                     AlterElevation(1, true);
+                }
                 else
+                {
                     AlterElevation(1, false);
+                }
             }
 
             public virtual void MouseWheelScrolledDown(List<Keys> heldKeys)
@@ -89,9 +91,13 @@ namespace LemballEditor.View.Level
                 /* If shift is held, the elevation for the active tiles will only be altered if the alteration
                  * can occur for all the active tiles, otherwise all tiles are checked and altered individually */
                 if (heldKeys.Contains(Keys.ShiftKey))
+                {
                     AlterElevation(-1, true);
+                }
                 else
+                {
                     AlterElevation(-1, false);
+                }
             }
 
             /// <summary>
@@ -100,7 +106,9 @@ namespace LemballEditor.View.Level
             public virtual void OnKeyPress(Keys keyCode)
             {
                 if (keyCode == Keys.Escape)
+                {
                     mapPanel.StartDefaultEditingMode();
+                }
             }
 
             /// <summary>
@@ -176,7 +184,9 @@ namespace LemballEditor.View.Level
                 {
                     // If one of the tiles cannot have its elevation changed, return false
                     if (!mapPanel.LoadedLevel.CanAlterElevationOfTile(tile, amount))
+                    {
                         return false;
+                    }
                 }
 
                 // All the active tiles can have their elevation altered
@@ -187,7 +197,7 @@ namespace LemballEditor.View.Level
             /// Highlights the tile the mouse is over
             /// </summary>
             /// <param name="g"></param>
-            protected void HighlightMouseOverTile (Graphics g)
+            protected void HighlightMouseOverTile(Graphics g)
             {
                 mapPanel.HighlightTile(g, mapPanel.mouseTileCoordinate, false);
             }
@@ -203,7 +213,7 @@ namespace LemballEditor.View.Level
                 return false;
             }
 
-            
+
         }
     }
 }

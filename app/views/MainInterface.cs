@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using System.IO;
-using System.Xml;
-using LemballEditor.Model;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level;
-using System.Runtime.InteropServices;
 using LemballEditor.View.Level.ObjectGraphics;
+using System;
+using System.IO;
+using System.Windows.Forms;
 
 namespace LemballEditor.View
 {
@@ -29,17 +22,17 @@ namespace LemballEditor.View
         /// <summary>
         /// The file name filter used by dialog boxes
         /// </summary>
-        private static String dialogFilter = "Lemball Editor Project files (*.lbp) | *.lbp";
+        private static readonly string dialogFilter = "Lemball Editor Project files (*.lbp) | *.lbp";
 
         /// <summary>
         /// 
         /// </summary>
-        private static MapPanel mapPanel;
+        private static readonly MapPanel mapPanel;
 
         /// <summary>
         /// 
         /// </summary>
-        private static LevelBrowser levelBrowser;
+        private static readonly LevelBrowser levelBrowser;
 
         /// <summary>
         /// 
@@ -116,10 +109,7 @@ namespace LemballEditor.View
         {
             Model.Level level = Program.LoadedLevel;
 
-            if (level != null)
-                return level.ObjectLimitRemaining;
-            else
-                return 0;
+            return level != null ? level.ObjectLimitRemaining : 0;
         }
 
         /*
@@ -129,7 +119,7 @@ namespace LemballEditor.View
             objectsList.updateObjectLimitCounter();
         }
         */
-        
+
         /// <summary>
         /// Refresh the list of levels
         /// </summary>
@@ -139,7 +129,7 @@ namespace LemballEditor.View
             Program.LoadLevelList(levelGroupSelector.SelectedLevelGroup, lstLevels);
             lstLevels.SelectedIndex = 0;
         }
-        */ 
+        */
 
         /// <summary>
         /// Loads a level with the specified number
@@ -150,7 +140,7 @@ namespace LemballEditor.View
             // Change the selected level number
             //Program.LoadedLevelNumber = levelNumber;
             Program.LoadLevel(levelGroup, levelNumber);
-            
+
 
             // Inform map panel that the level number has changed
             //OnLevelLoad();
@@ -276,10 +266,12 @@ namespace LemballEditor.View
         private void loadProjectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // Create load file dialog
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = dialogFilter;
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dialog.Title = "Select a Lemball Editor project file";
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = dialogFilter,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
+                Title = "Select a Lemball Editor project file"
+            };
 
             // Load file
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -298,7 +290,7 @@ namespace LemballEditor.View
                     }
                     catch (InvalidDataException error)
                     {
-                        MessageBox.Show(error.Message, "Invalid project file");
+                        _ = MessageBox.Show(error.Message, "Invalid project file");
                     }
                 }
             }
@@ -340,9 +332,11 @@ namespace LemballEditor.View
         private void ShowSaveAsDialog()
         {
             // Initialise the save file dialog
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = dialogFilter;
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = dialogFilter,
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)
+            };
 
             // Show dialog, and run code if a file is chosen
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -376,13 +370,13 @@ namespace LemballEditor.View
         private void levelToolStripMenuItem1_Click(object sender, EventArgs e)
         {
             LevelProperties properties = new EditLevelProperties(Program.LoadedLevel);
-            properties.ShowDialog();
+            _ = properties.ShowDialog();
         }
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Settings.Settings settings = new Settings.Settings();
-            settings.ShowDialog();
+            _ = settings.ShowDialog();
         }
 
         /// <summary>
@@ -392,10 +386,14 @@ namespace LemballEditor.View
         private void TestLevelPack(bool allLevels)
         {
 
-                if (allLevels)
-                    Program.TestLevelPack();
-                else
-                    Program.TestLoadedLevel();
+            if (allLevels)
+            {
+                Program.TestLevelPack();
+            }
+            else
+            {
+                Program.TestLoadedLevel();
+            }
 
 
             /*
@@ -406,7 +404,7 @@ namespace LemballEditor.View
         }
 
 
-        public void SetStatusMessage(String message)
+        public void SetStatusMessage(string message)
         {
             statusBarMessage.Text = message;
         }

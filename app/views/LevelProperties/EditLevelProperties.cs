@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LemballEditor.View
+﻿namespace LemballEditor.View
 {
     /// <summary>
     /// A version of the Level Properties that is used to edit an existing level rather than for creating a new one.
     /// This version disables some options that cannot be edited once the level is created
     /// </summary>
-    class EditLevelProperties : LevelProperties
+    internal class EditLevelProperties : LevelProperties
     {
         public EditLevelProperties(Model.Level level)
             : base(level)

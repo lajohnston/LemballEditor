@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
 using System.Xml;
-using System.Windows.Forms;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -17,8 +12,8 @@ namespace LemballEditor.Model
         /// <summary>
         /// The XML element name used by this type of object
         /// </summary>
-        public const String XML_NODE_NAME = "entrance";
-        
+        public const string XML_NODE_NAME = "entrance";
+
         /// <summary>
         /// The number of lemmings that use this entrance
         /// </summary>
@@ -27,13 +22,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.OneSLP;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.OneSLP;
 
         /// <summary>
         /// 
@@ -45,14 +34,14 @@ namespace LemballEditor.Model
         public Entrance(ushort id, ushort isoX, ushort isoY, byte numberOfLemmings)
             : base(id, isoX, isoY)
         {
-            this.NumberOfLemmings = numberOfLemmings;
+            NumberOfLemmings = numberOfLemmings;
         }
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
-        public Entrance(ushort id) : this(id, 0,0,1)
+        public Entrance(ushort id) : this(id, 0, 0, 1)
         {
         }
 
@@ -77,7 +66,7 @@ namespace LemballEditor.Model
             XmlElement element = xmlDoc.CreateElement("entrance");
 
             // Set position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Set colour
             element.SetAttribute("lemmings", NumberOfLemmings.ToString());

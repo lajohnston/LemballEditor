@@ -1,22 +1,20 @@
-﻿using System;
+﻿using LemballEditor.Model;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private class TileEditMode : EditingMode
         {
-            private uint selectedTileRef;
+            private readonly uint selectedTileRef;
 
             public TileEditMode(MapPanel mapPanel, uint tileRef)
                 : base(mapPanel)
             {
-                this.selectedTileRef = tileRef;
+                selectedTileRef = tileRef;
             }
 
             public override void LeftClickOnMap(Point position, List<Keys> heldKey)
@@ -66,7 +64,7 @@ namespace LemballEditor.View.Level
             {
                 // Get the tile coordinate that the mouse is over
                 TileCoordinate tileCoordinate = mapPanel.ConvertScreenXYtoTileXY(position.X, position.Y);
-                
+
                 // If the mouse if over the visible portion of the map
                 if (mapPanel.TileIsVisible(tileCoordinate))
                 {

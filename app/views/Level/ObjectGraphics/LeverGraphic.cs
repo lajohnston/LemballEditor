@@ -1,60 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn enemy
     /// </summary>
-    class LeverGraphic : SwitchGraphic
+    internal class LeverGraphic : SwitchGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Lever lever;
+        private readonly Lever lever;
 
         /// <summary>
         /// 
         /// </summary>
-        protected override Switch SwitchObject
-        {
-            get
-            {
-                return lever;
-            }
-        }
+        protected override Switch SwitchObject => lever;
 
         /// <summary>
         /// 
         /// </summary>
-        private Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("switch");
+        private readonly Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("switch");
 
         /// <summary>
         /// 
         /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image;
-            }
-        }
+        public override Bitmap Image => image;
 
         /// <summary>
         /// 
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
+        public override Point DrawOffset =>
                 // Inaccurate
-                return new Point(3, 14);
-            }
-        }
+                new Point(3, 14);
 
         /// <summary>
         /// 

@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
 using System.Xml;
-using System.Windows.Forms;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -17,18 +12,12 @@ namespace LemballEditor.Model
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.ROOD;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.ROOD;
 
         /// <summary>
         /// The element name that is used to store this object as XML data
         /// </summary>
-        public const String XML_NODE_NAME = "gate";
+        public const string XML_NODE_NAME = "gate";
 
         /// <summary>
         /// Types of lock that gates can use
@@ -60,7 +49,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// The lock type used by the gate
         /// </summary>
-        private LockType lockType;
+        private readonly LockType lockType;
 
         /// <summary>
         /// 
@@ -74,7 +63,7 @@ namespace LemballEditor.Model
             lockType = LockType.Switch;
         }
 
-        public Gate(ushort id) : this(id, 0,0)
+        public Gate(ushort id) : this(id, 0, 0)
         {
         }
 
@@ -85,8 +74,8 @@ namespace LemballEditor.Model
         public Gate(XmlElement xmlNode)
             : base(xmlNode)
         {
-            String attribute = xmlNode.GetAttribute("lockType");
-            lockType = (LockType)(Enum.Parse(typeof(LockType), attribute, true));
+            string attribute = xmlNode.GetAttribute("lockType");
+            lockType = (LockType)Enum.Parse(typeof(LockType), attribute, true);
         }
 
         /// <summary>
@@ -103,7 +92,7 @@ namespace LemballEditor.Model
             element.SetAttribute("lockType", System.Enum.GetName(typeof(LockType), lockType).ToLower());
 
             // Set rotation and position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Return element
             return element;
@@ -116,10 +105,9 @@ namespace LemballEditor.Model
         /// <returns></returns>
         public override bool OverlapsTile(TileCoordinate tileCoordinate)
         {
-            if (!Rotated)
-                return tileCoordinate.Equals(new TileCoordinate(base.OnTile.xTile, (ushort)(base.OnTile.yTile + 2)));
-            else
-                return tileCoordinate.Equals(new TileCoordinate((ushort)(base.OnTile.xTile + 2), base.OnTile.yTile));
+            return !Rotated
+                ? tileCoordinate.Equals(new TileCoordinate(base.OnTile.xTile, (ushort)(base.OnTile.yTile + 2)))
+                : tileCoordinate.Equals(new TileCoordinate((ushort)(base.OnTile.xTile + 2), base.OnTile.yTile));
         }
 
         /// <summary>
@@ -144,9 +132,13 @@ namespace LemballEditor.Model
 
             // Rotation
             if (Rotated)
+            {
                 binary.Append((short)26);
+            }
             else
+            {
                 binary.Append((short)25);
+            }
 
             // Lock
             binary.Append((short)lockType);

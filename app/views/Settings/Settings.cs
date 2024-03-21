@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using System.IO;
 
 namespace LemballEditor.View.Settings
 {
@@ -32,9 +26,11 @@ namespace LemballEditor.View.Settings
         private void button1_Click(object sender, EventArgs e)
         {
             // Create open file dialog
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "Lemmings Paintball Exe file | Lemball.exe";
-            dialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            OpenFileDialog dialog = new OpenFileDialog
+            {
+                Filter = "Lemmings Paintball Exe file | Lemball.exe",
+                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+            };
 
             if (dialog.ShowDialog() == DialogResult.OK)
             {

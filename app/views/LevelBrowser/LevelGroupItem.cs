@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LemballEditor.View
+﻿namespace LemballEditor.View
 {
     public partial class LevelBrowser
     {
@@ -19,7 +15,7 @@ namespace LemballEditor.View
             /// <param name="levelGroupType"></param>
             public LevelGroupItem(Model.LevelGroupTypes levelGroupType)
             {
-                this.LevelGroupType = levelGroupType;
+                LevelGroupType = levelGroupType;
             }
 
             /// <summary>

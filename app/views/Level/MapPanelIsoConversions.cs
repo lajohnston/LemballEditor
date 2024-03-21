@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
+using System;
 using System.Drawing;
-using LemballEditor.Model;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         /// <summary>
         /// 
@@ -20,7 +18,7 @@ namespace LemballEditor.View.Level
             int offsetX = (screenX - tile0Position.X) / 2;
             int offsetY = screenY - tile0Position.Y;
 
-            Point iso = new Point(offsetX + offsetY, (0 - offsetX) + offsetY);
+            Point iso = new Point(offsetX + offsetY, 0 - offsetX + offsetY);
             iso.X = Math.Max(iso.X, 0);
             iso.Y = Math.Max(iso.Y, 0);
             return iso;
@@ -66,8 +64,8 @@ namespace LemballEditor.View.Level
         {
             // Get iso coordinates
             Point iso = ConvertScreenXYtoIsoXY(screenX, screenY);
-            return ConvertIsoXYtoTileXY((int)iso.X, (int)iso.Y);
-            
+            return ConvertIsoXYtoTileXY(iso.X, iso.Y);
+
             /*
             // Get tileXY from iso coordinates
             if (iso.X >= 0 && iso.Y >= 0)

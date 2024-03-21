@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
 using System.IO;
 using System.Xml;
-using System.Windows.Forms;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -14,7 +10,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// 
         /// </summary>
-        public const String XML_NODE_NAME = "balloon";
+        public const string XML_NODE_NAME = "balloon";
 
         /// <summary>
         /// 
@@ -24,13 +20,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.BOMG;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.BOMG;
 
         /// <summary>
         /// 
@@ -62,7 +52,7 @@ namespace LemballEditor.Model
         {
             // Get the balloon's colour
             Colours colour = (Colours)Enum.Parse(typeof(Colours), element.GetAttribute("colour"));
-            
+
             // Get the balloon's id
             ushort id = Convert.ToUInt16(element.GetAttribute("id"));
 
@@ -89,8 +79,10 @@ namespace LemballEditor.Model
         /// <returns></returns>
         public BalloonPost CreatePost(ushort id)
         {
-            BalloonPost post = new BalloonPost(id, Colour);
-            post.IsoPosition = IsoPosition;
+            BalloonPost post = new BalloonPost(id, Colour)
+            {
+                IsoPosition = IsoPosition
+            };
             return post;
         }
 
@@ -112,7 +104,7 @@ namespace LemballEditor.Model
             binary.Append((short)0);
         }
 
-        
+
 
         public override XmlElement CompileXml(XmlDocument xmlDoc)
         {
@@ -120,7 +112,7 @@ namespace LemballEditor.Model
             XmlElement element = xmlDoc.CreateElement("balloon");
 
             // Set position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Set colour
             element.SetAttribute("colour", Colour.ToString());

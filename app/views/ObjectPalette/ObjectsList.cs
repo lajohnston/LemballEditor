@@ -1,18 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
+﻿using LemballEditor.Model;
+using System;
 using System.Windows.Forms;
-using LemballEditor.Model;
-using LemballEditor.View.Level;
 
 namespace LemballEditor.View
 {
     public partial class ObjectsList : UserControl
     {
-        private MainInterface mainInterface;
+        private readonly MainInterface mainInterface;
 
         public ObjectsList(MainInterface mainInterface)
         {
@@ -21,19 +15,19 @@ namespace LemballEditor.View
             this.mainInterface = mainInterface;
 
             // Add objects to list
-            lstObjects.Items.Add(new ObjectListItem("Ammo", typeof(Ammo)));
-            lstObjects.Items.Add(new ObjectListItem("Balloon (blue)", typeof(BlueBalloon)));
-            lstObjects.Items.Add(new ObjectListItem("Balloon (green)", typeof(GreenBalloon)));
-            lstObjects.Items.Add(new ObjectListItem("Balloon (red)", typeof(RedBalloon)));
-            lstObjects.Items.Add(new ObjectListItem("Balloon (yellow)", typeof(YellowBalloon)));
-            lstObjects.Items.Add(new ObjectListItem("Catapult", typeof(Catapult)));
-            lstObjects.Items.Add(new ObjectListItem("Enemy", typeof(Enemy)));
-            lstObjects.Items.Add(new ObjectListItem("Entrance", typeof(Entrance)));
-            lstObjects.Items.Add(new ObjectListItem("Flag (blue)", typeof(Flag)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Ammo", typeof(Ammo)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Balloon (blue)", typeof(BlueBalloon)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Balloon (green)", typeof(GreenBalloon)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Balloon (red)", typeof(RedBalloon)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Balloon (yellow)", typeof(YellowBalloon)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Catapult", typeof(Catapult)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Enemy", typeof(Enemy)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Entrance", typeof(Entrance)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Flag (blue)", typeof(Flag)));
             //lstObjects.Items.Add(new ObjectListItem("Flag (red)", typeof(RedFlag)));
-            lstObjects.Items.Add(new ObjectListItem("Gate/Barrier", typeof(Gate)));
-            lstObjects.Items.Add(new ObjectListItem("Mine", typeof(Mine)));
-            lstObjects.Items.Add(new ObjectListItem("Switch", typeof(Lever)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Gate/Barrier", typeof(Gate)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Mine", typeof(Mine)));
+            _ = lstObjects.Items.Add(new ObjectListItem("Switch", typeof(Lever)));
 
             UpdateObjectLimitCounter();
         }
@@ -64,7 +58,7 @@ namespace LemballEditor.View
                     }
                     catch (NotImplementedException)
                     {
-                        MessageBox.Show("Object graphic not supported", "Error");
+                        _ = MessageBox.Show("Object graphic not supported", "Error");
                     }
                 }
             }
@@ -79,13 +73,10 @@ namespace LemballEditor.View
 
             lblObjectLimit.Text = "Object limit remaining: " + value;
 
-            if (value <= 0)
-                lstObjects.Enabled = false;
-            else
-                lstObjects.Enabled = true;
+            lstObjects.Enabled = value > 0;
         }
 
-        
+
         /// <summary>
         /// Called when an object has been deleted. Renables the list if object count is now
         /// below the limit
@@ -100,10 +91,7 @@ namespace LemballEditor.View
 
         private bool objectLimitReached()
         {
-            if (MainInterface.GetObjectLimitRemaining() <= 0)
-                return true;
-            else
-                return false;
+            return MainInterface.GetObjectLimitRemaining() <= 0;
         }
     }
 }

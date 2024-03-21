@@ -1,9 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
 
 namespace LemballEditor.View
@@ -31,13 +26,7 @@ namespace LemballEditor.View
         /// <summary>
         /// 
         /// </summary>
-        protected LevelGroupItem[] LevelGroupItems
-        {
-            get
-            {
-                return levelGroupSelector.GetItems();
-            }
-        }
+        protected LevelGroupItem[] LevelGroupItems => levelGroupSelector.GetItems();
 
         /// <summary>
         /// 
@@ -68,7 +57,7 @@ namespace LemballEditor.View
             // Add listeners for buttons
             newLevel.Click += new EventHandler(newLevel_Click);
             deleteLevel.Click += new EventHandler(deleteLevel_Click);
-            
+
         }
 
         /// <summary>
@@ -76,7 +65,7 @@ namespace LemballEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void levelGroupSelector_SelectedIndexChanged(object sender, EventArgs e)
+        private void levelGroupSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateLevelList();
             UpdateSelectedLevel();
@@ -87,9 +76,9 @@ namespace LemballEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void deleteLevel_Click(object sender, EventArgs e)
+        private void deleteLevel_Click(object sender, EventArgs e)
         {
-            Program.DeleteLevel((Model.LevelGroupTypes)levelGroupSelector.SelectedLevelGroup, levelList.SelectedIndex);
+            Program.DeleteLevel(levelGroupSelector.SelectedLevelGroup, levelList.SelectedIndex);
             UpdateLevelList();
         }
 
@@ -98,12 +87,12 @@ namespace LemballEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void newLevel_Click(object sender, EventArgs e)
+        private void newLevel_Click(object sender, EventArgs e)
         {
-            try 
+            try
             {
                 // Attempt to create level
-                Program.CreateNewLevel((Model.LevelGroupTypes)levelGroupSelector.SelectedLevelGroup);
+                Program.CreateNewLevel(levelGroupSelector.SelectedLevelGroup);
 
                 // Refresh the level list so that it includes the new level
                 UpdateLevelList();
@@ -123,10 +112,10 @@ namespace LemballEditor.View
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        void levelList_SelectedIndexChanged(object sender, EventArgs e)
+        private void levelList_SelectedIndexChanged(object sender, EventArgs e)
         {
             // Load the selected level
-            Program.LoadLevel((Model.LevelGroupTypes)levelGroupSelector.SelectedLevelGroup, levelList.SelectedIndex);
+            Program.LoadLevel(levelGroupSelector.SelectedLevelGroup, levelList.SelectedIndex);
 
             // If no level is selected
             if (levelList.SelectedIndex == -1)
@@ -143,16 +132,10 @@ namespace LemballEditor.View
                 deleteLevel.Enabled = true;
 
                 // If first level is selected
-                if (levelList.SelectedIndex == 0)
-                    moveLevelUp.Enabled = false;
-                else
-                    moveLevelUp.Enabled = true;
+                moveLevelUp.Enabled = levelList.SelectedIndex != 0;
 
                 // If last level is selected
-                if (levelList.SelectedIndex == levelList.Items.Count - 1)
-                    moveLevelDown.Enabled = false;
-                else
-                    moveLevelDown.Enabled = true;
+                moveLevelDown.Enabled = levelList.SelectedIndex != levelList.Items.Count - 1;
             }
 
         }
@@ -169,10 +152,7 @@ namespace LemballEditor.View
             UpdateSelectedLevel();
 
             // Disable new level button if the capacity for the selected level group has been reached
-            if (Program.LevelGroupHasCapacity((Model.LevelGroupTypes)levelGroupSelector.SelectedLevelGroup))
-                newLevel.Enabled = true;
-            else
-                newLevel.Enabled = false;
+            newLevel.Enabled = Program.LevelGroupHasCapacity(levelGroupSelector.SelectedLevelGroup);
         }
 
         /// <summary>
@@ -231,7 +211,9 @@ namespace LemballEditor.View
             int levelNumber = levelList.SelectedIndex;
 
             if (levelNumber != -1)
-                Program.MoveLevelUp((Model.LevelGroupTypes)levelGroupSelector.SelectedLevelGroup, levelNumber);
+            {
+                Program.MoveLevelUp(levelGroupSelector.SelectedLevelGroup, levelNumber);
+            }
 
             UpdateLevelList();
         }
@@ -241,7 +223,9 @@ namespace LemballEditor.View
             int levelNumber = levelList.SelectedIndex;
 
             if (levelNumber != -1)
-                Program.MoveLevelDown((Model.LevelGroupTypes)levelGroupSelector.SelectedLevelGroup, levelNumber);
+            {
+                Program.MoveLevelDown(levelGroupSelector.SelectedLevelGroup, levelNumber);
+            }
 
             UpdateLevelList();
         }
@@ -254,12 +238,12 @@ namespace LemballEditor.View
         private void moveLevel_Click(object sender, EventArgs e)
         {
             MoveLevel moveLevel = new MoveLevel(this);
-            moveLevel.ShowDialog();
+            _ = moveLevel.ShowDialog();
         }
 
         private void copyLevel_Click(object sender, EventArgs e)
         {
-            CopySelectedLevel(levelGroupSelector.SelectedLevelGroup);
+            _ = CopySelectedLevel(levelGroupSelector.SelectedLevelGroup);
         }
 
         /// <summary>
@@ -279,7 +263,7 @@ namespace LemballEditor.View
             }
             catch (Model.LevelGroupFullException)
             {
-                MessageBox.Show("The " + destinationGroup.ToString() + " level group has reached its capacity");
+                _ = MessageBox.Show("The " + destinationGroup.ToString() + " level group has reached its capacity");
                 return false;
             }
         }

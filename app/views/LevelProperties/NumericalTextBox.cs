@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Forms;
 
 namespace LemballEditor.View
@@ -12,10 +9,6 @@ namespace LemballEditor.View
     /// </summary>
     public class NumericTextBox : TextBox
     {
-        /// <summary>
-        /// Whether the box can contain space characters
-        /// </summary>
-        bool allowSpace = false;
 
         /// <summary>
         /// Restricts the entry of characters to digits (including hex), the negative sign,
@@ -28,13 +21,12 @@ namespace LemballEditor.View
             base.OnKeyPress(e);
 
             NumberFormatInfo numberFormatInfo = System.Globalization.CultureInfo.CurrentCulture.NumberFormat;
-            string decimalSeparator = numberFormatInfo.NumberDecimalSeparator;
-            string groupSeparator = numberFormatInfo.NumberGroupSeparator;
-            string negativeSign = numberFormatInfo.NegativeSign;
+            _ = numberFormatInfo.NumberDecimalSeparator;
+            _ = numberFormatInfo.NumberGroupSeparator;
+            _ = numberFormatInfo.NegativeSign;
+            _ = e.KeyChar.ToString();
 
-            string keyInput = e.KeyChar.ToString();
-            
-            if (Char.IsDigit(e.KeyChar))
+            if (char.IsDigit(e.KeyChar))
             {
                 // Digits are OK
             }
@@ -53,7 +45,7 @@ namespace LemballEditor.View
             //    {
             //     // Let the edit control handle control and alt key combinations
             //    }
-            else if (this.allowSpace && e.KeyChar == ' ')
+            else if (AllowSpace && e.KeyChar == ' ')
             {
 
             }
@@ -66,34 +58,11 @@ namespace LemballEditor.View
             }
         }
 
-        public int IntValue
-        {
-            get
-            {
-                return Int32.Parse(this.Text);
-            }
-        }
+        public int IntValue => int.Parse(Text);
 
-        public decimal DecimalValue
-        {
-            get
-            {
-                return Decimal.Parse(this.Text);
-            }
-        }
+        public decimal DecimalValue => decimal.Parse(Text);
 
-        public bool AllowSpace
-        {
-            set
-            {
-                this.allowSpace = value;
-            }
-
-            get
-            {
-                return this.allowSpace;
-            }
-        }
+        public bool AllowSpace { set; get; } = false;
     }
 
 }

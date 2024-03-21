@@ -1,56 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn enemy
     /// </summary>
-    class EnemyGraphic : MovingObjectGraphic
+    internal class EnemyGraphic : MovingObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Enemy enemy;
+        private readonly Enemy enemy;
 
         /// <summary>
         /// 
         /// </summary>
-        protected override MovingObject MovingObject
-        {
-            get { return enemy; }
-        }
+        protected override MovingObject MovingObject => enemy;
 
         /// <summary>
         /// 
         /// </summary>
-        private static Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("enemy");
-        
-        /// <summary>
-        /// 
-        /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image;
-            }
-        }
+        private static readonly Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("enemy");
 
         /// <summary>
         /// 
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(8, 12);
-            }
-        }
+        public override Bitmap Image => image;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public override Point DrawOffset => new Point(8, 12);
 
         /// <summary>
         /// 

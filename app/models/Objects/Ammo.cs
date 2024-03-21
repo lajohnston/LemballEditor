@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
-using System.Xml;
-using System.Windows.Forms;
+﻿using System.Xml;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -17,18 +11,12 @@ namespace LemballEditor.Model
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.BOMG;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.BOMG;
 
         /// <summary>
         /// The name used when creating an xml element of the object
         /// </summary>
-        public const String XML_NODE_NAME = "ammo";
+        public const string XML_NODE_NAME = "ammo";
 
         /// <summary>
         /// 
@@ -45,7 +33,7 @@ namespace LemballEditor.Model
         /// 
         /// </summary>
         /// <param name="id"></param>
-        public Ammo(ushort id) : this(id, 0,0)
+        public Ammo(ushort id) : this(id, 0, 0)
         {
         }
 
@@ -68,9 +56,9 @@ namespace LemballEditor.Model
         {
             // Create xml element
             XmlElement element = xmlDoc.CreateElement(XML_NODE_NAME);
-            
+
             // Set position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Return element
             return element;

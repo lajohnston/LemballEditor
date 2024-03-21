@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level.ObjectGraphics;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private class NodeEditMode : EditingMode
         {
             /// <summary>
             /// The object whose nodes are being edited
             /// </summary>
-            private MovingObject editingObject;
+            private readonly MovingObject editingObject;
 
             /// <summary>
             /// The node currently being dragged/moved, if any
@@ -25,9 +24,9 @@ namespace LemballEditor.View.Level
             /// <summary>
             /// The nodes that are currently drawn
             /// </summary>
-            private List<ObjectGraphic> drawnNodes;
+            private readonly List<ObjectGraphic> drawnNodes;
 
-            
+
 
             /// <summary>
             /// 
@@ -78,8 +77,8 @@ namespace LemballEditor.View.Level
 
                     // Create menu item that deletes the node
                     MenuItem deleteMenu = new MenuItem("Delete node");
-                    menu.MenuItems.Add(deleteMenu);
-                    deleteMenu.Click += delegate(object sender, EventArgs e)
+                    _ = menu.MenuItems.Add(deleteMenu);
+                    deleteMenu.Click += delegate (object sender, EventArgs e)
                     {
                         editingObject.DeleteNode((Node)levelObject);
                     };
@@ -120,10 +119,7 @@ namespace LemballEditor.View.Level
                 Node node = GetMouseOverNode(mousePosition);
 
                 // If a node was clicked on, return the node, otherwise revert to base method
-                if (node != null)
-                    return node;
-                else
-                    return base.GetObjectMouseIsOver(mousePosition);
+                return node ?? base.GetObjectMouseIsOver(mousePosition);
             }
 
             /// <summary>
@@ -135,7 +131,9 @@ namespace LemballEditor.View.Level
                 foreach (ObjectGraphic nodeImage in drawnNodes)
                 {
                     if (nodeImage.OverlapsPoint(mousePosition))
+                    {
                         return (Node)nodeImage.LevelObject;
+                    }
                 }
 
                 return null;
@@ -153,20 +151,20 @@ namespace LemballEditor.View.Level
 
                 // Create the add node menu item
                 MenuItem newNode = new MenuItem("Create node here");
-                menu.MenuItems.Add(newNode);
-                newNode.Click += delegate(object sender, EventArgs e)
+                _ = menu.MenuItems.Add(newNode);
+                newNode.Click += delegate (object sender, EventArgs e)
                 {
                     CreateNode(mousePosition);
                 };
-                
+
                 // Create the exit menu item
                 MenuItem exit = new MenuItem("Exit path mode");
-                menu.MenuItems.Add(exit);
-                exit.Click += delegate(object sender, EventArgs e)
+                _ = menu.MenuItems.Add(exit);
+                exit.Click += delegate (object sender, EventArgs e)
                 {
                     mapPanel.StartDefaultEditingMode();
                 };
-                
+
                 // Show menu at mouse
                 mapPanel.ShowMenuAtMouse(menu);
             }
@@ -204,7 +202,7 @@ namespace LemballEditor.View.Level
             private void DrawNodes(Graphics g)
             {
                 // Get the current level
-                Model.Level level = mapPanel.LoadedLevel;
+                _ = mapPanel.LoadedLevel;
 
                 // Clear the drawn nodes
                 drawnNodes.Clear();
@@ -231,7 +229,7 @@ namespace LemballEditor.View.Level
                 {
                     // Get the current node and the next node
                     Node currentNode = nodes[i];
-                    
+
                     // Get the screen position of the node
                     Point position = mapPanel.ConvertIsoXYtoScreenXY(currentNode.IsoPosition);
 
@@ -260,17 +258,16 @@ namespace LemballEditor.View.Level
                 {
                     // Get the screen positions of the first and last nodes
                     //Point firstNode = mapPanel.ConvertIsoXYtoScreenXY(nodes[0].getIsoPosition());
-                    Point firstNode = new Point(0, 0);
+                    _ = new Point(0, 0);
                     Point lastNode = mapPanel.ConvertIsoXYtoScreenXY(nodes[nodes.Count - 1].IsoPosition);
-                    
-                    if (editingObject is Enemy)
-                        firstNode = mapPanel.ConvertIsoXYtoScreenXY(nodes[0].IsoPosition);
-                    else
-                        firstNode = mapPanel.ConvertIsoXYtoScreenXY(editingObject.IsoPosition);
+
+                    Point firstNode = editingObject is Enemy
+                        ? mapPanel.ConvertIsoXYtoScreenXY(nodes[0].IsoPosition)
+                        : mapPanel.ConvertIsoXYtoScreenXY(editingObject.IsoPosition);
 
                     // Set the pen to a dotted line
                     pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dash;
-                    
+
                     // Draw the line
                     g.DrawLine(pen, firstNode, lastNode);
                 }

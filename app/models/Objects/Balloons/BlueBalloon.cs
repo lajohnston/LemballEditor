@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-
-namespace LemballEditor.Model
+﻿namespace LemballEditor.Model
 {
     /// <summary>
     /// A blue balloon
     /// </summary>
-    class BlueBalloon : Balloon
+    internal class BlueBalloon : Balloon
     {
 
-        public override Balloon.Colours Colour
-        {
-            get
-            {
-                return Colours.Blue;
-            }
-        }
+        public override Balloon.Colours Colour => Colours.Blue;
 
 
         public BlueBalloon(ushort id)

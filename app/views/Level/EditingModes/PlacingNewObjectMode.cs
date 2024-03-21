@@ -1,14 +1,11 @@
-﻿using System;
+﻿using LemballEditor.View.Level.ObjectGraphics;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Windows.Forms;
-using LemballEditor.View.Level.ObjectGraphics;
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private class PlacingNewObjectMode : HoldingObjectMode
         {

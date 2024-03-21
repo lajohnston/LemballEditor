@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
+﻿using LemballEditor.Model;
+using System;
 using System.Windows.Forms;
-using LemballEditor.Model;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
@@ -14,7 +9,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// The lift graphic being edited
         /// </summary>
-        private LiftGraphic liftGraphic;
+        private readonly LiftGraphic liftGraphic;
 
         /// <summary>
         /// 

@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
 using System.Xml;
-using System.Windows.Forms;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -17,7 +13,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// 
         /// </summary>
-        public const String XML_NODE_NAME = "moving_platform";
+        public const string XML_NODE_NAME = "moving_platform";
 
         /// <summary>
         /// 
@@ -67,23 +63,17 @@ namespace LemballEditor.Model
         /// <summary>
         /// The type of platform
         /// </summary>
-        private PlatformType platformType;
+        private readonly PlatformType platformType;
 
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.EVOM;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.EVOM;
 
         /// <summary>
         /// How the switch is activated and how it behaves
         /// </summary>
-        private ActivationType activationType;
+        private readonly ActivationType activationType;
 
         /// <summary>
         /// 
@@ -97,7 +87,6 @@ namespace LemballEditor.Model
             : base(id, isoX, isoY)
         {
             this.platformType = platformType;
-            activationType = ActivationType.SwitchMoveOnce;
             Nodes.Add(new Node(isoX, (ushort)(isoY + 50)));
             Nodes.Add(new Node((ushort)(isoX + 50), (ushort)(isoY + 60)));
         }
@@ -119,7 +108,7 @@ namespace LemballEditor.Model
         public MovingPlatform(XmlElement xmlNode)
             : base(xmlNode)
         {
-            platformType = (PlatformType) Enum.Parse(typeof(PlatformType), xmlNode.GetAttribute("activation"));
+            platformType = (PlatformType)Enum.Parse(typeof(PlatformType), xmlNode.GetAttribute("activation"));
             activationType = (ActivationType)Enum.Parse(typeof(ActivationType), xmlNode.GetAttribute("type"));
         }
 
@@ -146,7 +135,7 @@ namespace LemballEditor.Model
         {
             // ID
             base.AppendIdToBinary(binary);
-            
+
             // Platform type
             binary.Append((byte)platformType);
 
@@ -176,10 +165,10 @@ namespace LemballEditor.Model
             XmlElement element = xmlDoc.CreateElement(XML_NODE_NAME);
 
             // Set position and id
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Activation and behaviour
-            element.SetAttribute("activation", ((int) activationType).ToString());
+            element.SetAttribute("activation", ((int)activationType).ToString());
 
             // Type
             element.SetAttribute("type", ((int)platformType).ToString());

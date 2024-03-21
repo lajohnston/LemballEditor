@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level.ObjectGraphics;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
 
 
 namespace LemballEditor.View.Level
 {
-    partial class MapPanel
+    public partial class MapPanel
     {
         private class DefaultMode : EditingMode
         {
@@ -67,7 +67,7 @@ namespace LemballEditor.View.Level
             public DefaultMode(MapPanel mapPanel)
                 : base(mapPanel)
             {
-               
+
             }
 
             /// <summary>
@@ -84,12 +84,18 @@ namespace LemballEditor.View.Level
                 if (heldKeys.Contains(Keys.ShiftKey))
                 {
                     if (!mapPanel.selectedTiles.Contains(clickedTile))
+                    {
                         mapPanel.AddTileToSelection(clickedTile);
+                    }
                     else
-                        mapPanel.selectedTiles.Remove(clickedTile);
+                    {
+                        _ = mapPanel.selectedTiles.Remove(clickedTile);
+                    }
                 }
                 else
+                {
                     mapPanel.SelectSingleTile(clickedTile);
+                }
             }
 
             public override void RightClickOnMap(Point position, List<Keys> heldKeys)
@@ -121,12 +127,12 @@ namespace LemballEditor.View.Level
                 {
                     StringBuilder sb = new StringBuilder();
 
-                    foreach(Model.TileCoordinate tile in mapPanel.selectedTiles)
+                    foreach (Model.TileCoordinate tile in mapPanel.selectedTiles)
                     {
-                        sb.Append("x" + tile.xTile + " y" + tile.yTile + ",");
+                        _ = sb.Append("x" + tile.xTile + " y" + tile.yTile + ",");
                     }
 
-                    MessageBox.Show(sb.ToString());
+                    _ = MessageBox.Show(sb.ToString());
                 }
             }
 
@@ -170,7 +176,9 @@ namespace LemballEditor.View.Level
                 {
                     // Only highlight the tile if it isn't already selected, otherwise it'll be highlighted twice
                     if (!mapPanel.selectedTiles.Contains(tile))
+                    {
                         mapPanel.HighlightTile(g, tile, true);
+                    }
                 }
 
                 // Highlight the tile the mouse is over

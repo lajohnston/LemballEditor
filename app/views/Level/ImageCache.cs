@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Text;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Xml;
 using System.IO;
+using System.Xml;
 
 namespace LemballEditor.View.Level
 {
     /// <summary>
     /// Loads tile images from an XML cache
     /// </summary>
-    static class ImageCache
+    internal static class ImageCache
     {
         /// <summary>
         /// The current level terrain
@@ -22,7 +20,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The XML tile archive
         /// </summary>
-        private static XmlDocument tileArchive;
+        private static readonly XmlDocument tileArchive;
 
         /// <summary>
         /// The node containing the tiles for the current terrain
@@ -37,18 +35,12 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// Null tile
         /// </summary>
-        private static TileImage nullTile;
+        private static readonly TileImage nullTile;
 
         /// <summary>
         /// A placeholder bitmap used for object images that could not be loaded or do not exist
         /// </summary>
-        public static Bitmap NullObjectImage
-        {
-            get
-            {
-                return new Bitmap(LemballEditor.Properties.Resources.nullObjectImage);
-            }
-        }
+        public static Bitmap NullObjectImage => new Bitmap(LemballEditor.Properties.Resources.nullObjectImage);
 
         /// <summary>
         /// Different types of tile that exist within the game
@@ -117,7 +109,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// A hashtable that associates TileImage objects with their tileRef number
         /// </summary>
-        private static Hashtable cache;
+        private static readonly Hashtable cache;
 
         /// <summary>
         /// The static initialiser for the tile cache
@@ -148,7 +140,7 @@ namespace LemballEditor.View.Level
         /// Changes the terrain type that the cache handles
         /// </summary>
         /// <param name="terrainType"></param>
-        public static void ChangeTerrainType (Model.Level.TerrainTypes newTerrain)
+        public static void ChangeTerrainType(Model.Level.TerrainTypes newTerrain)
         {
             // If the new terrain type is different from the current one
             if (terrain != newTerrain)
@@ -166,11 +158,10 @@ namespace LemballEditor.View.Level
         {
             foreach (XmlNode tileNode in terrainNode)
             {
-                XmlElement tileElement = null;
                 if (tileNode is XmlElement && tileNode.Name == "tile")
                 {
                     // Cast the tileNode as an XmlElement
-                    tileElement = (XmlElement)tileNode;
+                    XmlElement tileElement = (XmlElement)tileNode;
 
                     // Ensure that the tile is not hidden
                     if (tileElement.GetAttribute("hide") != "yes")
@@ -200,14 +191,14 @@ namespace LemballEditor.View.Level
         /// Sets the terrain type, changes the XML tile terrain node and clears the cache
         /// </summary>
         /// <param name="newTerrain"></param>
-        private static void SetTerrainType (Model.Level.TerrainTypes newTerrain)
+        private static void SetTerrainType(Model.Level.TerrainTypes newTerrain)
         {
             terrain = newTerrain;
             terrainNode = (XmlElement)tileArchive.DocumentElement.ChildNodes[(int)newTerrain];
             cache.Clear();
 
             // Load elevation graphic
-            XmlElement elevElement = (XmlElement) terrainNode.SelectSingleNode("elevation");
+            XmlElement elevElement = (XmlElement)terrainNode.SelectSingleNode("elevation");
             terrainElevationBitmap = loadBitmap(elevElement);
         }
 
@@ -220,8 +211,8 @@ namespace LemballEditor.View.Level
         /// <returns></returns>
         public static TileImage getTile(uint tileRef, bool addToCache)
         {
-            TileImage tile = (TileImage) cache[tileRef];
-            
+            TileImage tile = (TileImage)cache[tileRef];
+
             if (tile == null)
             {
                 tile = loadTileFromXML(tileRef, addToCache);
@@ -252,26 +243,23 @@ namespace LemballEditor.View.Level
             getTile(tileRef).DrawTile(g, position);
         }
 
-        
+
 
         public static Bitmap getElevationBitmap()
         {
             return terrainElevationBitmap;
         }
 
-        public static Bitmap GetObjectImage(String name)
+        public static Bitmap GetObjectImage(string name)
         {
             // Load tile cache XML data
             try
             {
                 XmlDocument objects = new XmlDocument();
                 objects.Load(@"..\..\assets\objects.xml");
-                XmlElement element = (XmlElement)(objects.DocumentElement.SelectSingleNode("image[@name=\"" + name +"\"]"));
+                XmlElement element = (XmlElement)objects.DocumentElement.SelectSingleNode("image[@name=\"" + name + "\"]");
 
-                if (element != null)
-                    return loadBitmap(element);
-                else
-                    return NullObjectImage;
+                return element != null ? loadBitmap(element) : NullObjectImage;
             }
             catch (Exception)
             {
@@ -285,17 +273,19 @@ namespace LemballEditor.View.Level
         /// </summary>
         /// <param name="tileRef"></param>
         /// <returns></returns>
-        private static TileImage loadTileFromXML (uint tileRef, bool addToCache)
+        private static TileImage loadTileFromXML(uint tileRef, bool addToCache)
         {
             // Search for tile in the archive
-            XmlElement tileNode = (XmlElement) terrainNode.SelectSingleNode("tile[@ref=" + tileRef + "]");
+            XmlElement tileNode = (XmlElement)terrainNode.SelectSingleNode("tile[@ref=" + tileRef + "]");
 
             if (tileNode != null)
             {
                 TileImage tile = new TileImage(tileNode);
-                
+
                 if (addToCache)
+                {
                     cache.Add(tileRef, tile);
+                }
 
                 return tile;
             }
@@ -317,7 +307,7 @@ namespace LemballEditor.View.Level
                 // Read the PNG data from the archive and return a bitmap image
                 try
                 {
-                    String base64data = tileElement.FirstChild.Value;
+                    string base64data = tileElement.FirstChild.Value;
 
                     // Convert base64 text into data
                     byte[] data = Convert.FromBase64String(base64data);

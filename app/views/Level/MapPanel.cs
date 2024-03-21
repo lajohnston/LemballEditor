@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Drawing.Imaging;
-using LemballEditor.Model;
+﻿using LemballEditor.Model;
 using LemballEditor.View.Level.ObjectGraphics;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace LemballEditor.View.Level
 {
@@ -40,7 +39,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// Stores a bitmap of the rendered map
         /// </summary>
-        private Bitmap renderedMap;
+        private readonly Bitmap renderedMap;
 
         /// <summary>
         /// True if the mouse is over the mapPanel, otherwise false
@@ -50,7 +49,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The map coordinate of the first viewable tile (at the top of the isometric diamond)
         /// </summary>
-        private TileCoordinate firstViewTile;
+        private readonly TileCoordinate firstViewTile;
 
         /// <summary>
         /// The screen position of the first isometric pixel, which may be outside the viewable
@@ -67,17 +66,17 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The bitmap used to highlight the outline of tiles
         /// </summary>
-        private static Bitmap selectedTileOutline = new Bitmap(LemballEditor.Properties.Resources.mouseOverTile);
+        private static readonly Bitmap selectedTileOutline = new Bitmap(LemballEditor.Properties.Resources.mouseOverTile);
 
         /// <summary>
         /// The bitmap used to highlight tiles tiles
         /// </summary>
-        private static Bitmap selectedTileFill = new Bitmap(LemballEditor.Properties.Resources.selectedTile);
+        private static readonly Bitmap selectedTileFill = new Bitmap(LemballEditor.Properties.Resources.selectedTile);
 
         /// <summary>
         /// The attributes used to draw the selected tile fill graphic
         /// </summary>
-        private static ImageAttributes selectedTileFillAttributes;
+        private static readonly ImageAttributes selectedTileFillAttributes;
 
         /// <summary>
         /// The image attributes used to draw images with transparency
@@ -89,8 +88,8 @@ namespace LemballEditor.View.Level
         /// </summary>
         //private List<LevelObject> drawnObjects;
 
-        private List<ObjectGraphic> drawnObjectImages;
-        private List<ObjectGraphic> objectViews;
+        private readonly List<ObjectGraphic> drawnObjectImages;
+        private readonly List<ObjectGraphic> objectViews;
 
         /// <summary>
         /// The current editing mode, which defines what should occur when certain events take place
@@ -100,7 +99,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// A list of tiles that have been selected by the user
         /// </summary>
-        private List<TileCoordinate> selectedTiles;
+        private readonly List<TileCoordinate> selectedTiles;
 
         /// <summary>
         /// A list of active tiles, that is, tiles that will be edited by an action such as altering elevation. 
@@ -137,13 +136,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The level that is currently loaded
         /// </summary>
-        public Model.Level LoadedLevel
-        {
-            get
-            {
-                return Program.LoadedLevel;
-            }
-        }
+        public Model.Level LoadedLevel => Program.LoadedLevel;
 
         /// <summary>
         /// 
@@ -161,8 +154,10 @@ namespace LemballEditor.View.Level
             selectedTileFillAttributes.SetColorKey(transparentColour, transparentColour);
 
             // Create a remap table to make the fill semi-transparent
-            ColorMap map = new ColorMap();
-            map.OldColor = selectedTileFill.GetPixel(16, 8);
+            ColorMap map = new ColorMap
+            {
+                OldColor = selectedTileFill.GetPixel(16, 8)
+            };
             map.NewColor = Color.FromArgb(80, map.OldColor);
             selectedTileFillAttributes.SetRemapTable(new ColorMap[] { map });
         }
@@ -189,14 +184,14 @@ namespace LemballEditor.View.Level
             Dock = DockStyle.Fill;
 
             // Double buffers the display so that it doesn't flicker
-            this.DoubleBuffered = true;
+            DoubleBuffered = true;
 
             //
             drawnObjectImages = new List<ObjectGraphic>(10);
             objectViews = new List<ObjectGraphic>(10);
 
             // 
-            renderedMap = new Bitmap(MAX_VIEW_SIZE_XY * 32, MAX_VIEW_SIZE_XY * 16 + 90);
+            renderedMap = new Bitmap(MAX_VIEW_SIZE_XY * 32, (MAX_VIEW_SIZE_XY * 16) + 90);
 
             //
             selectedTiles = new List<Model.TileCoordinate>();
@@ -248,13 +243,13 @@ namespace LemballEditor.View.Level
                 RenderMapAtNextUpdate();
 
                 // Call for immediate refresh
-                this.Invalidate();
+                Invalidate();
             }
             else
             {
                 // Disable panel and make invisible
-                this.Enabled = false;
-                this.Visible = false;
+                Enabled = false;
+                Visible = false;
             }
         }
 
@@ -350,7 +345,7 @@ namespace LemballEditor.View.Level
                     }
                     catch (Exception)
                     {
-                        MessageBox.Show("Graphic error when rendering map");
+                        _ = MessageBox.Show("Graphic error when rendering map");
                     }
                 }
 
@@ -376,7 +371,7 @@ namespace LemballEditor.View.Level
         /// </summary>
         /// <param name="g"></param>
         /// <param name="tileCoordinate"></param>
-        private void HighlightTile (Graphics g, TileCoordinate tileCoordinate, bool fill)
+        private void HighlightTile(Graphics g, TileCoordinate tileCoordinate, bool fill)
         {
             if (tileCoordinate != null && TileIsVisible(tileCoordinate))
             {
@@ -462,10 +457,14 @@ namespace LemballEditor.View.Level
                 || tile.xTile >= firstViewTile.xTile + mapViewTileDimensions.Width
                 || tile.yTile >= firstViewTile.yTile + mapViewTileDimensions.Height
                 )
+            {
                 return false;
+            }
             else
+            {
                 // Tile is on the map
                 return true;
+            }
         }
 
         /// <summary>
@@ -488,7 +487,9 @@ namespace LemballEditor.View.Level
             foreach (ObjectGraphic imageData in objectViews)
             {
                 if (imageData.LevelObject.Equals(levelObject))
+                {
                     return imageData;
+                }
             }
 
             // Initialise object view and add to list
@@ -552,8 +553,8 @@ namespace LemballEditor.View.Level
             Bitmap elevationBmp = ImageCache.getElevationBitmap();
 
             // Get the number of tiles in the map
-            int xTiles = LoadedLevel.MapSizeX;
-            int yTiles = LoadedLevel.MapSizeY;
+            _ = LoadedLevel.MapSizeX;
+            _ = LoadedLevel.MapSizeY;
 
             // Erase previously drawn objects
             drawnObjectImages.Clear();
@@ -571,7 +572,9 @@ namespace LemballEditor.View.Level
                     //MapTile currentTile = LoadedLevel.GetTile(currentTileCoordinate);
 
                     if (currentTileCoordinate == null)
+                    {
                         break;
+                    }
 
                     // Get the current tile's elevation
                     int elevation = GetTileDrawElevation(currentTileCoordinate, true);
@@ -599,7 +602,7 @@ namespace LemballEditor.View.Level
 
                     // Draw objects
                     DrawObjectsOnTile(g, LoadedLevel, currentTileCoordinate);
-                    
+
 
                     // Increment the currentTile X value
                     currentTileCoordinate.xTile++;
@@ -721,7 +724,9 @@ namespace LemballEditor.View.Level
         private void AddTileToSelection(TileCoordinate tile)
         {
             if (!selectedTiles.Contains(tile))
+            {
                 selectedTiles.Add(tile);
+            }
         }
     }
 }

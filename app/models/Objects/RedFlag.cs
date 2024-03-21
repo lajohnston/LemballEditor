@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
+﻿using System.Xml;
 
 namespace LemballEditor.Model
 {
-    class RedFlag : Flag
+    internal class RedFlag : Flag
     {
         public RedFlag(XmlElement element)
             : base(element)

@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Xml;
 using VsrCompiler;
-using System.Windows.Forms;
-using LemballEditor.View;
 
 namespace LemballEditor.Model
 {
@@ -18,13 +15,7 @@ namespace LemballEditor.Model
         /// <summary>
         /// Returns a copy of the idrefs of the objects connected to this switch
         /// </summary>
-        public int[] ConnectedIdrefs
-        {
-            get
-            {
-                return connectedObjectIds.ToArray();
-            }
-        }
+        public int[] ConnectedIdrefs => connectedObjectIds.ToArray();
 
         /// <summary>
         /// 
@@ -67,7 +58,7 @@ namespace LemballEditor.Model
                 // If the idref list doesn't already contain the idref
                 if (!connectedObjectIds.Contains(levelObject.Id))
                 {
-                    levelObject.ConnectToSwitch();
+                    _ = levelObject.ConnectToSwitch();
                     connectedObjectIds.Add(levelObject.Id);
                 }
 
@@ -85,7 +76,7 @@ namespace LemballEditor.Model
         /// <param name="idref"></param>
         public void DeleteConnection(int idref)
         {
-            connectedObjectIds.Remove(idref);
+            _ = connectedObjectIds.Remove(idref);
         }
 
         /// <summary>
@@ -105,16 +96,9 @@ namespace LemballEditor.Model
         /// <returns></returns>
         public virtual bool CanConnectToObject(LevelObject levelObject)
         {
-            if (levelObject is Gate
+            return levelObject is Gate
                 || levelObject is MovingPlatform
-                || levelObject is Lift)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+                || levelObject is Lift;
         }
 
         /// <summary>
@@ -138,7 +122,7 @@ namespace LemballEditor.Model
         /// </summary>
         /// <param name="binary"></param>
         /// <param name="levelObject"></param>
-        protected abstract void CompileConnection (BinaryEditor binary, LevelObject levelObject);
+        protected abstract void CompileConnection(BinaryEditor binary, LevelObject levelObject);
 
 
     }

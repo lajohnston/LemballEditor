@@ -22,17 +22,14 @@ namespace LemballEditor.Model
         private Point isoPosition;
         public virtual Point IsoPosition
         {
-            get
-            {
-                return isoPosition;
-            }
+            get => isoPosition;
             set
             {
                 // Set the isometric position
                 isoPosition = value;
 
                 // Calculate the tile the object is on
-                this.OnTile = new TileCoordinate(
+                OnTile = new TileCoordinate(
                         (byte)Math.Floor((double)isoPosition.X / 16),
                         (byte)Math.Floor((double)isoPosition.Y / 16)
                     );
@@ -58,7 +55,7 @@ namespace LemballEditor.Model
             YMNE,
             GPHS,
             EDON,
-            LLAB,            
+            LLAB,
             ENIM,
             LLOC,
             MINA,
@@ -84,15 +81,15 @@ namespace LemballEditor.Model
         public LevelObject(ushort id, ushort isoX, ushort isoY)
         {
             IsoPosition = new Point(isoX, isoY);
-            this.Id = id;
+            Id = id;
         }
 
         /// <summary>
         /// Positions a new game object at the isometric coordinate of 0, 0
         /// </summary>
-        public LevelObject(ushort id) 
-            : this(id, 0, 0) {}
-        
+        public LevelObject(ushort id)
+            : this(id, 0, 0) { }
+
         /// <summary>
         /// Positions a GameObject based on the values stored in an XML element
         /// </summary>
@@ -156,10 +153,7 @@ namespace LemballEditor.Model
                     return new Lever(xmlElement);
 
                 case Flag.XML_NODE_NAME:
-                    if (xmlElement.GetAttribute("player") == "1")
-                        return new Flag(xmlElement);
-                    else
-                        return new RedFlag(xmlElement);
+                    return xmlElement.GetAttribute("player") == "1" ? new Flag(xmlElement) : (LevelObject)new RedFlag(xmlElement);
             }
 
             throw new NotImplementedException();
@@ -191,7 +185,7 @@ namespace LemballEditor.Model
         /// (like the gate) can only be on ground level. These objects should override this
         /// method to return a 'false' value.
         /// </summary>
-        /// <returns>Unless overrideen, always returns true, which indicates the object can levitate</returns>
+        /// <returns>Unless overridden, always returns true, which indicates the object can levitate</returns>
         public virtual bool CanElevate()
         {
             return true;
@@ -232,7 +226,7 @@ namespace LemballEditor.Model
         {
             // Store id if required
             element.SetAttribute("id", Id.ToString());
-            
+
             // Store position
             element.SetAttribute("x", IsoPosition.X.ToString());
             element.SetAttribute("y", IsoPosition.Y.ToString());
@@ -273,7 +267,7 @@ namespace LemballEditor.Model
         /// 
         /// </summary>
         /// <returns></returns>
-        public virtual bool ConnectToSwitch ()
+        public virtual bool ConnectToSwitch()
         {
             return false;
         }

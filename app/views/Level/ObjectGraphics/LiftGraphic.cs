@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
@@ -15,25 +12,19 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// The lift object this graphic represents
         /// </summary>
-        private Lift lift;
+        private readonly Lift lift;
 
         /// <summary>
         /// The lift object this graphic represents
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return lift; }
-        }
+        public override LevelObject LevelObject => lift;
 
         /// <summary>
         /// The X tile size of the lift
         /// </summary>
         public ushort xTileSize
         {
-            get
-            {
-                return lift.xTileSize;
-            }
+            get => lift.xTileSize;
             set
             {
                 lift.xTileSize = value;
@@ -46,10 +37,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// </summary>
         public ushort yTileSize
         {
-            get
-            {
-                return lift.yTileSize;
-            }
+            get => lift.yTileSize;
             set
             {
                 lift.yTileSize = value;
@@ -62,14 +50,8 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// </summary>
         public Lift.ActivationTypes ActivationType
         {
-            get
-            {
-                return lift.ActivationType;
-            }
-            set
-            {
-                lift.ActivationType = value;
-            }
+            get => lift.ActivationType;
+            set => lift.ActivationType = value;
         }
 
         /// <summary>
@@ -77,10 +59,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// </summary>
         public ushort StartHeight
         {
-            get
-            {
-                return lift.StartHeight;
-            }
+            get => lift.StartHeight;
             set
             {
                 lift.StartHeight = value;
@@ -93,10 +72,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// </summary>
         public ushort EndHeight
         {
-            get
-            {
-                return lift.EndHeight;
-            }
+            get => lift.EndHeight;
             set
             {
                 lift.EndHeight = value;
@@ -107,13 +83,10 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// If true, the lift will be drawn at it's start height, otherwise it will be drawn at it's end height
         /// </summary>
-        private Boolean previewStartHeight;
-        public Boolean PreviewStartHeight
+        private bool previewStartHeight;
+        public bool PreviewStartHeight
         {
-            get
-            {
-                return previewStartHeight;
-            }
+            get => previewStartHeight;
             set
             {
                 previewStartHeight = value;
@@ -124,32 +97,17 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// The height the lift is set to be drawn at on the map
         /// </summary>
-        public ushort PreviewHeight
-        {
-            get
-            {
-                if (PreviewStartHeight)
-                    return StartHeight;
-                else
-                    return EndHeight;
-            }
-        }
+        public ushort PreviewHeight => PreviewStartHeight ? StartHeight : EndHeight;
 
         /// <summary>
         /// The image for each tile of the lift's area
         /// </summary>
-        private Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("lift");
+        private readonly Bitmap image = LemballEditor.View.Level.ImageCache.GetObjectImage("lift");
 
         /// <summary>
         /// 
         /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image;
-            }
-        }
+        public override Bitmap Image => image;
 
         //public override Bitmap Image
         //{
@@ -200,13 +158,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// 
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(0, 0);
-            }
-        }
+        public override Point DrawOffset => new Point(0, 0);
 
         /// <summary>
         /// 
@@ -246,11 +198,11 @@ namespace LemballEditor.View.Level.ObjectGraphics
             settings.Click += delegate
             {
                 ChangeLiftArea dialog = new ChangeLiftArea(this);
-                dialog.ShowDialog();
-            
+                _ = dialog.ShowDialog();
+
             };
 
-            menu.MenuItems.Add(settings);
+            _ = menu.MenuItems.Add(settings);
         }
 
         /// <summary>

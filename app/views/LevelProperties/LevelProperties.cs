@@ -1,11 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using LemballEditor.Model;
 
 namespace LemballEditor.View
 {
@@ -14,7 +8,7 @@ namespace LemballEditor.View
         /// <summary>
         /// The level to display and edit the properties of
         /// </summary>
-        private Model.Level level;
+        private readonly Model.Level level;
 
         /// <summary>
         /// Creates a new Level Properties form based on the settings of the specified level
@@ -24,7 +18,7 @@ namespace LemballEditor.View
         {
             // Initailise components
             InitializeComponent();
-            
+
             // Store level
             this.level = level;
 
@@ -147,20 +141,24 @@ namespace LemballEditor.View
 
             // Set time limit
             level.SetTimeLimit((ushort)
-                (Convert.ToInt32(timeLimitMinutes.Text) * 60
+                ((Convert.ToInt32(timeLimitMinutes.Text) * 60)
                 + Convert.ToInt32(timeLimitSeconds.Text)));
 
             // Set flags required
             if (oneFlag.Checked)
+            {
                 level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.One;
+            }
             else if (twoFlags.Checked)
+            {
                 level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.Two;
-            else if (threeFlags.Checked)
-                level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.Three;
-            else if (fourFlags.Checked)
-                level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.Four;
+            }
             else
-                level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.All;
+            {
+                level.NumberOfFlagsRequiredToWin = threeFlags.Checked
+                    ? Model.Level.FlagsRequired.Three
+                    : fourFlags.Checked ? Model.Level.FlagsRequired.Four : Model.Level.FlagsRequired.All;
+            }
         }
 
         /// <summary>

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using LemballEditor.Model;
+﻿using LemballEditor.Model;
+using System;
 
 namespace LemballEditor.View
 {
-    class ObjectListItem
+    internal class ObjectListItem
     {
-        private String text;
-        private Type gameObjectType;
+        private readonly string text;
+        private readonly Type gameObjectType;
 
-        public ObjectListItem(String text, Type gameObjectType)
+        public ObjectListItem(string text, Type gameObjectType)
         {
             this.text = text;
             //gameObjectType = gameObject.GetType();
@@ -22,7 +20,7 @@ namespace LemballEditor.View
             return (LevelObject)Activator.CreateInstance(gameObjectType, (ushort)0);
         }
 
-        public override String ToString()
+        public override string ToString()
         {
             return text;
         }

@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using VsrCompiler;
-using LemballEditor.Model;
 using System.IO;
+using VsrCompiler;
 
 namespace LemballEditor.Model
 {
-    partial class Level
+    public partial class Level
     {
         private abstract class LevelCompiler
         {
@@ -46,7 +44,9 @@ namespace LemballEditor.Model
                 foreach (LevelObject gameObject in level.levelObjects)
                 {
                     if (gameObject.RequiresStaticId() && gameObject.Id >= nextId)
+                    {
                         nextId = (ushort)(gameObject.Id + 1);
+                    }
                 }
 
                 // Compiler header
@@ -105,7 +105,7 @@ namespace LemballEditor.Model
                 binary.Append("FSDG");
 
                 // Size of level tiles chunk
-                binary.Append((level.MapSizeX * level.MapSizeY * 6 + 12));
+                binary.Append((level.MapSizeX * level.MapSizeY * 6) + 12);
 
                 // Number of X and Y tiles
                 binary.Append((short)level.MapSizeX);
@@ -116,7 +116,7 @@ namespace LemballEditor.Model
             /// Compiles the level's tiles into a Lemmings Paintball compatible format
             /// </summary>
             /// <param name="binary"></param>
-            public static void CompileTiles (BinaryEditor binaryEditor, Level level)
+            public static void CompileTiles(BinaryEditor binaryEditor, Level level)
             {
                 // Write tiles
                 int xTiles = level.MapSizeX;
@@ -131,7 +131,7 @@ namespace LemballEditor.Model
                         TileCoordinate tile = new TileCoordinate(xTile, yTile);
 
                         // Tile image ref
-                        binaryEditor.Append((uint)level.GetTileImageRef(tile));
+                        binaryEditor.Append(level.GetTileImageRef(tile));
 
                         // Tile elevation
                         binaryEditor.Append((short)level.GetTileElevation(tile));
@@ -369,7 +369,7 @@ namespace LemballEditor.Model
                 }
 
                 // Set size
-                uint size = (binary.getSize() - sizePointer) + 4;
+                uint size = binary.getSize() - sizePointer + 4;
                 binary.Set(sizePointer, size);
 
                 // Pad
@@ -413,7 +413,9 @@ namespace LemballEditor.Model
                 foreach (LevelObject gameObject in level.levelObjects)
                 {
                     if (gameObject.ObjectBlock == objectBlock)
+                    {
                         list.Add(gameObject);
+                    }
                 }
 
                 return list;
@@ -431,7 +433,9 @@ namespace LemballEditor.Model
                     // If the object doesn't require a static id, assign it a new one
                     ushort? id = null;
                     if (!gameObject.RequiresStaticId())
+                    {
                         id = nextId;
+                    }
 
                     gameObject.CompileVsrBinary(binary, level, id);
                 }
@@ -673,7 +677,7 @@ namespace LemballEditor.Model
             /// </summary>
             /// <param name="binary">The BinaryEditor to which to write the compiled block</param>
             /// <param name="name">The header string</param>
-            private static void CompileEmptyBlock(String name)
+            private static void CompileEmptyBlock(string name)
             {
                 // Name
                 binary.Append(name);

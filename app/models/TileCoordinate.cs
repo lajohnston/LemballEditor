@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace LemballEditor.Model
+﻿namespace LemballEditor.Model
 {
     /// <summary>
     /// Stores an X and Y tile coordinate
@@ -22,13 +18,12 @@ namespace LemballEditor.Model
         {
             // Return false if object is not a tile coordinate
             if (!(obj is TileCoordinate))
+            {
                 return false;
+            }
 
             TileCoordinate compareTo = (TileCoordinate)obj;
-            if (xTile == compareTo.xTile && yTile == compareTo.yTile)
-                return true;
-            else
-                return false;
+            return xTile == compareTo.xTile && yTile == compareTo.yTile;
         }
 
         public override int GetHashCode()

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
+﻿using System.Collections.Generic;
 using System.Drawing;
-using LemballEditor.View.Level;
-using System.Windows.Forms;
+using System.Xml;
 
 namespace LemballEditor.Model
 {
@@ -20,10 +16,7 @@ namespace LemballEditor.Model
         /// </summary>
         public override Point IsoPosition
         {
-            get
-            {
-                return base.IsoPosition;
-            }
+            get => base.IsoPosition;
             set
             {
                 // Remember old position
@@ -51,7 +44,7 @@ namespace LemballEditor.Model
             }
         }
 
-        public MovingObject(ushort id, ushort isoX, ushort isoY) : base (id, isoX, isoY)
+        public MovingObject(ushort id, ushort isoX, ushort isoY) : base(id, isoX, isoY)
         {
             Nodes = new List<Node>();
         }
@@ -61,7 +54,7 @@ namespace LemballEditor.Model
         /// </summary>
         /// <param name="element"></param>
         public MovingObject(XmlElement element)
-            : base (element)
+            : base(element)
         {
             Nodes = new List<Node>();
 
@@ -81,12 +74,12 @@ namespace LemballEditor.Model
 
             // Create element to hold nodes
             XmlElement nodes = xmlDoc.CreateElement("nodes");
-            objectElement.AppendChild(nodes);
+            _ = objectElement.AppendChild(nodes);
 
             // Compile each node
             foreach (Node node in Nodes)
             {
-                nodes.AppendChild(node.CompileXml(xmlDoc));
+                _ = nodes.AppendChild(node.CompileXml(xmlDoc));
             }
 
             // Pass element to base
@@ -100,7 +93,7 @@ namespace LemballEditor.Model
 
         public void DeleteNode(Node node)
         {
-            Nodes.Remove(node);
+            _ = Nodes.Remove(node);
         }
 
         public int CountNodes()

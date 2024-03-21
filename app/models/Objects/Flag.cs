@@ -1,27 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml;
-using System.Windows.Forms;
-using System.Drawing;
+﻿using System.Xml;
 using VsrCompiler;
 
 namespace LemballEditor.Model
 {
-    class Flag : LevelObject
+    internal class Flag : LevelObject
     {
-        public const String XML_NODE_NAME = "flag";
+        public const string XML_NODE_NAME = "flag";
 
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.LLOC;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.LLOC;
 
 
 
@@ -48,7 +37,7 @@ namespace LemballEditor.Model
             XmlElement element = xmlDoc.CreateElement(XML_NODE_NAME);
 
             // Set position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Player
             if (isPlayerOne())

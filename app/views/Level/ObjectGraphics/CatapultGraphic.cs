@@ -1,58 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn catapult
     /// </summary>
-    class CatapultGraphic : ObjectGraphic
+    internal class CatapultGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Catapult catapult;
+        private readonly Catapult catapult;
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return catapult; }
-        }
+        public override LevelObject LevelObject => catapult;
 
         /// <summary>
         /// The object's image
         /// </summary>
-        private static Bitmap image_x = LemballEditor.View.Level.ImageCache.GetObjectImage("catapult_x");
-        private static Bitmap image_y = LemballEditor.View.Level.ImageCache.GetObjectImage("catapult_y");
+        private static readonly Bitmap image_x = LemballEditor.View.Level.ImageCache.GetObjectImage("catapult_x");
+        private static readonly Bitmap image_y = LemballEditor.View.Level.ImageCache.GetObjectImage("catapult_y");
 
         /// <summary>
         /// The draw offset of the object's graphic
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(42, 42);
-            }
-        }
+        public override Point DrawOffset => new Point(42, 42);
 
 
         /// <summary>
         /// Accessor to the object image
         /// </summary>
-        public override Bitmap Image
-        {
-            get
-            {
-                return image_x;
-            }
-        }
+        public override Bitmap Image => image_x;
 
         /// <summary>
         /// 

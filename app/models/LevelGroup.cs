@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
-using System.IO;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -30,26 +30,19 @@ namespace LemballEditor.Model
         /// the level group cannot have any more or less levels than this number. If there aren't enough
         /// user-created levels to meet this number then blank levels need to be used to pad the number out.
         /// </summary>
-        private int MaxLevels
-        {
-            get
-            {
-                return new byte[] { 25, 26, 29, 22, 12 }[(int)Group];
-                /*
+        private int MaxLevels => new byte[] { 25, 26, 29, 22, 12 }[(int)Group];/*
                 if (FullVersion)
                     return new byte[] { 25, 26, 29, 22, 12 }[(int)group];
                 else
                     return new byte[] { 2, 1, 1, 1, 1 }[(int)group];
                 */
-            }
-        }
 
         //private bool FullVersion;
 
         /// <summary>
         /// 
         /// </summary>
-        private List<Level> levels;
+        private readonly List<Level> levels;
 
         /// <summary>
         /// 
@@ -74,12 +67,14 @@ namespace LemballEditor.Model
         public LevelGroup(XmlElement xmlElement, BinaryReader tilesReader)
         {
             // Get the level group
-            Group = (LevelGroupTypes)Enum.Parse(typeof(LevelGroupTypes), xmlElement.GetAttribute("name")); 
+            Group = (LevelGroupTypes)Enum.Parse(typeof(LevelGroupTypes), xmlElement.GetAttribute("name"));
 
             // Verify tiles data
-            if (new String(tilesReader.ReadChars(3)) != "DIR")
+            if (new string(tilesReader.ReadChars(3)) != "DIR")
+            {
                 throw new InvalidDataException("Invalid tile directory offset");
-            
+            }
+
             // Number of level tiles
             int numberOfTileFiles = tilesReader.ReadByte();
 
@@ -88,7 +83,9 @@ namespace LemballEditor.Model
 
             // Ensure number of XML levels is equal to the number of tile files
             if (xmlLevels.Count != numberOfTileFiles)
+            {
                 throw new InvalidDataException("Invalid number of tile files");
+            }
 
             // Initialise level list
             levels = new List<Level>(xmlLevels.Count);
@@ -97,15 +94,17 @@ namespace LemballEditor.Model
             for (int i = 0; i < numberOfTileFiles; i++)
             {
                 // Verify level data offset
-                if (new String(tilesReader.ReadChars(4)) != "LEV ")
+                if (new string(tilesReader.ReadChars(4)) != "LEV ")
+                {
                     throw new InvalidDataException("Invalid tile file offset");
-                
+                }
+
                 // Get tile data
                 int tileSize = tilesReader.ReadInt32();
                 byte[] tileData = tilesReader.ReadBytes(tileSize);
 
                 // Get level node
-                XmlElement levelElement = (XmlElement) xmlLevels.Item(i);
+                XmlElement levelElement = (XmlElement)xmlLevels.Item(i);
 
                 // Add level to list
                 levels.Add(new Level(levelElement, tileData));
@@ -128,7 +127,7 @@ namespace LemballEditor.Model
             foreach (Level level in levels)
             {
                 // Add level data to group element
-                groupElement.AppendChild(level.CompileXML(xmlDoc));
+                _ = groupElement.AppendChild(level.CompileXML(xmlDoc));
             }
 
             // Return new group element
@@ -142,9 +141,13 @@ namespace LemballEditor.Model
         public void AppendLevel(Level level)
         {
             if (HasCapacity())
+            {
                 levels.Add(level);
+            }
             else
+            {
                 throw new LevelGroupFullException();
+            }
         }
 
         /// <summary>
@@ -162,7 +165,7 @@ namespace LemballEditor.Model
         /// <param name="level"></param>
         public void DeleteLevel(Level level)
         {
-            levels.Remove(level);
+            _ = levels.Remove(level);
         }
 
         /// <summary>
@@ -239,10 +242,7 @@ namespace LemballEditor.Model
         /// <returns>true if there is room, otherwise false</returns>
         public bool HasCapacity()
         {
-            if (levels.Count < MaxLevels)
-                return true;
-            else
-                return false;
+            return levels.Count < MaxLevels;
         }
 
         /// <summary>
@@ -287,9 +287,13 @@ namespace LemballEditor.Model
 
                 // Compiled level
                 if (!tilesOnly)
+                {
                     level.CompileVsrData(binary);
+                }
                 else
+                {
                     level.CompileTiles(binary);
+                }
 
                 // Set address of last byte at sizeAddr pointer
                 //binary.SetAddressPointer(sizeAddr, binary.getPosition() - 1 - sizeAddr - 4);
@@ -301,7 +305,7 @@ namespace LemballEditor.Model
         /// Fills a list box with the names of each level
         /// </summary>
         /// <param name="list"></param>
-        public void GetLevelList (ListBox list)
+        public void GetLevelList(ListBox list)
         {
             // Clear list
             list.Items.Clear();
@@ -310,9 +314,9 @@ namespace LemballEditor.Model
             for (int i = 0; i < levels.Count; i++)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("(" + i + ") ");
-                sb.Append(levels[i].Name);
-                list.Items.Add(sb.ToString());
+                _ = sb.Append("(" + i + ") ");
+                _ = sb.Append(levels[i].Name);
+                _ = list.Items.Add(sb.ToString());
             }
 
         }

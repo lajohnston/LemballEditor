@@ -1,28 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+﻿using LemballEditor.View;
+using System;
 using System.IO;
 using System.Text;
-using LemballEditor.View;
-using VsrCompiler;
-using System.Configuration;
+using System.Windows.Forms;
 
 
 
 namespace LemballEditor
 {
-    static class Program
+    internal static class Program
     {
         /// <summary>
         /// Byte array containing the version number
         /// (major version, year, month, release number)
         /// </summary>
-        private static byte[] version = new byte[] {0,0,5,0};
+        private static readonly byte[] version = new byte[] { 0, 0, 5, 0 };
 
         /// <summary>
         /// The file name to which the loaded level pack was last saved
         /// </summary>
-        public static String ProjectFileName { get; set; }
+        public static string ProjectFileName { get; set; }
 
         /// <summary>
         /// The currently loaded level pack
@@ -30,10 +27,7 @@ namespace LemballEditor
         private static Model.LevelPack loadedLevelPack;
         private static Model.LevelPack LoadedLevelPack
         {
-            get
-            {
-                return loadedLevelPack;
-            }
+            get => loadedLevelPack;
             set
             {
                 loadedLevelPack = value;
@@ -52,10 +46,7 @@ namespace LemballEditor
         private static Model.Level loadedLevel;
         public static Model.Level LoadedLevel
         {
-            get
-            {
-                return loadedLevel;
-            }
+            get => loadedLevel;
             set
             {
                 loadedLevel = value;
@@ -73,59 +64,29 @@ namespace LemballEditor
         /// <summary>
         /// The path to the Lemball Exe file
         /// </summary>
-        public static String LemballExePath
+        public static string LemballExePath
         {
             get
             {
-                String path = Properties.Settings.Default.LemballExePath;
-                if (path.Length == 0 || !File.Exists(path))
-                    return null;
-                else
-                    return path;
+                string path = Properties.Settings.Default.LemballExePath;
+                return path.Length == 0 || !File.Exists(path) ? null : path;
             }
         }
 
         /// <summary>
         /// The path to the Lemmings Paintball directory
         /// </summary>
-        public static String LemballDirectory
-        {
-            get
-            {
-                if (LemballExePath == null)
-                    return null;
-                else
-                    return Path.GetDirectoryName(LemballExePath);
-            }
-        }
+        public static string LemballDirectory => LemballExePath == null ? null : Path.GetDirectoryName(LemballExePath);
 
         /// <summary>
         /// The path to the current Vsr file
         /// </summary>
-        public static String VsrPath
-        {
-            get
-            {
-                if (LemballExePath == null)
-                    return null;
-                else
-                    return Path.Combine(LemballDirectory, "pbaimog.vsr");
-            }
-        }
+        public static string VsrPath => LemballExePath == null ? null : Path.Combine(LemballDirectory, "pbaimog.vsr");
 
         /// <summary>
         /// The path used to backup the original Vsr file
         /// </summary>
-        private static String BackupVsrPath
-        {
-            get
-            {
-                if (LemballExePath == null)
-                    return null;
-                else
-                    return Path.Combine(LemballDirectory, "pbaimog (backup).vsr");
-            }
-        }
+        private static string BackupVsrPath => LemballExePath == null ? null : Path.Combine(LemballDirectory, "pbaimog (backup).vsr");
 
         /// <summary>
         /// Called when an object graphic has been altered, for example if it has been rotated
@@ -144,7 +105,7 @@ namespace LemballEditor
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             //
             Application.EnableVisualStyles();
@@ -189,7 +150,7 @@ namespace LemballEditor
                 + (version[3] * 16777216)
                 ;
 
-            return (uint) versionNumber;
+            return (uint)versionNumber;
         }
 
         /// <summary>
@@ -201,7 +162,9 @@ namespace LemballEditor
         {
             // Ensure the version to compare is 4-bytes long
             if (toVersion.Length != 4)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
             // Check if newer or older
             for (int i = 0; i < 4; i++)
@@ -209,9 +172,13 @@ namespace LemballEditor
                 int difference = toVersion[i] - version[i];
 
                 if (difference < 0)
+                {
                     return -1;
+                }
                 else if (difference > 0)
+                {
                     return 1;
+                }
             }
 
             // Both version are the same
@@ -222,7 +189,7 @@ namespace LemballEditor
         /// Formats the the Lemball Editor version number as a string
         /// </summary>
         /// <returns>A string containing the version number</returns>
-        public static String GetVersionString()
+        public static string GetVersionString()
         {
             // Create a string builder to store the version
             StringBuilder builder = new StringBuilder(11);
@@ -231,11 +198,13 @@ namespace LemballEditor
             for (int i = 0; i < 4; i++)
             {
                 // Append sub version number
-                builder.Append(version[i]);
+                _ = builder.Append(version[i]);
 
                 // Append a decimal point if there are more subversions to go
                 if (i != version.Length - 1)
-                    builder.Append('.');
+                {
+                    _ = builder.Append('.');
+                }
             }
 
             return builder.ToString();
@@ -246,7 +215,7 @@ namespace LemballEditor
         /// </summary>
         /// <param name="reader">The reader that is reading a level pack file</param>
         /// <param name="fileName">The file name of the file</param>
-        public static void LoadLevelPack(BinaryReader reader, String fileName)
+        public static void LoadLevelPack(BinaryReader reader, string fileName)
         {
             // Loads the level pack
             Model.LevelPack levelPack = new LemballEditor.Model.LevelPack(reader);
@@ -273,13 +242,14 @@ namespace LemballEditor
                 // Retrieve the level group
                 Model.LevelGroupTypes? group = LoadedLevelPack.GetLevelGroupType(LoadedLevel);
 
-                if (group != null)
-                    return (Model.LevelGroupTypes)group;
-                else
-                    throw new ApplicationException("Loaded level is not part of the loaded level pack");
+                return group != null
+                    ? (Model.LevelGroupTypes?)(Model.LevelGroupTypes)group
+                    : throw new ApplicationException("Loaded level is not part of the loaded level pack");
             }
             else
+            {
                 return null;
+            }
         }
 
         /// <summary>
@@ -288,10 +258,7 @@ namespace LemballEditor
         /// <returns></returns>
         public static int LoadedLevelNumber()
         {
-            if (LoadedLevel != null)
-                return LoadedLevelPack.GetLevelNumber(LoadedLevel);        
-            else
-                throw new NullReferenceException();
+            return LoadedLevel != null ? LoadedLevelPack.GetLevelNumber(LoadedLevel) : throw new NullReferenceException();
         }
 
         /// <summary>
@@ -319,10 +286,7 @@ namespace LemballEditor
         /// <returns>True if a level pack is loaded, otherwise false</returns>
         public static bool LevelPackIsLoaded()
         {
-            if (LoadedLevelPack != null)
-                return true;
-            else
-                return false;
+            return LoadedLevelPack != null;
         }
 
 
@@ -330,7 +294,7 @@ namespace LemballEditor
         /// 
         /// </summary>
         /// <param name="fileName"></param>
-        public static void SaveLevelPackToFile(String fileName)
+        public static void SaveLevelPackToFile(string fileName)
         {
             // Compile the project
             LoadedLevelPack.SaveProjectFile(fileName);
@@ -451,9 +415,9 @@ namespace LemballEditor
         /// </summary>
         /// <param name="levelPack"></param>
         /// <param name="outputPath"></param>
-        private static void CompileVsr (Model.LevelPack levelPack, String outputPath)
+        private static void CompileVsr(Model.LevelPack levelPack, string outputPath)
         {
-            var vsrCompiler = new VsrCompiler.VsrCompiler(VsrPath, BackupVsrPath);
+            VsrCompiler.VsrCompiler vsrCompiler = new VsrCompiler.VsrCompiler(VsrPath, BackupVsrPath);
 
             // Compile the level pack without compression
             using (MemoryStream compiledLevelPack = levelPack.Compile(false))
@@ -471,25 +435,31 @@ namespace LemballEditor
         /// </summary>
         public static void RunLemball()
         {
-            var process = new System.Diagnostics.Process();
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
             process.StartInfo.WorkingDirectory = LemballDirectory;
             process.StartInfo.FileName = LemballExePath;
-            
+
             // Arguments
             StringBuilder args = new StringBuilder(27);
             if (!Properties.Settings.Default.EnableMovies)
-                args.Append("/noanim");
+            {
+                _ = args.Append("/noanim");
+            }
 
             if (!Properties.Settings.Default.EnableMusic)
-                args.Append(" /nomusic");
+            {
+                _ = args.Append(" /nomusic");
+            }
 
             if (!Properties.Settings.Default.EnableSoundEffects)
-                args.Append(" /noeffects");
-            
+            {
+                _ = args.Append(" /noeffects");
+            }
+
             process.StartInfo.Arguments = args.ToString();
 
             // Start Lemball
-            process.Start();
+            _ = process.Start();
         }
 
         public static void RestoreOriginalLevels()

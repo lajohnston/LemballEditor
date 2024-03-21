@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Xml;
-using System.Windows.Forms;
 
 namespace LemballEditor.Model
 {
@@ -51,21 +48,20 @@ namespace LemballEditor.Model
         /// 
         /// </summary>
         /// <param name="element"></param>
-        public RotatableObject(XmlElement element) 
+        public RotatableObject(XmlElement element)
             : base(element)
         {
-            if (element.HasAttribute("rotated"))
-                Rotated = Convert.ToBoolean(element.GetAttribute("rotated"));
-            else
-                Rotated = false;
+            Rotated = element.HasAttribute("rotated") && Convert.ToBoolean(element.GetAttribute("rotated"));
         }
 
-        
+
         protected override XmlElement CompileXml(XmlElement element)
         {
             // Rotation
             if (Rotated)
+            {
                 element.SetAttribute("rotated", "true");
+            }
 
             // Position
             return base.CompileXml(element);

@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using LemballEditor.View.Level;
+using System;
 using System.Drawing;
-using System.Data;
-using System.Text;
 using System.Windows.Forms;
-using LemballEditor.View.Level;
 
 namespace LemballEditor.View
 {
@@ -43,7 +39,7 @@ namespace LemballEditor.View
                 ImageCache.TileTypes.Rock,
                 ImageCache.TileTypes.Other,
             }));
-            
+
             tabControl1.Controls.Add(new TilePalette("Trees", new ImageCache.TileTypes[] {
                 ImageCache.TileTypes.Plant
             }));
@@ -63,7 +59,7 @@ namespace LemballEditor.View
 
         }
 
-        public static void SetSelectedTileRef (uint tileRef)
+        public static void SetSelectedTileRef(uint tileRef)
         {
             selectedTileRef = tileRef;
             Program.MainInterface.StartTileEditMode(tileRef);
@@ -73,7 +69,7 @@ namespace LemballEditor.View
         {
             // Render the browser
             browser = ((TilePalette)tabControl1.SelectedTab).RenderBrowser();
- 
+
             // Update the vScrollBar height
             vScrollBar1.Maximum = browser.Height;
             vScrollBar1.Value = 0;

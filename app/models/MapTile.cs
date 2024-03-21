@@ -16,13 +16,7 @@ namespace LemballEditor.Model
         /// Returns the maximum elevation that this tile can be set to, dependent on its tile image ref
         /// </summary>
         /// <returns></returns>
-        private byte MaxElevation
-        {
-            get
-            {
-                return View.Level.ImageCache.GetMaxElevation(TileImageRef);
-            }
-        }
+        private byte MaxElevation => View.Level.ImageCache.GetMaxElevation(TileImageRef);
 
         /// <summary>
         /// The tile's elevation
@@ -34,20 +28,14 @@ namespace LemballEditor.Model
         /// </summary>
         public byte Elevation
         {
-            get
-            {
-                return elevation;
-            }
+            get => elevation;
             set
             {
                 // Get the maximum elevation possible for the tile image ref
                 byte maxElevation = MaxElevation;
 
                 // If value exceeds maximum, set elevation to maximum, otherwise set to value
-                if (value > maxElevation)
-                    elevation = maxElevation;
-                else
-                    elevation = value;
+                elevation = value > maxElevation ? maxElevation : value;
             }
         }
 
@@ -56,16 +44,16 @@ namespace LemballEditor.Model
         /// </summary>
         /// <param name="tileRef"></param>
         /// <param name="elevation"></param>
-        public MapTile (uint tileRef, byte elevation)
+        public MapTile(uint tileRef, byte elevation)
         {
-            this.TileImageRef = tileRef;
+            TileImageRef = tileRef;
             Elevation = elevation;
         }
 
         /// <summary>
         /// Creates a map tile with the default elevation and tile image ref
         /// </summary>
-        public MapTile ()
+        public MapTile()
         {
             TileImageRef = 521;
             elevation = 0;
@@ -79,10 +67,7 @@ namespace LemballEditor.Model
         public bool CanAlterElevation(int amount)
         {
             int newVal = elevation + amount;
-            if (newVal < 0 || newVal > MaxElevation)
-                return false;
-            else
-                return true;
+            return newVal >= 0 && newVal <= MaxElevation;
         }
 
         /// <summary>

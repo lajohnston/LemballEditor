@@ -1,28 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
-using System.IO;
-using System.Xml;
-using System.Windows.Forms;
+﻿using System.Xml;
 using VsrCompiler;
 
 namespace LemballEditor.Model
 {
     public class Catapult : RotatableObject
     {
-        public const String XML_NODE_NAME = "catapult";
+        public const string XML_NODE_NAME = "catapult";
 
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.BOMG;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.BOMG;
 
         /// <summary>
         /// 
@@ -51,7 +39,7 @@ namespace LemballEditor.Model
         /// </summary>
         /// <param name="element"></param>
         public Catapult(XmlElement element)
-            : base (element)
+            : base(element)
         {
         }
 
@@ -88,7 +76,7 @@ namespace LemballEditor.Model
             XmlElement element = xmlDoc.CreateElement("catapult");
 
             // Set position
-            base.CompileXml(element);
+            _ = base.CompileXml(element);
 
             // Return element
             return element;

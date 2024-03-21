@@ -1,37 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using LemballEditor.Model;
 using System.Drawing;
-using LemballEditor.Model;
-using System.Windows.Forms;
 
 namespace LemballEditor.View.Level.ObjectGraphics
 {
     /// <summary>
     /// Represents a drawn balloon
     /// </summary>
-    class BalloonGraphic : ObjectGraphic
+    internal class BalloonGraphic : ObjectGraphic
     {
         /// <summary>
         /// 
         /// </summary>
-        private Balloon balloon;
+        private readonly Balloon balloon;
 
         /// <summary>
         /// 
         /// </summary>
-        public override LevelObject LevelObject
-        {
-            get { return balloon; }
-        }
+        public override LevelObject LevelObject => balloon;
 
         /// <summary>
         /// The object's image
         /// </summary>
-        private static Bitmap blueBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_blue");
-        private static Bitmap redBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_red");
-        private static Bitmap greenBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_green");
-        private static Bitmap yellowBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_yellow");
+        private static readonly Bitmap blueBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_blue");
+        private static readonly Bitmap redBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_red");
+        private static readonly Bitmap greenBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_green");
+        private static readonly Bitmap yellowBalloon = LemballEditor.View.Level.ImageCache.GetObjectImage("balloon_yellow");
 
         /// <summary>
         /// Accessor to the object image
@@ -59,13 +52,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// <summary>
         /// 
         /// </summary>
-        public override Point DrawOffset
-        {
-            get
-            {
-                return new Point(13, 66);
-            }
-        }
+        public override Point DrawOffset => new Point(13, 66);
 
         /// <summary>
         /// 

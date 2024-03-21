@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
 using System.IO;
 using System.Xml;
-using System.Windows.Forms;
-using LemballEditor.View;
 using VsrCompiler;
 
 namespace LemballEditor.Model
@@ -13,27 +9,21 @@ namespace LemballEditor.Model
     /// <summary>
     /// An enemy Lemmings
     /// </summary>
-    class Enemy : MovingObject
+    internal class Enemy : MovingObject
     {
-        public const String XML_NODE_NAME = "enemy";
+        public const string XML_NODE_NAME = "enemy";
 
 
 
         /// <summary>
         /// The data block in which the object data is stored in compiled levels
         /// </summary>
-        public override LevelObject.ObjectBlocks ObjectBlock
-        {
-            get
-            {
-                return ObjectBlocks.YMNE;
-            }
-        }
+        public override LevelObject.ObjectBlocks ObjectBlock => ObjectBlocks.YMNE;
 
         /// <summary>
         /// The enemy's behaviour type
         /// </summary>
-        private BehaviourTypes behaviour;
+        private readonly BehaviourTypes behaviour;
 
         /// <summary>
         /// The types of enemy behaviours
@@ -100,9 +90,11 @@ namespace LemballEditor.Model
             : base(element)
         {
             if (element.Name != XML_NODE_NAME)
+            {
                 throw new InvalidDataException();
+            }
 
-            behaviour = (BehaviourTypes) Enum.Parse(typeof(BehaviourTypes), element.GetAttribute("behaviour"));
+            behaviour = (BehaviourTypes)Enum.Parse(typeof(BehaviourTypes), element.GetAttribute("behaviour"));
         }
 
 
@@ -113,7 +105,7 @@ namespace LemballEditor.Model
 
             // Behaviour
             element.SetAttribute("behaviour", behaviour.ToString());
-            
+
             // Set position
             return base.CompileXml(element);
         }
@@ -138,7 +130,9 @@ namespace LemballEditor.Model
 
             // The enemy's behaviour
             if (base.CountNodes() > 1)
+            {
                 binary.Append((byte)behaviour);
+            }
             else
             {
                 // If there are 0 or 1 nodes, set the guard to 'Statue' mode so that it doesn't twitch
