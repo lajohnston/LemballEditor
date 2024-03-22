@@ -92,7 +92,6 @@ namespace LemballEditor.View.Level.ObjectGraphics
             }
         }
 
-
         /// <summary>
         /// The static constructor for ObjectGraphic, which initialises the imageAttributes
         /// </summary>
@@ -101,7 +100,6 @@ namespace LemballEditor.View.Level.ObjectGraphics
             imageAttributes = new ImageAttributes();
             imageAttributes.SetColorKey(transparent, transparent);
         }
-
 
         /// <summary>
         /// 
@@ -227,23 +225,12 @@ namespace LemballEditor.View.Level.ObjectGraphics
             Draw(g, mapPanel.ConvertIsoXYtoScreenXY(LevelObject.IsoPosition), mapPanel.GetTileDrawElevation(LevelObject.OnTile, true));
         }
 
-
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="cursorPosition"></param>
         public virtual void DrawAtCursor(Graphics g)
         {
-            // Set the elevation offset
-            byte elevation = 0;
-
-            TileCoordinate mouseOverTile = mapPanel.MouseOverTileCoords;
-            if (mouseOverTile != null)
-            {
-                _ = mapPanel.GetTileDrawElevation(mouseOverTile, true);
-            }
-
             // Calculate the position to draw the object
             Point position;
             if (SnapsToTile())
@@ -267,6 +254,10 @@ namespace LemballEditor.View.Level.ObjectGraphics
                 }
             }
 
+            // Get the elevation offset
+            var mouseOverTile = mapPanel.MouseOverTileCoords;
+            var elevation = mouseOverTile == null ? 0 : mapPanel.GetTileDrawElevation(mouseOverTile, true);
+
             // Draw the image at the mouse cursor
             Draw(g, position, elevation);
         }
@@ -279,11 +270,6 @@ namespace LemballEditor.View.Level.ObjectGraphics
         {
             return false;
         }
-
-
-
-
-
 
         /// <summary>
         /// Determines whether the specified point overlaps the object. This procedure
@@ -322,7 +308,6 @@ namespace LemballEditor.View.Level.ObjectGraphics
             return LevelObject.OverlapsTile(tile);
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -341,7 +326,5 @@ namespace LemballEditor.View.Level.ObjectGraphics
         {
             return true;
         }
-
-
     }
 }
