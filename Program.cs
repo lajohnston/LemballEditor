@@ -73,6 +73,8 @@ namespace LemballEditor
             }
         }
 
+        public static bool LemballPathIsSet => LemballExePath != null;
+
         /// <summary>
         /// The path to the Lemmings Paintball directory
         /// </summary>
@@ -289,7 +291,6 @@ namespace LemballEditor
             return LoadedLevelPack != null;
         }
 
-
         /// <summary>
         /// 
         /// </summary>
@@ -382,7 +383,6 @@ namespace LemballEditor
             {
                 throw new NullReferenceException();
             }
-
         }
 
         /// <summary>

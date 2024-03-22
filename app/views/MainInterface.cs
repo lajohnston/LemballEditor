@@ -63,14 +63,41 @@ namespace LemballEditor.View
             refreshMapTimer.Interval = 1000 / MapPanel.REFRESH_RATE;
             refreshMapTimer.Start();
 
-            testAllLevelsToolStripMenuItem.Click += delegate { TestLevelPack(true); };
-            testLevelToolStripMenuItem.Click += delegate { TestLevelPack(false); };
+            testAllLevelsToolStripMenuItem.Click += delegate {
+                if (EnsureLemballPathIsSet())
+                {
+                    Program.TestLevelPack();
+                }
+            };
+
+            testLevelToolStripMenuItem.Click += delegate {
+                if (EnsureLemballPathIsSet())
+                {
+                    Program.TestLoadedLevel();
+                }
+            };
 
             //
             ShowObjectSelectionList();
             //showTilePalette();
 
             SetStatusMessage("Use mouse wheel to adjust elevation. Move objects by dragging with left button. Right click object for options. Use arrows keys to scroll.");
+        }
+
+        /// <summary>
+        /// Displays the settings dialog if the LemballExe path is not set
+        /// </summary>
+        /// <returns>true if the LemballExe path is set or the user sets it, otherwise false</returns>
+        private bool EnsureLemballPathIsSet()
+        {
+            if (Program.LemballPathIsSet)
+            {
+                return true;
+            }
+
+            ShowSettingsDialog();
+
+            return Program.LemballPathIsSet;
         }
 
         /// <summary>
@@ -375,34 +402,14 @@ namespace LemballEditor.View
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings.Settings settings = new Settings.Settings();
-            _ = settings.ShowDialog();
+            _ = ShowSettingsDialog();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="allLevels">If true, all levels are compiled, otherwise only the loaded level is compiled as first level of Fun.</param>
-        private void TestLevelPack(bool allLevels)
+        private DialogResult ShowSettingsDialog()
         {
-
-            if (allLevels)
-            {
-                Program.TestLevelPack();
-            }
-            else
-            {
-                Program.TestLoadedLevel();
-            }
-
-
-            /*
-            BinaryEditor new2 = new BinaryEditor(@".\compressed.dat", true);
-            new2.saveUncompressed(@".\decompressed.dat");
-            new2.Close();
-             */
+            Settings.Settings settings = new Settings.Settings();
+            return settings.ShowDialog();
         }
-
 
         public void SetStatusMessage(string message)
         {
