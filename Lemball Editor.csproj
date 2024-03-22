@@ -62,12 +62,15 @@
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="VsrCompiler, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\VsrCompiler.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="app\models\VsrCompiler\BinaryEditor.cs" />
+    <Compile Include="app\models\VsrCompiler\CompiledLevel.cs" />
+    <Compile Include="app\models\VsrCompiler\LevelGroup.cs" />
+    <Compile Include="app\models\VsrCompiler\LevelPack.cs" />
+    <Compile Include="app\models\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
+    <Compile Include="app\models\VsrCompiler\UnsupportedVSRException.cs" />
+    <Compile Include="app\models\VsrCompiler\VsrCompiler.cs" />
     <Compile Include="app\views\LevelBrowser\LevelBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
