@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Windows.Forms;
 
 namespace LemballEditor.View.Settings
@@ -16,6 +18,8 @@ namespace LemballEditor.View.Settings
             enableMovies.Checked = Properties.Settings.Default.EnableMovies;
             enableMusic.Checked = Properties.Settings.Default.EnableMusic;
             enableSoundEffects.Checked = Properties.Settings.Default.EnableSoundEffects;
+
+            this.FormClosing += OnFormClosing;
         }
 
         /// <summary>
@@ -39,22 +43,50 @@ namespace LemballEditor.View.Settings
         }
 
         /// <summary>
-        /// Called when the Ok button is pressed. Verifies that the EXE folder path is correct
+        /// Indicates if the given path points to what looks like a valid Lemball.exe file
+        /// </summary>
+        /// <param name="exePath"></param>
+        /// <returns></returns>
+        private bool ExePathIsValid(string exePath)
+        {
+            if (!File.Exists(exePath)) {
+                return false;
+            }
+
+            var filename = Path.GetFileName(exePath).ToLowerInvariant();
+            return filename == "lemball.exe";
+        }
+
+        /// <summary>
+        /// Called when the form is closing
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void ok_Click(object sender, EventArgs e)
+        private void OnFormClosing(object sender, FormClosingEventArgs e)
         {
+            if (this.DialogResult == DialogResult.Cancel) {
+                return;
+            }
+
+            if (exePath.Text.Length > 0 && !ExePathIsValid(exePath.Text))
+            {
+                MessageBox.Show("The EXE path should point to a valid Lemball.exe file", "Invalid EXE Path");
+                e.Cancel = true;
+                return;
+            }
+
+            var settings = Properties.Settings.Default;
+
             // Save exe path
-            Properties.Settings.Default.LemballExePath = exePath.Text;
+            settings.LemballExePath = exePath.Text;
 
             // Save run options
-            Properties.Settings.Default.EnableMovies = enableMovies.Checked;
-            Properties.Settings.Default.EnableMusic = enableMusic.Checked;
-            Properties.Settings.Default.EnableSoundEffects = enableSoundEffects.Checked;
+            settings.EnableMovies = enableMovies.Checked;
+            settings.EnableMusic = enableMusic.Checked;
+            settings.EnableSoundEffects = enableSoundEffects.Checked;
 
             // Save settings
-            Properties.Settings.Default.Save();
+            settings.Save();
         }
     }
 }
