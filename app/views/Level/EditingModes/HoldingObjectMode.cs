@@ -11,9 +11,9 @@ namespace LemballEditor.View.Level
             /// <summary>
             /// 
             /// </summary>
-            public LevelObject selectedObject => selectedObjectImage.LevelObject;
+            public LevelObject SelectedObject => SelectedObjectImage.LevelObject;
 
-            public ObjectGraphic selectedObjectImage { get; private set; }
+            public ObjectGraphic SelectedObjectImage { get; private set; }
 
             /// <summary>
             /// 
@@ -23,9 +23,7 @@ namespace LemballEditor.View.Level
             public HoldingObjectMode(MapPanel mapPanel, ObjectGraphic objectImage)
                 : base(mapPanel)
             {
-                //this.selectedObject = levelObject;
-
-                selectedObjectImage = objectImage;
+                SelectedObjectImage = objectImage;
 
             }
 
@@ -36,7 +34,7 @@ namespace LemballEditor.View.Level
             /// <returns></returns>
             public override bool ObjectIsBeingHeld(LevelObject levelObject)
             {
-                return levelObject == selectedObject;
+                return levelObject == SelectedObject;
             }
 
             /// <summary>
@@ -56,7 +54,7 @@ namespace LemballEditor.View.Level
                 if (mapPanel.IsoPositionIsOnViewableMap(isoPosition))
                 {
                     // Place the object
-                    selectedObject.IsoPosition = isoPosition;
+                    SelectedObject.IsoPosition = isoPosition;
 
                     // Object placement was successful
                     return true;
@@ -69,40 +67,17 @@ namespace LemballEditor.View.Level
             }
 
             /// <summary>
-            /// Old
-            /// </summary>
-            /*
-            private void PlaceHeldObject()
-            {
-                // Get the iso coordinates of the mouse
-                Point isoPosition = ConvertScreenXYtoIsoXY(mousePosition.X, mousePosition.Y);
-
-                // Place object is in visible portion of map, otherwise its position is left unchanged (where it was before being picked up)
-                if (IsoPositionIsOnViewableMap(isoPosition))
-                {
-                    // If the object is new, add it to the level
-                    if (editingMode is PlacingNewObjectMode)
-                    {
-                        GetLoadedLevel().addObject(heldObject, isoPosition);
-                    }
-                }
-
-                // Delete the held object
-                CancelHeldObject();
-
-                // Update the render at the next update
-                RenderMapAtNextUpdate();
-            }
-            */
-
-            /// <summary>
             /// Draws the object the user is currently dragging or placing
             /// </summary>
             /// <param name="g"></param>
             /// <param name="mouseIsOverMap"></param>
             public override void Update(Graphics g)
             {
-                selectedObjectImage.DrawAtCursor(g);
+                SelectedObjectImage.DrawAtCursor(g);
+
+                // Highlight the tile the mouse is over
+                base.HighlightMouseOverTile(g);
+
                 //// Set the elevation offset
                 //byte elevation = 0;
 

@@ -536,18 +536,14 @@ namespace LemballEditor.View.Level
             topPixelOfViewableMap.X = renderedMap.Width / 2;
             topPixelOfViewableMap.Y = 90;
 
-            /* Calculate the position of the first tile in the map, that is, the very first tile
-                * (which may be off screen depending on the scroll position) rather than the first
-            * tile in the viewable portion of the map */
+            /**
+             * Calculate the position of the first tile in the map, that is, the very first tile
+             * (which may be off screen depending on the scroll position) rather than the first
+             * tile in the viewable portion of the map
+             */
             tile0Position = new Point(
                 topPixelOfViewableMap.X - (firstViewTile.xTile * 16) + (firstViewTile.yTile * 16),
                 topPixelOfViewableMap.Y - (firstViewTile.xTile * 8) - (firstViewTile.yTile * 8));
-
-            /*
-            Bitmap mapTop = new Bitmap(1, 1);
-            mapTop.SetPixel(0, 0, Color.Indigo);
-            drawImage(g, mapTop, topOfMap.X, topOfMap.Y);
-            */
 
             // Get the elevation graphic for the current terrain type
             Bitmap elevationBmp = ImageCache.getElevationBitmap();
@@ -568,9 +564,6 @@ namespace LemballEditor.View.Level
                 // Each tile in row
                 for (ushort viewTileX = 0; viewTileX < mapViewTileDimensions.Width; viewTileX++)
                 {
-                    // Get the current tile being drawn
-                    //MapTile currentTile = LoadedLevel.GetTile(currentTileCoordinate);
-
                     if (currentTileCoordinate == null)
                     {
                         break;
@@ -602,7 +595,6 @@ namespace LemballEditor.View.Level
 
                     // Draw objects
                     DrawObjectsOnTile(g, LoadedLevel, currentTileCoordinate);
-
 
                     // Increment the currentTile X value
                     currentTileCoordinate.xTile++;
@@ -648,40 +640,6 @@ namespace LemballEditor.View.Level
             // If no lifts overlap the tile, return the height of the maptile
             return LoadedLevel.GetTileElevation(tile);
         }
-
-        /// <summary>
-        /// Draws all the objects on the specified tile coordinate
-        /// </summary>
-        /// <param name="g"></param>
-        /// <param name="level"></param>
-        /// <param name="mapCoordinate"></param>
-        /*
-        private void OldDrawObjectsOnTile(Graphics g, Level level, TileCoordinate mapCoordinate)
-        {
-            // Get a list of all objects that are on the specified tile
-            List<LevelObject> objects = level.OldGetObjectsOverlapingTile(mapCoordinate);
-
-            // Draw each object that is on the tile
-            foreach (LevelObject levelObject in objects)
-            {
-                // Determine whether the object is currently being held by the user
-                if (!editingMode.ObjectIsBeingHeld(levelObject))
-                {
-                    // Draw object
-                    level.DrawObject(levelObject, g, ConvertIsoXYtoScreenXY(levelObject.IsoPosition));
-
-                    // Add object to list of drawn objects
-                    if (!drawnObjects.Contains(levelObject))
-                        drawnObjects.Add(levelObject);
-                }
-
-                // Draw a dot at the object's position, without its image offset
-                //Bitmap dot = new Bitmap(1, 1);
-                //dot.SetPixel(0, 0, Color.HotPink);
-                //drawImage(g, dot, screenPosition.X, screenPosition.Y);
-            }
-        }
-        */
 
         /// <summary>
         /// 

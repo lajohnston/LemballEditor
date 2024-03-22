@@ -20,7 +20,7 @@ namespace LemballEditor.View.Level
                 if (base.PlaceObject(position))
                 {
                     // If the object placement was successful, add the object to the level
-                    Program.LoadedLevel.AddObject(selectedObject);
+                    Program.LoadedLevel.AddObject(SelectedObject);
                 }
 
                 // Return to default mode
