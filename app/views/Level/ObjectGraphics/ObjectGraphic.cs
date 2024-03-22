@@ -254,12 +254,26 @@ namespace LemballEditor.View.Level.ObjectGraphics
                 }
             }
 
+            // Draw the image at the mouse cursor
+            var elevation = GetMouseOverTileElevation();
+            Draw(g, position, elevation);
+        }
+
+        /// <summary>
+        /// Gets the elevation of the tile the mouse is currently hovering over
+        /// </summary>
+        /// <returns></returns>
+        private int GetMouseOverTileElevation()
+        {
+            if (!LevelObject.CanElevate())
+            {
+                return 0;
+            }
+
             // Get the elevation offset
             var mouseOverTile = mapPanel.MouseOverTileCoords;
-            var elevation = mouseOverTile == null ? 0 : mapPanel.GetTileDrawElevation(mouseOverTile, true);
 
-            // Draw the image at the mouse cursor
-            Draw(g, position, elevation);
+            return mouseOverTile == null ? 0 : mapPanel.GetTileDrawElevation(mouseOverTile, true);
         }
 
         /// <summary>

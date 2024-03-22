@@ -122,6 +122,15 @@ namespace LemballEditor.Model
         /// <summary>
         /// 
         /// </summary>
+        /// <returns></returns>
+        public override bool CanElevate()
+        {
+            return false;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="binary"></param>
         /// <param name="level"></param>
         /// <param name="id"></param>
@@ -149,7 +158,6 @@ namespace LemballEditor.Model
             // Null
             binary.Append((short)0);
         }
-
     }
 }
 

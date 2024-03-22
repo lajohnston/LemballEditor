@@ -191,7 +191,6 @@ namespace LemballEditor.Model
             return true;
         }
 
-
         /// <summary>
         /// Indicates whether the object can be deleted. This is overriden
         /// by the BalloonPost class which can only be deleted if no balloons
