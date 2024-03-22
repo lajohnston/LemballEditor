@@ -208,7 +208,7 @@ namespace LemballEditor.Model
             levelObjects = new List<LevelObject>();
 
             TimeLimit = 600;
-            NumberOfFlagsRequiredToWin = FlagsRequired.None;
+            NumberOfFlagsRequiredToWin = FlagsRequired.One;
             Name = "Level";
         }
 
