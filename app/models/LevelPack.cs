@@ -191,9 +191,9 @@ namespace LemballEditor.Model
         /// </summary>
         /// <param name="group"></param>
         /// <param name="levelNumber"></param>
-        public void DeleteLevel(LevelGroupTypes group, int levelNumber)
+        public void DeleteLevel(LevelGroupTypes group, Level level)
         {
-            GetLevelGroup(group).DeleteLevel(levelNumber);
+            GetLevelGroup(group).DeleteLevel(level);
         }
 
         /// <summary>

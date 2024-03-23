@@ -331,39 +331,40 @@ namespace LemballEditor.View.Level
         /// <param name="e"></param>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Program.LevelPackIsLoaded())
+            if (!Program.LevelIsLoaded())
             {
-                // Get the graphics object
-                Graphics g = e.Graphics;
-
-                // Re-render the map if it needs to be
-                if (updateRendering)
-                {
-                    try
-                    {
-                        RenderMap();
-                    }
-                    catch (Exception)
-                    {
-                        _ = MessageBox.Show("Graphic error when rendering map");
-                    }
-                }
-
-                // Draw the rendered map
-                g.DrawImageUnscaled(renderedMap, 0, 0);
-
-                // Highlight the selected tiles
-                HighlightTileSelection(g);
-
-                /* 
-                 * Draw the overlay that the editing mode specifies, such as held objects, tile pasting preview,
-                 * or the highlighting of the tile the mouse is over)
-                 */
-                editingMode.Update(g);
-
-                //
-                base.OnPaint(e);
+                return;
             }
+            
+            // Get the graphics object
+            Graphics g = e.Graphics;
+
+            // Re-render the map if it needs to be
+            if (updateRendering)
+            {
+                try
+                {
+                    RenderMap();
+                }
+                catch (Exception)
+                {
+                    _ = MessageBox.Show("Graphic error when rendering map");
+                }
+            }
+
+            // Draw the rendered map
+            g.DrawImageUnscaled(renderedMap, 0, 0);
+
+            // Highlight the selected tiles
+            HighlightTileSelection(g);
+
+            /**
+             * Draw the overlay that the editing mode specifies, such as held objects, tile pasting preview,
+             * or the highlighting of the tile the mouse is over)
+             */
+            editingMode.Update(g);
+
+            base.OnPaint(e);
         }
 
         /// <summary>

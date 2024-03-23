@@ -283,12 +283,12 @@ namespace LemballEditor
         }
 
         /// <summary>
-        /// States whether a level pack is currently loaded
+        /// States whether a level is currently loaded
         /// </summary>
-        /// <returns>True if a level pack is loaded, otherwise false</returns>
-        public static bool LevelPackIsLoaded()
+        /// <returns>True if a level is loaded, otherwise false</returns>
+        public static bool LevelIsLoaded()
         {
-            return LoadedLevelPack != null;
+            return LoadedLevel != null;
         }
 
         /// <summary>
@@ -362,11 +362,18 @@ namespace LemballEditor
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="group"></param>
+        /// <param name="levelGroup"></param>
         /// <param name="levelNumber"></param>
-        public static void DeleteLevel(Model.LevelGroupTypes group, int levelNumber)
+        public static void DeleteLevel(Model.LevelGroupTypes levelGroup, int levelNumber)
         {
-            LoadedLevelPack.DeleteLevel(group, levelNumber);
+            var level = LoadedLevelPack.GetLevel(levelGroup, levelNumber);
+
+            LoadedLevelPack.DeleteLevel(levelGroup, level);
+
+            if (LoadedLevel == level)
+            {
+                LoadedLevel = null;
+            }
         }
 
         /// <summary>

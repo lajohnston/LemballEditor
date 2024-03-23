@@ -78,8 +78,14 @@ namespace LemballEditor.View
         /// <param name="e"></param>
         private void deleteLevel_Click(object sender, EventArgs e)
         {
-            Program.DeleteLevel(levelGroupSelector.SelectedLevelGroup, levelList.SelectedIndex);
+            var levelIndex = levelList.SelectedIndex;
+            Program.DeleteLevel(levelGroupSelector.SelectedLevelGroup, levelIndex);
             UpdateLevelList();
+
+            if (levelList.Items.Count > 0)
+            {
+                levelList.SelectedIndex = Math.Min(levelIndex, levelList.Items.Count - 1);
+            }
         }
 
         /// <summary>

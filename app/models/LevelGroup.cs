@@ -153,15 +153,6 @@ namespace LemballEditor.Model
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="levelNumber"></param>
-        public void DeleteLevel(int levelNumber)
-        {
-            levels.RemoveAt(levelNumber);
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
         /// <param name="level"></param>
         public void DeleteLevel(Level level)
         {
