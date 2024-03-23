@@ -313,9 +313,6 @@
     <None Include="assets\nullObjectImage.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\blankLevel.dat" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="assets\selectedTile.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
