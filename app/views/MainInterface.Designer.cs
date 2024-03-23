@@ -48,7 +48,6 @@
             this.restoreOriginalLevelsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.propertiesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.levelToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.levelPackToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -196,8 +195,7 @@
             // propertiesToolStripMenuItem
             // 
             this.propertiesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.levelToolStripMenuItem1,
-            this.levelPackToolStripMenuItem});
+            this.levelToolStripMenuItem1});
             this.propertiesToolStripMenuItem.Name = "propertiesToolStripMenuItem";
             this.propertiesToolStripMenuItem.Size = new System.Drawing.Size(72, 20);
             this.propertiesToolStripMenuItem.Text = "Properties";
@@ -205,17 +203,10 @@
             // levelToolStripMenuItem1
             // 
             this.levelToolStripMenuItem1.Name = "levelToolStripMenuItem1";
-            this.levelToolStripMenuItem1.Size = new System.Drawing.Size(129, 22);
+            this.levelToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.levelToolStripMenuItem1.Text = "Level";
             this.levelToolStripMenuItem1.ToolTipText = "Change properties for the loaded level";
             this.levelToolStripMenuItem1.Click += new System.EventHandler(this.levelToolStripMenuItem1_Click);
-            // 
-            // levelPackToolStripMenuItem
-            // 
-            this.levelPackToolStripMenuItem.Name = "levelPackToolStripMenuItem";
-            this.levelPackToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
-            this.levelPackToolStripMenuItem.Text = "Level Pack";
-            this.levelPackToolStripMenuItem.ToolTipText = "Change properties for the loaded level pack";
             // 
             // settingsToolStripMenuItem
             // 
@@ -322,7 +313,6 @@
         private System.Windows.Forms.ToolStripMenuItem saveProjectAsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem propertiesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem levelToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem levelPackToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem restoreOriginalLevelsToolStripMenuItem;
