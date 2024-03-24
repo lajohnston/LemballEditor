@@ -99,6 +99,16 @@ namespace LemballEditor.View.Level
             }
 
             /// <summary>
+            /// 
+            /// </summary>
+            /// <param name="position"></param>
+            /// <param name="heldKeys"></param>
+            public override void LeftClickOnMap(Point position, List<Keys> heldKeys)
+            {
+                CreateNode(position);
+            }
+
+            /// <summary>
             /// Show the NodeEditMode right-click menu
             /// </summary>
             /// <param name="position">The position to display the menu, usually the mousePosition</param>
