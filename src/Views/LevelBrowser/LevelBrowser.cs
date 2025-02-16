@@ -107,7 +107,7 @@ namespace LemballEditor.View
                 int levelNumber = levelList.Items.Count - 1;
                 levelList.SelectedIndex = levelNumber;
             }
-            catch (Model.LevelGroupFullException)
+            catch (LegacyModels.LevelGroupFullException)
             {
 
             }
@@ -194,13 +194,13 @@ namespace LemballEditor.View
         public void OnLevelLoad()
         {
             // Get the loaded level group
-            Model.LevelGroupTypes? loadedLevelGroup = Program.LoadedLevelGroup();
+            LegacyModels.LevelGroupTypes? loadedLevelGroup = Program.LoadedLevelGroup();
 
             // If a level is loaded
             if (loadedLevelGroup != null)
             {
                 // Attempt to display the level group that the level is loaded in
-                levelGroupSelector.SelectedLevelGroup = (Model.LevelGroupTypes)loadedLevelGroup;
+                levelGroupSelector.SelectedLevelGroup = (LegacyModels.LevelGroupTypes)loadedLevelGroup;
 
                 // Update the selected level in the level list
                 UpdateSelectedLevel();
@@ -236,7 +236,7 @@ namespace LemballEditor.View
             UpdateLevelList();
         }
 
-        public void MoveLevelToGroup(Model.LevelGroupTypes group)
+        public void MoveLevelToGroup(LegacyModels.LevelGroupTypes group)
         {
             Program.MoveLoadedLevelToLevelGroup(group);
         }
@@ -256,7 +256,7 @@ namespace LemballEditor.View
         /// 
         /// </summary>
         /// <param name="destinationGroup"></param>
-        public bool CopySelectedLevel(Model.LevelGroupTypes destinationGroup)
+        public bool CopySelectedLevel(LegacyModels.LevelGroupTypes destinationGroup)
         {
             try
             {
@@ -267,7 +267,7 @@ namespace LemballEditor.View
 
                 return true;
             }
-            catch (Model.LevelGroupFullException)
+            catch (LegacyModels.LevelGroupFullException)
             {
                 _ = MessageBox.Show("The " + destinationGroup.ToString() + " level group has reached its capacity");
                 return false;

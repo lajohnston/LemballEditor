@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -39,7 +39,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// </summary>
         /// <param name="entrance"></param>
         /// <param name="mapPanel"></param>
-        public EntranceGraphic(Model.Entrance entrance, MapPanel mapPanel)
+        public EntranceGraphic(LegacyModels.Entrance entrance, MapPanel mapPanel)
             : base(mapPanel)
         {
             this.entrance = entrance;

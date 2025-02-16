@@ -15,7 +15,7 @@ namespace LemballEditor.View
             /// <summary>
             /// The level group that is currently selected
             /// </summary>
-            private Model.LevelGroupTypes SelectedLevelGroup => ((LevelBrowser.LevelGroupItem)levelGroupList.SelectedItem).LevelGroupType;
+            private LegacyModels.LevelGroupTypes SelectedLevelGroup => ((LevelBrowser.LevelGroupItem)levelGroupList.SelectedItem).LevelGroupType;
 
             /// <summary>
             /// 
@@ -53,7 +53,7 @@ namespace LemballEditor.View
                     // Close dialog
                     Close();
                 }
-                catch (Model.LevelGroupFullException)
+                catch (LegacyModels.LevelGroupFullException)
                 {
                     _ = MessageBox.Show("The " + SelectedLevelGroup.ToString() + " level group has reached its capacity");
                 }

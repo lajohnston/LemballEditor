@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using System.Drawing;
 using System.Windows.Forms;
 

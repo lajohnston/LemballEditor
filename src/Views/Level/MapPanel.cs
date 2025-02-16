@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using LemballEditor.View.Level.ObjectGraphics;
 using System;
 using System.Collections.Generic;
@@ -136,7 +136,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The level that is currently loaded
         /// </summary>
-        public Model.Level LoadedLevel => Program.LoadedLevel;
+        public LegacyModels.Level LoadedLevel => Program.LoadedLevel;
 
         /// <summary>
         /// 
@@ -194,7 +194,7 @@ namespace LemballEditor.View.Level
             renderedMap = new Bitmap(MAX_VIEW_SIZE_XY * 32, (MAX_VIEW_SIZE_XY * 16) + 90);
 
             //
-            selectedTiles = new List<Model.TileCoordinate>();
+            selectedTiles = new List<LegacyModels.TileCoordinate>();
 
             // The size of the viewable portion of the map
             mapViewTileDimensions = new Size(MAX_VIEW_SIZE_XY, MAX_VIEW_SIZE_XY);
@@ -648,7 +648,7 @@ namespace LemballEditor.View.Level
         /// <param name="g"></param>
         /// <param name="level"></param>
         /// <param name="mapCoordinate"></param>
-        private void DrawObjectsOnTile(Graphics g, Model.Level level, TileCoordinate mapCoordinate)
+        private void DrawObjectsOnTile(Graphics g, LegacyModels.Level level, TileCoordinate mapCoordinate)
         {
             // Get ObjectImageData objects
             List<LevelObject> objectsOnTile = level.GetObjectsOverlapingTile(mapCoordinate);

@@ -7,13 +7,13 @@
             /// <summary>
             /// 
             /// </summary>
-            public Model.LevelGroupTypes LevelGroupType { get; private set; }
+            public LegacyModels.LevelGroupTypes LevelGroupType { get; private set; }
 
             /// <summary>
             /// 
             /// </summary>
             /// <param name="levelGroupType"></param>
-            public LevelGroupItem(Model.LevelGroupTypes levelGroupType)
+            public LevelGroupItem(LegacyModels.LevelGroupTypes levelGroupType)
             {
                 LevelGroupType = levelGroupType;
             }

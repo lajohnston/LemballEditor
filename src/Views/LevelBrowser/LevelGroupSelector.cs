@@ -9,7 +9,7 @@ namespace LemballEditor.View
             /// <summary>
             /// 
             /// </summary>
-            public Model.LevelGroupTypes SelectedLevelGroup
+            public LegacyModels.LevelGroupTypes SelectedLevelGroup
             {
                 get => ((LevelGroupItem)SelectedItem).LevelGroupType;
                 set => SelectedIndex = (int)value;
@@ -17,7 +17,7 @@ namespace LemballEditor.View
 
             public override int SelectedIndex
             {
-                set => base.SelectedIndex = value > -1 && value < (int)Model.LevelGroupTypes.Mayhem ? value : 0;
+                set => base.SelectedIndex = value > -1 && value < (int)LegacyModels.LevelGroupTypes.Mayhem ? value : 0;
             }
 
             /// <summary>
@@ -29,10 +29,10 @@ namespace LemballEditor.View
                 DropDownStyle = ComboBoxStyle.DropDownList;
 
                 // Add level groups
-                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Fun));
-                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Tricky));
-                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Taxing));
-                _ = Items.Add(new LevelGroupItem(Model.LevelGroupTypes.Mayhem));
+                _ = Items.Add(new LevelGroupItem(LegacyModels.LevelGroupTypes.Fun));
+                _ = Items.Add(new LevelGroupItem(LegacyModels.LevelGroupTypes.Tricky));
+                _ = Items.Add(new LevelGroupItem(LegacyModels.LevelGroupTypes.Taxing));
+                _ = Items.Add(new LevelGroupItem(LegacyModels.LevelGroupTypes.Mayhem));
 
                 // Select the Fun level group
                 SelectedIndex = 0;

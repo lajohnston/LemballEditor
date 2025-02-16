@@ -6,7 +6,7 @@
     /// </summary>
     internal class EditLevelProperties : LevelProperties
     {
-        public EditLevelProperties(Model.Level level)
+        public EditLevelProperties(LegacyModels.Level level)
             : base(level)
         {
             // Disable the buttons to change the terrain type

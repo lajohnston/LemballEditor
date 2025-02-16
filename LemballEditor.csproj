@@ -65,13 +65,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\Models\VsrCompiler\BinaryEditor.cs" />
-    <Compile Include="src\Models\VsrCompiler\CompiledLevel.cs" />
-    <Compile Include="src\Models\VsrCompiler\LevelGroup.cs" />
-    <Compile Include="src\Models\VsrCompiler\LevelPack.cs" />
-    <Compile Include="src\Models\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
-    <Compile Include="src\Models\VsrCompiler\UnsupportedVSRException.cs" />
-    <Compile Include="src\Models\VsrCompiler\VsrCompiler.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\BinaryEditor.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\CompiledLevel.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\LevelGroup.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\LevelPack.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedVSRException.cs" />
+    <Compile Include="src\LegacyModels\VsrCompiler\VsrCompiler.cs" />
     <Compile Include="src\Views\LevelBrowser\LevelBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -184,36 +184,36 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="src\Views\Level\ObjectGraphics\ObjectGraphic.cs" />
-    <Compile Include="src\Models\LevelGroup.cs" />
-    <Compile Include="src\Models\LevelPack.cs" />
-    <Compile Include="src\Models\Level.cs" />
-    <Compile Include="src\Models\LevelCompiler.cs" />
-    <Compile Include="src\Models\LevelPackFullException.cs" />
-    <Compile Include="src\Models\Objects\Ammo.cs" />
-    <Compile Include="src\Models\Objects\Balloons\BlueBalloon.cs" />
-    <Compile Include="src\Models\Objects\Balloons\GreenBalloon.cs" />
-    <Compile Include="src\Models\Objects\Balloons\RedBalloon.cs" />
-    <Compile Include="src\Models\Objects\Balloons\YellowBalloon.cs" />
-    <Compile Include="src\Models\Objects\Catapult.cs" />
-    <Compile Include="src\Models\Objects\Balloons\Balloon.cs" />
-    <Compile Include="src\Models\Objects\Balloons\BalloonPost.cs" />
-    <Compile Include="src\Models\Objects\Gate.cs" />
-    <Compile Include="src\Models\Objects\Lift.cs">
+    <Compile Include="src\LegacyModels\LevelGroup.cs" />
+    <Compile Include="src\LegacyModels\LevelPack.cs" />
+    <Compile Include="src\LegacyModels\Level.cs" />
+    <Compile Include="src\LegacyModels\LevelCompiler.cs" />
+    <Compile Include="src\LegacyModels\LevelPackFullException.cs" />
+    <Compile Include="src\LegacyModels\Objects\Ammo.cs" />
+    <Compile Include="src\LegacyModels\Objects\Balloons\BlueBalloon.cs" />
+    <Compile Include="src\LegacyModels\Objects\Balloons\GreenBalloon.cs" />
+    <Compile Include="src\LegacyModels\Objects\Balloons\RedBalloon.cs" />
+    <Compile Include="src\LegacyModels\Objects\Balloons\YellowBalloon.cs" />
+    <Compile Include="src\LegacyModels\Objects\Catapult.cs" />
+    <Compile Include="src\LegacyModels\Objects\Balloons\Balloon.cs" />
+    <Compile Include="src\LegacyModels\Objects\Balloons\BalloonPost.cs" />
+    <Compile Include="src\LegacyModels\Objects\Gate.cs" />
+    <Compile Include="src\LegacyModels\Objects\Lift.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\Models\Objects\RotatableObject.cs" />
-    <Compile Include="src\Models\Objects\Lever.cs" />
-    <Compile Include="src\Models\Objects\MovingObject.cs" />
-    <Compile Include="src\Models\Objects\MovingPlatform.cs" />
-    <Compile Include="src\Models\Objects\Node.cs" />
-    <Compile Include="src\Models\Objects\Enemy.cs" />
-    <Compile Include="src\Models\Objects\RedFlag.cs" />
-    <Compile Include="src\Models\Objects\Flag.cs" />
-    <Compile Include="src\Models\Objects\Mine.cs" />
-    <Compile Include="src\Models\Objects\Entrance.cs" />
-    <Compile Include="src\Models\Objects\LevelObject.cs" />
-    <Compile Include="src\Models\Objects\Switch.cs" />
-    <Compile Include="src\Models\TileCoordinate.cs" />
+    <Compile Include="src\LegacyModels\Objects\RotatableObject.cs" />
+    <Compile Include="src\LegacyModels\Objects\Lever.cs" />
+    <Compile Include="src\LegacyModels\Objects\MovingObject.cs" />
+    <Compile Include="src\LegacyModels\Objects\MovingPlatform.cs" />
+    <Compile Include="src\LegacyModels\Objects\Node.cs" />
+    <Compile Include="src\LegacyModels\Objects\Enemy.cs" />
+    <Compile Include="src\LegacyModels\Objects\RedFlag.cs" />
+    <Compile Include="src\LegacyModels\Objects\Flag.cs" />
+    <Compile Include="src\LegacyModels\Objects\Mine.cs" />
+    <Compile Include="src\LegacyModels\Objects\Entrance.cs" />
+    <Compile Include="src\LegacyModels\Objects\LevelObject.cs" />
+    <Compile Include="src\LegacyModels\Objects\Switch.cs" />
+    <Compile Include="src\LegacyModels\TileCoordinate.cs" />
     <Compile Include="src\Views\Level\TileImage.cs" />
     <Compile Include="src\Views\Level\MapPanel.cs">
       <SubType>Component</SubType>
@@ -224,7 +224,7 @@
     <Compile Include="src\Views\MainInterface.Designer.cs">
       <DependentUpon>MainInterface.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\Models\MapTile.cs" />
+    <Compile Include="src\LegacyModels\MapTile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="src\Views\LevelBrowser\LevelBrowser.resx">

@@ -115,7 +115,7 @@
             this.levelGroupSelector.FormattingEnabled = true;
             this.levelGroupSelector.Location = new System.Drawing.Point(3, 3);
             this.levelGroupSelector.Name = "levelGroupSelector";
-            this.levelGroupSelector.SelectedLevelGroup = LemballEditor.Model.LevelGroupTypes.Fun;
+            this.levelGroupSelector.SelectedLevelGroup = LemballEditor.LegacyModels.LevelGroupTypes.Fun;
             this.levelGroupSelector.Size = new System.Drawing.Size(162, 21);
             this.levelGroupSelector.TabIndex = 6;
             // 

@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using LemballEditor.View.Level.ObjectGraphics;
 using System;
 using System.Collections.Generic;
@@ -109,7 +109,7 @@ namespace LemballEditor.View.Level
             /// <param name="position"></param>
             public override void LeftMouseUp(Point position)
             {
-                foreach (Model.TileCoordinate tile in DragSelectionTiles)
+                foreach (LegacyModels.TileCoordinate tile in DragSelectionTiles)
                 {
                     mapPanel.AddTileToSelection(tile);
                 }
@@ -127,7 +127,7 @@ namespace LemballEditor.View.Level
                 {
                     StringBuilder sb = new StringBuilder();
 
-                    foreach (Model.TileCoordinate tile in mapPanel.selectedTiles)
+                    foreach (LegacyModels.TileCoordinate tile in mapPanel.selectedTiles)
                     {
                         _ = sb.Append("x" + tile.xTile + " y" + tile.yTile + ",");
                     }
@@ -172,7 +172,7 @@ namespace LemballEditor.View.Level
             public override void Update(Graphics g)
             {
                 // Highlight each tile in the drag selection
-                foreach (Model.TileCoordinate tile in DragSelectionTiles)
+                foreach (LegacyModels.TileCoordinate tile in DragSelectionTiles)
                 {
                     // Only highlight the tile if it isn't already selected, otherwise it'll be highlighted twice
                     if (!mapPanel.selectedTiles.Contains(tile))

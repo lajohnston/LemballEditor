@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using System.Drawing;
 
 namespace LemballEditor.View.Level.ObjectGraphics
@@ -38,7 +38,7 @@ namespace LemballEditor.View.Level.ObjectGraphics
         /// </summary>
         /// <param name="ammo"></param>
         /// <param name="mapPanel"></param>
-        public NodeGraphic(Model.Node node, MapPanel mapPanel)
+        public NodeGraphic(LegacyModels.Node node, MapPanel mapPanel)
             : base(mapPanel)
         {
             this.node = node;

@@ -15,7 +15,7 @@ namespace LemballEditor.View.Level
         /// <summary>
         /// The current level terrain
         /// </summary>
-        private static Model.Level.TerrainTypes terrain;
+        private static LegacyModels.Level.TerrainTypes terrain;
 
         /// <summary>
         /// The XML tile archive
@@ -133,14 +133,14 @@ namespace LemballEditor.View.Level
             // Initialise hash table (tile cache)
             cache = new Hashtable(50);
 
-            SetTerrainType(Model.Level.TerrainTypes.Grass);
+            SetTerrainType(LegacyModels.Level.TerrainTypes.Grass);
         }
 
         /// <summary>
         /// Changes the terrain type that the cache handles
         /// </summary>
         /// <param name="terrainType"></param>
-        public static void ChangeTerrainType(Model.Level.TerrainTypes newTerrain)
+        public static void ChangeTerrainType(LegacyModels.Level.TerrainTypes newTerrain)
         {
             // If the new terrain type is different from the current one
             if (terrain != newTerrain)
@@ -191,7 +191,7 @@ namespace LemballEditor.View.Level
         /// Sets the terrain type, changes the XML tile terrain node and clears the cache
         /// </summary>
         /// <param name="newTerrain"></param>
-        private static void SetTerrainType(Model.Level.TerrainTypes newTerrain)
+        private static void SetTerrainType(LegacyModels.Level.TerrainTypes newTerrain)
         {
             terrain = newTerrain;
             terrainNode = (XmlElement)tileArchive.DocumentElement.ChildNodes[(int)newTerrain];

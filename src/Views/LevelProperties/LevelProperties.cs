@@ -8,13 +8,13 @@ namespace LemballEditor.View
         /// <summary>
         /// The level to display and edit the properties of
         /// </summary>
-        private readonly Model.Level level;
+        private readonly LegacyModels.Level level;
 
         /// <summary>
         /// Creates a new Level Properties form based on the settings of the specified level
         /// </summary>
         /// <param name="level">The level whose properties will be edited</param>
-        public LevelProperties(Model.Level level)
+        public LevelProperties(LegacyModels.Level level)
         {
             // Initailise components
             InitializeComponent();
@@ -57,19 +57,19 @@ namespace LemballEditor.View
         {
             switch (level.NumberOfFlagsRequiredToWin)
             {
-                case Model.Level.FlagsRequired.One:
+                case LegacyModels.Level.FlagsRequired.One:
                     oneFlag.Select();
                     break;
-                case Model.Level.FlagsRequired.Two:
+                case LegacyModels.Level.FlagsRequired.Two:
                     twoFlags.Select();
                     break;
-                case Model.Level.FlagsRequired.Three:
+                case LegacyModels.Level.FlagsRequired.Three:
                     threeFlags.Select();
                     break;
-                case Model.Level.FlagsRequired.Four:
+                case LegacyModels.Level.FlagsRequired.Four:
                     fourFlags.Select();
                     break;
-                case Model.Level.FlagsRequired.All:
+                case LegacyModels.Level.FlagsRequired.All:
                     allFlags.Select();
                     break;
             }
@@ -83,16 +83,16 @@ namespace LemballEditor.View
             // Set terrain type
             switch (level.TerrainType)
             {
-                case LemballEditor.Model.Level.TerrainTypes.Grass:
+                case LemballEditor.LegacyModels.Level.TerrainTypes.Grass:
                     grassTerrain.Select();
                     break;
-                case LemballEditor.Model.Level.TerrainTypes.Lego:
+                case LemballEditor.LegacyModels.Level.TerrainTypes.Lego:
                     legoTerrain.Select();
                     break;
-                case LemballEditor.Model.Level.TerrainTypes.Snow:
+                case LemballEditor.LegacyModels.Level.TerrainTypes.Snow:
                     snowTerrain.Select();
                     break;
-                case LemballEditor.Model.Level.TerrainTypes.Space:
+                case LemballEditor.LegacyModels.Level.TerrainTypes.Space:
                     spaceTerrain.Select();
                     break;
             }
@@ -147,17 +147,17 @@ namespace LemballEditor.View
             // Set flags required
             if (oneFlag.Checked)
             {
-                level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.One;
+                level.NumberOfFlagsRequiredToWin = LegacyModels.Level.FlagsRequired.One;
             }
             else if (twoFlags.Checked)
             {
-                level.NumberOfFlagsRequiredToWin = Model.Level.FlagsRequired.Two;
+                level.NumberOfFlagsRequiredToWin = LegacyModels.Level.FlagsRequired.Two;
             }
             else
             {
                 level.NumberOfFlagsRequiredToWin = threeFlags.Checked
-                    ? Model.Level.FlagsRequired.Three
-                    : fourFlags.Checked ? Model.Level.FlagsRequired.Four : Model.Level.FlagsRequired.All;
+                    ? LegacyModels.Level.FlagsRequired.Three
+                    : fourFlags.Checked ? LegacyModels.Level.FlagsRequired.Four : LegacyModels.Level.FlagsRequired.All;
             }
         }
 

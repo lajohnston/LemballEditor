@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using LemballEditor.View.Level;
 using LemballEditor.View.Level.ObjectGraphics;
 using System;
@@ -134,7 +134,7 @@ namespace LemballEditor.View
         /// <returns></returns>
         public static int GetObjectLimitRemaining()
         {
-            Model.Level level = Program.LoadedLevel;
+            LegacyModels.Level level = Program.LoadedLevel;
 
             return level != null ? level.ObjectLimitRemaining : 0;
         }
@@ -162,7 +162,7 @@ namespace LemballEditor.View
         /// Loads a level with the specified number
         /// </summary>
         /// <param name="levelNumber"></param>
-        public void LoadLevel(Model.LevelGroupTypes levelGroup, int levelNumber)
+        public void LoadLevel(LegacyModels.LevelGroupTypes levelGroup, int levelNumber)
         {
             // Change the selected level number
             //Program.LoadedLevelNumber = levelNumber;

@@ -24,8 +24,8 @@ namespace LemballEditor
         /// <summary>
         /// The currently loaded level pack
         /// </summary>
-        private static Model.LevelPack loadedLevelPack;
-        private static Model.LevelPack LoadedLevelPack
+        private static LegacyModels.LevelPack loadedLevelPack;
+        private static LegacyModels.LevelPack LoadedLevelPack
         {
             get => loadedLevelPack;
             set
@@ -33,7 +33,7 @@ namespace LemballEditor
                 loadedLevelPack = value;
 
                 // Load first level
-                LoadLevel(Model.LevelGroupTypes.Fun, 0);
+                LoadLevel(LegacyModels.LevelGroupTypes.Fun, 0);
 
                 // Inform GUI
                 //MainInterface.OnLevelPackLoad(loadedLevelPack);
@@ -43,8 +43,8 @@ namespace LemballEditor
         /// <summary>
         /// The current loaded level
         /// </summary>
-        private static Model.Level loadedLevel;
-        public static Model.Level LoadedLevel
+        private static LegacyModels.Level loadedLevel;
+        public static LegacyModels.Level LoadedLevel
         {
             get => loadedLevel;
             set
@@ -93,7 +93,7 @@ namespace LemballEditor
         /// <summary>
         /// Called when an object graphic has been altered, for example if it has been rotated
         /// </summary>
-        public static void OnObjectAlteration(Model.LevelObject levelObject)
+        public static void OnObjectAlteration(LegacyModels.LevelObject levelObject)
         {
             MainInterface.OnObjectAlteration(levelObject);
         }
@@ -120,11 +120,11 @@ namespace LemballEditor
             ProjectFileName = null;
 
             // Create and load a new level pack with a level in Fun
-            LoadedLevelPack = new LemballEditor.Model.LevelPack();
-            LoadedLevelPack.CreateNewLevel(Model.LevelGroupTypes.Fun);
+            LoadedLevelPack = new LemballEditor.LegacyModels.LevelPack();
+            LoadedLevelPack.CreateNewLevel(LegacyModels.LevelGroupTypes.Fun);
 
             // Load first level
-            LoadLevel(Model.LevelGroupTypes.Fun, 0);
+            LoadLevel(LegacyModels.LevelGroupTypes.Fun, 0);
 
 
             //Properties.Settings.Default.Reset();
@@ -220,7 +220,7 @@ namespace LemballEditor
         public static void LoadLevelPack(BinaryReader reader, string fileName)
         {
             // Loads the level pack
-            Model.LevelPack levelPack = new LemballEditor.Model.LevelPack(reader);
+            LegacyModels.LevelPack levelPack = new LemballEditor.LegacyModels.LevelPack(reader);
 
             // Verify that the level pack has been loaded successfully
             if (levelPack != null)
@@ -237,15 +237,15 @@ namespace LemballEditor
         /// Returns the level group of the loaded level
         /// </summary>
         /// <returns></returns>
-        public static Model.LevelGroupTypes? LoadedLevelGroup()
+        public static LegacyModels.LevelGroupTypes? LoadedLevelGroup()
         {
             if (LoadedLevel != null)
             {
                 // Retrieve the level group
-                Model.LevelGroupTypes? group = LoadedLevelPack.GetLevelGroupType(LoadedLevel);
+                LegacyModels.LevelGroupTypes? group = LoadedLevelPack.GetLevelGroupType(LoadedLevel);
 
                 return group != null
-                    ? (Model.LevelGroupTypes?)(Model.LevelGroupTypes)group
+                    ? (LegacyModels.LevelGroupTypes?)(LegacyModels.LevelGroupTypes)group
                     : throw new ApplicationException("Loaded level is not part of the loaded level pack");
             }
             else
@@ -267,7 +267,7 @@ namespace LemballEditor
         /// 
         /// </summary>
         /// <returns></returns>
-        public static bool LevelGroupHasCapacity(Model.LevelGroupTypes group)
+        public static bool LevelGroupHasCapacity(LegacyModels.LevelGroupTypes group)
         {
             return LoadedLevelPack.LevelGroupHasCapacity(group);
         }
@@ -277,7 +277,7 @@ namespace LemballEditor
         /// </summary>
         /// <param name="levelGroup"></param>
         /// <param name="levelNumber"></param>
-        public static void LoadLevel(Model.LevelGroupTypes levelGroup, int levelNumber)
+        public static void LoadLevel(LegacyModels.LevelGroupTypes levelGroup, int levelNumber)
         {
             LoadedLevel = LoadedLevelPack.GetLevel(levelGroup, levelNumber);
         }
@@ -308,7 +308,7 @@ namespace LemballEditor
         /// Loads a list of levels in the current difficulty group within the specified ListBox object
         /// </summary>
         /// <param name="list">The ListBox to load the level list into</param>
-        public static void LoadLevelList(Model.LevelGroupTypes levelGroup, ListBox list)
+        public static void LoadLevelList(LegacyModels.LevelGroupTypes levelGroup, ListBox list)
         {
             LoadedLevelPack.LoadLevelList(levelGroup, list);
         }
@@ -336,10 +336,10 @@ namespace LemballEditor
         public static void TestLoadedLevel()
         {
             // Create a new level pack
-            Model.LevelPack levelPack = new Model.LevelPack();
+            LegacyModels.LevelPack levelPack = new LegacyModels.LevelPack();
 
             // Make the loaded level the first level of fun
-            levelPack.CreateNewLevel(Model.LevelGroupTypes.Fun, LoadedLevel);
+            levelPack.CreateNewLevel(LegacyModels.LevelGroupTypes.Fun, LoadedLevel);
 
             // Compile level pack as a VSR file
             CompileVsr(levelPack, VsrPath);
@@ -354,7 +354,7 @@ namespace LemballEditor
         /// if the maximum number of levels within the current difficulty has been reached.
         /// </summary>
         /// <returns>True if the level creation was successful, otherwise false</returns>
-        public static void CreateNewLevel(Model.LevelGroupTypes levelGroup)
+        public static void CreateNewLevel(LegacyModels.LevelGroupTypes levelGroup)
         {
             LoadedLevelPack.CreateNewLevel(levelGroup);
         }
@@ -364,7 +364,7 @@ namespace LemballEditor
         /// </summary>
         /// <param name="levelGroup"></param>
         /// <param name="levelNumber"></param>
-        public static void DeleteLevel(Model.LevelGroupTypes levelGroup, int levelNumber)
+        public static void DeleteLevel(LegacyModels.LevelGroupTypes levelGroup, int levelNumber)
         {
             var level = LoadedLevelPack.GetLevel(levelGroup, levelNumber);
 
@@ -380,7 +380,7 @@ namespace LemballEditor
         /// 
         /// </summary>
         /// <param name="destinationGroup"></param>
-        public static void CopyLoadedLevel(Model.LevelGroupTypes destinationGroup)
+        public static void CopyLoadedLevel(LegacyModels.LevelGroupTypes destinationGroup)
         {
             if (LoadedLevel != null)
             {
@@ -397,12 +397,12 @@ namespace LemballEditor
         /// </summary>
         /// <param name="group"></param>
         /// <param name="levelNumber"></param>
-        public static void MoveLevelUp(Model.LevelGroupTypes group, int levelNumber)
+        public static void MoveLevelUp(LegacyModels.LevelGroupTypes group, int levelNumber)
         {
             LoadedLevelPack.MoveLevelUp(group, levelNumber);
         }
 
-        public static void MoveLoadedLevelToLevelGroup(Model.LevelGroupTypes group)
+        public static void MoveLoadedLevelToLevelGroup(LegacyModels.LevelGroupTypes group)
         {
             LoadedLevelPack.MoveLevelToLevelGroup(LoadedLevel, group);
         }
@@ -412,7 +412,7 @@ namespace LemballEditor
         /// </summary>
         /// <param name="group"></param>
         /// <param name="levelNumber"></param>
-        public static void MoveLevelDown(Model.LevelGroupTypes group, int levelNumber)
+        public static void MoveLevelDown(LegacyModels.LevelGroupTypes group, int levelNumber)
         {
             LoadedLevelPack.MoveLevelDown(group, levelNumber);
         }
@@ -422,7 +422,7 @@ namespace LemballEditor
         /// </summary>
         /// <param name="levelPack"></param>
         /// <param name="outputPath"></param>
-        private static void CompileVsr(Model.LevelPack levelPack, string outputPath)
+        private static void CompileVsr(LegacyModels.LevelPack levelPack, string outputPath)
         {
             VsrCompiler.VsrCompiler vsrCompiler = new VsrCompiler.VsrCompiler(VsrPath, BackupVsrPath);
 

@@ -1,4 +1,4 @@
-﻿using LemballEditor.Model;
+﻿using LemballEditor.LegacyModels;
 using LemballEditor.View.Level.ObjectGraphics;
 using System.Collections.Generic;
 using System.Drawing;
