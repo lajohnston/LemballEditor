@@ -30,6 +30,9 @@ namespace LemballEditor.View.Level
             public override void Update(Graphics g)
             {
                 DrawHeldTile(g);
+
+                // Highlight the tile the mouse is over
+                base.HighlightMouseOverTile(g);
             }
 
             /// <summary>
