@@ -65,190 +65,190 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\models\VsrCompiler\BinaryEditor.cs" />
-    <Compile Include="src\models\VsrCompiler\CompiledLevel.cs" />
-    <Compile Include="src\models\VsrCompiler\LevelGroup.cs" />
-    <Compile Include="src\models\VsrCompiler\LevelPack.cs" />
-    <Compile Include="src\models\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
-    <Compile Include="src\models\VsrCompiler\UnsupportedVSRException.cs" />
-    <Compile Include="src\models\VsrCompiler\VsrCompiler.cs" />
-    <Compile Include="src\views\LevelBrowser\LevelBrowser.cs">
+    <Compile Include="src\Models\VsrCompiler\BinaryEditor.cs" />
+    <Compile Include="src\Models\VsrCompiler\CompiledLevel.cs" />
+    <Compile Include="src\Models\VsrCompiler\LevelGroup.cs" />
+    <Compile Include="src\Models\VsrCompiler\LevelPack.cs" />
+    <Compile Include="src\Models\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
+    <Compile Include="src\Models\VsrCompiler\UnsupportedVSRException.cs" />
+    <Compile Include="src\Models\VsrCompiler\VsrCompiler.cs" />
+    <Compile Include="src\Views\LevelBrowser\LevelBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\views\LevelBrowser\LevelBrowser.Designer.cs">
+    <Compile Include="src\Views\LevelBrowser\LevelBrowser.Designer.cs">
       <DependentUpon>LevelBrowser.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\LevelBrowser\LevelGroupItem.cs">
+    <Compile Include="src\Views\LevelBrowser\LevelGroupItem.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\views\LevelBrowser\LevelGroupSelector.cs">
+    <Compile Include="src\Views\LevelBrowser\LevelGroupSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\views\LevelBrowser\MoveLevel.cs">
+    <Compile Include="src\Views\LevelBrowser\MoveLevel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\views\LevelBrowser\MoveLevel.Designer.cs">
+    <Compile Include="src\Views\LevelBrowser\MoveLevel.Designer.cs">
       <DependentUpon>MoveLevel.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\LevelPackProperties\LevelPackProperties.cs">
+    <Compile Include="src\Views\LevelPackProperties\LevelPackProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\views\LevelPackProperties\LevelPackProperties.Designer.cs">
+    <Compile Include="src\Views\LevelPackProperties\LevelPackProperties.Designer.cs">
       <DependentUpon>LevelPackProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\LevelProperties\EditLevelProperties.cs">
+    <Compile Include="src\Views\LevelProperties\EditLevelProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\views\LevelProperties\LevelProperties.cs">
+    <Compile Include="src\Views\LevelProperties\LevelProperties.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\views\LevelProperties\LevelProperties.Designer.cs">
+    <Compile Include="src\Views\LevelProperties\LevelProperties.Designer.cs">
       <DependentUpon>LevelProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\LevelProperties\NumericalTextBox.cs">
+    <Compile Include="src\Views\LevelProperties\NumericalTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\EditConnectionsMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\EditConnectionsMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\NodeEditMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\NodeEditMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\MovingObjectMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\MovingObjectMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\TileEditMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\TileEditMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\HoldingObjectMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\HoldingObjectMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\PlacingNewObjectMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\PlacingNewObjectMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\EditingMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\EditingMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\EditingModes\DefaultMode.cs">
+    <Compile Include="src\Views\Level\EditingModes\DefaultMode.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\ImageCache.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\AmmoGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\BalloonGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\BalloonPostGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\ChangeLiftArea.cs">
+    <Compile Include="src\Views\Level\ImageCache.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\AmmoGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\BalloonGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\BalloonPostGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\ChangeLiftArea.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\views\Level\ObjectGraphics\ChangeLiftArea.Designer.cs">
+    <Compile Include="src\Views\Level\ObjectGraphics\ChangeLiftArea.Designer.cs">
       <DependentUpon>ChangeLiftArea.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\Level\ObjectGraphics\CatapultGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\NodeGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\SwitchGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\RotatableObjectGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\MovingObjectGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\MineGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\LeverGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\GateGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\FlagGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\EnemyGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\EntranceGraphic.cs" />
-    <Compile Include="src\views\Level\ObjectGraphics\LiftGraphic.cs" />
-    <Compile Include="src\views\Level\MapPanelInputHandling.cs">
+    <Compile Include="src\Views\Level\ObjectGraphics\CatapultGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\NodeGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\SwitchGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\RotatableObjectGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\MovingObjectGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\MineGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\LeverGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\GateGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\FlagGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\EnemyGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\EntranceGraphic.cs" />
+    <Compile Include="src\Views\Level\ObjectGraphics\LiftGraphic.cs" />
+    <Compile Include="src\Views\Level\MapPanelInputHandling.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\MapPanelIsoConversions.cs">
+    <Compile Include="src\Views\Level\MapPanelIsoConversions.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\ObjectPalette\ObjectListItem.cs" />
-    <Compile Include="src\views\ObjectPalette\ObjectsList.cs">
+    <Compile Include="src\Views\ObjectPalette\ObjectListItem.cs" />
+    <Compile Include="src\Views\ObjectPalette\ObjectsList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\views\ObjectPalette\ObjectsList.Designer.cs">
+    <Compile Include="src\Views\ObjectPalette\ObjectsList.Designer.cs">
       <DependentUpon>ObjectsList.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\Settings\Settings.cs">
+    <Compile Include="src\Views\Settings\Settings.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\views\Settings\Settings.Designer.cs">
+    <Compile Include="src\Views\Settings\Settings.Designer.cs">
       <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\TilePalette\TilePaletteSelector.cs">
+    <Compile Include="src\Views\TilePalette\TilePaletteSelector.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="src\views\TilePalette\TilePaletteSelector.Designer.cs">
+    <Compile Include="src\Views\TilePalette\TilePaletteSelector.Designer.cs">
       <DependentUpon>TilePaletteSelector.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\views\TilePalette\TilePaletteIcon.cs" />
-    <Compile Include="src\views\TilePalette\TilePalette.cs">
+    <Compile Include="src\Views\TilePalette\TilePaletteIcon.cs" />
+    <Compile Include="src\Views\TilePalette\TilePalette.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\Level\ObjectGraphics\ObjectGraphic.cs" />
-    <Compile Include="src\models\LevelGroup.cs" />
-    <Compile Include="src\models\LevelPack.cs" />
-    <Compile Include="src\models\Level.cs" />
-    <Compile Include="src\models\LevelCompiler.cs" />
-    <Compile Include="src\models\LevelPackFullException.cs" />
-    <Compile Include="src\models\Objects\Ammo.cs" />
-    <Compile Include="src\models\Objects\Balloons\BlueBalloon.cs" />
-    <Compile Include="src\models\Objects\Balloons\GreenBalloon.cs" />
-    <Compile Include="src\models\Objects\Balloons\RedBalloon.cs" />
-    <Compile Include="src\models\Objects\Balloons\YellowBalloon.cs" />
-    <Compile Include="src\models\Objects\Catapult.cs" />
-    <Compile Include="src\models\Objects\Balloons\Balloon.cs" />
-    <Compile Include="src\models\Objects\Balloons\BalloonPost.cs" />
-    <Compile Include="src\models\Objects\Gate.cs" />
-    <Compile Include="src\models\Objects\Lift.cs">
+    <Compile Include="src\Views\Level\ObjectGraphics\ObjectGraphic.cs" />
+    <Compile Include="src\Models\LevelGroup.cs" />
+    <Compile Include="src\Models\LevelPack.cs" />
+    <Compile Include="src\Models\Level.cs" />
+    <Compile Include="src\Models\LevelCompiler.cs" />
+    <Compile Include="src\Models\LevelPackFullException.cs" />
+    <Compile Include="src\Models\Objects\Ammo.cs" />
+    <Compile Include="src\Models\Objects\Balloons\BlueBalloon.cs" />
+    <Compile Include="src\Models\Objects\Balloons\GreenBalloon.cs" />
+    <Compile Include="src\Models\Objects\Balloons\RedBalloon.cs" />
+    <Compile Include="src\Models\Objects\Balloons\YellowBalloon.cs" />
+    <Compile Include="src\Models\Objects\Catapult.cs" />
+    <Compile Include="src\Models\Objects\Balloons\Balloon.cs" />
+    <Compile Include="src\Models\Objects\Balloons\BalloonPost.cs" />
+    <Compile Include="src\Models\Objects\Gate.cs" />
+    <Compile Include="src\Models\Objects\Lift.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="src\models\Objects\RotatableObject.cs" />
-    <Compile Include="src\models\Objects\Lever.cs" />
-    <Compile Include="src\models\Objects\MovingObject.cs" />
-    <Compile Include="src\models\Objects\MovingPlatform.cs" />
-    <Compile Include="src\models\Objects\Node.cs" />
-    <Compile Include="src\models\Objects\Enemy.cs" />
-    <Compile Include="src\models\Objects\RedFlag.cs" />
-    <Compile Include="src\models\Objects\Flag.cs" />
-    <Compile Include="src\models\Objects\Mine.cs" />
-    <Compile Include="src\models\Objects\Entrance.cs" />
-    <Compile Include="src\models\Objects\LevelObject.cs" />
-    <Compile Include="src\models\Objects\Switch.cs" />
-    <Compile Include="src\models\TileCoordinate.cs" />
-    <Compile Include="src\views\Level\TileImage.cs" />
-    <Compile Include="src\views\Level\MapPanel.cs">
+    <Compile Include="src\Models\Objects\RotatableObject.cs" />
+    <Compile Include="src\Models\Objects\Lever.cs" />
+    <Compile Include="src\Models\Objects\MovingObject.cs" />
+    <Compile Include="src\Models\Objects\MovingPlatform.cs" />
+    <Compile Include="src\Models\Objects\Node.cs" />
+    <Compile Include="src\Models\Objects\Enemy.cs" />
+    <Compile Include="src\Models\Objects\RedFlag.cs" />
+    <Compile Include="src\Models\Objects\Flag.cs" />
+    <Compile Include="src\Models\Objects\Mine.cs" />
+    <Compile Include="src\Models\Objects\Entrance.cs" />
+    <Compile Include="src\Models\Objects\LevelObject.cs" />
+    <Compile Include="src\Models\Objects\Switch.cs" />
+    <Compile Include="src\Models\TileCoordinate.cs" />
+    <Compile Include="src\Views\Level\TileImage.cs" />
+    <Compile Include="src\Views\Level\MapPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="src\views\MainInterface.cs">
+    <Compile Include="src\Views\MainInterface.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="src\views\MainInterface.Designer.cs">
+    <Compile Include="src\Views\MainInterface.Designer.cs">
       <DependentUpon>MainInterface.cs</DependentUpon>
     </Compile>
-    <Compile Include="src\models\MapTile.cs" />
+    <Compile Include="src\Models\MapTile.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="src\views\LevelBrowser\LevelBrowser.resx">
+    <EmbeddedResource Include="src\Views\LevelBrowser\LevelBrowser.resx">
       <DependentUpon>LevelBrowser.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\LevelPackProperties\LevelPackProperties.resx">
+    <EmbeddedResource Include="src\Views\LevelPackProperties\LevelPackProperties.resx">
       <DependentUpon>LevelPackProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\LevelProperties\LevelProperties.resx">
+    <EmbeddedResource Include="src\Views\LevelProperties\LevelProperties.resx">
       <DependentUpon>LevelProperties.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\MainInterface.resx">
+    <EmbeddedResource Include="src\Views\MainInterface.resx">
       <DependentUpon>MainInterface.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\Level\ObjectGraphics\ChangeLiftArea.resx">
+    <EmbeddedResource Include="src\Views\Level\ObjectGraphics\ChangeLiftArea.resx">
       <DependentUpon>ChangeLiftArea.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\ObjectPalette\ObjectsList.resx">
+    <EmbeddedResource Include="src\Views\ObjectPalette\ObjectsList.resx">
       <DependentUpon>ObjectsList.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\Settings\Settings.resx">
+    <EmbeddedResource Include="src\Views\Settings\Settings.resx">
       <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="src\views\TilePalette\TilePaletteSelector.resx">
+    <EmbeddedResource Include="src\Views\TilePalette\TilePaletteSelector.resx">
       <DependentUpon>TilePaletteSelector.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
