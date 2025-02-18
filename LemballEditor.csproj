@@ -75,6 +75,7 @@
     <Compile Include="src\Models\Level.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />
     <Compile Include="src\Models\LevelPack.cs" />
+    <Compile Include="src\Serializers\LevelSerializer.cs" />
     <Compile Include="src\Views\LevelBrowser\LevelBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
