@@ -19,11 +19,11 @@ namespace LemballEditor.Tests.Serializers
             LevelSerializer.Serialize(level, writer);
 
             // Deserialize the data
+            var result = new Level();
             _ = stream.Seek(0, SeekOrigin.Begin);
-            var resultLevel = new Level();
-            LevelSerializer.Deserialize(resultLevel, reader);
+            LevelSerializer.Deserialize(result, reader);
 
-            return resultLevel;
+            return result;
         }
 
         private byte[] getSerializedData(ILevel level)
@@ -49,19 +49,36 @@ namespace LemballEditor.Tests.Serializers
         {
             var invalidHeader = Encoding.UTF8.GetBytes("UNEXPECTED HEADER BYTES");
             var act = () => deserialize(invalidHeader, new Level());
-            _ = act.Should().Throw<InvalidDataException>("Invalid header");
+            _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid header value");
         }
 
         [TestMethod]
         public void Deserialize_ShouldThrowAnExceptionIfTheUnknownAValueIsInvalid()
         {
+            var level = new Level();
+            var data = getSerializedData(level);
+
             // Mock a level that throws an exception when UnknownA is set
             var fakeErrorMessage = "Some Error";
             var mockLevel = new Mock<ILevel>();
-            _ = mockLevel.SetupSet(m => m.UnknownA = It.IsAny<ushort>()).Throws<ArgumentException>();
 
-            var act = () => serializeAndDeserialize(mockLevel.Object);
-            _ = act.Should().Throw<InvalidDataException>(fakeErrorMessage);
+            _ = mockLevel.SetupSet(m => m.UnknownA = It.IsAny<ushort>())
+                    .Throws<ArgumentException>(() => new ArgumentException(fakeErrorMessage));
+
+            var act = () => deserialize(data, mockLevel.Object);
+            _ = act.Should().Throw<InvalidDataException>().WithMessage(fakeErrorMessage);
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldThrowAnExceptionIfTheThemeIsNotValid()
+        {
+            var level = new Level();
+            var data = getSerializedData(level);
+
+            data[10] = 100;
+
+            var act = () => deserialize(data, level);
+            _ = act.Should().Throw<InvalidDataException>().WithMessage($"Theme value should be between 0-3, 100 given");
         }
 
         [TestMethod]
@@ -74,6 +91,54 @@ namespace LemballEditor.Tests.Serializers
 
             var result = serializeAndDeserialize(level);
             _ = result.UnknownA.Should().Be(10);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetGrassTheme()
+        {
+            var level = new Level()
+            {
+                Theme = LevelTheme.Grass
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.Theme.Should().Be(LevelTheme.Grass);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetLegoTheme()
+        {
+            var level = new Level()
+            {
+                Theme = LevelTheme.Lego
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.Theme.Should().Be(LevelTheme.Lego);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetSnowTheme()
+        {
+            var level = new Level()
+            {
+                Theme = LevelTheme.Snow
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.Theme.Should().Be(LevelTheme.Snow);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetSpaceTheme()
+        {
+            var level = new Level()
+            {
+                Theme = LevelTheme.Space
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.Theme.Should().Be(LevelTheme.Space);
         }
 
         [TestMethod]

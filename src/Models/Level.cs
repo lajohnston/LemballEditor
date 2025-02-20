@@ -23,11 +23,17 @@ namespace LemballEditor.Models
         }
 
         /// <summary>
+        /// The level's theme/graphical style
+        /// </summary>
+        public LevelTheme Theme { get; set; }
+
+        /// <summary>
         /// Creates a new level instance with sensible defaults
         /// </summary>
         public Level()
         {
             UnknownA = 9;
+            Theme = LevelTheme.Grass;
         }
     }
 }

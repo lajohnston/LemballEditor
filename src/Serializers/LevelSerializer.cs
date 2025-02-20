@@ -14,7 +14,8 @@ namespace LemballEditor.Serializers
         private static readonly Action<ILevel, BinaryReader, BinaryWriter>[] DATA_FORMAT = new Action<ILevel, BinaryReader, BinaryWriter>[]
         {
             ProcessHeader,
-            ProcessUnknownA
+            ProcessUnknownA,
+            ProcessTheme
         };
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace LemballEditor.Serializers
         }
 
         /// <summary>
-        /// Reads/Writes the UnknownA byte
+        /// Reads/Writes the UnknownA value
         /// </summary>
         /// <param name="level">The level to serialize/deserialize</param>
         /// <param name="reader">If given, will read the value and set it to the level</param>
@@ -67,6 +68,56 @@ namespace LemballEditor.Serializers
             else
             {
                 writer?.Write(level.UnknownA);
+            }
+        }
+
+        /// <summary>
+        /// Reads/Writes the Theme value
+        /// </summary>
+        /// <param name="level">The level to serialize/deserialize</param>
+        /// <param name="reader">If given, will read the value and set it to the level</param>
+        /// <param name="writer">If given, will write the value to the stream</param>
+        private static void ProcessTheme(ILevel level, BinaryReader reader = null, BinaryWriter writer = null)
+        {
+            if (reader != null)
+            {
+                var value = reader.ReadUInt16();
+
+                switch (value)
+                {
+                    case 0:
+                        level.Theme = LevelTheme.Grass;
+                        break;
+                    case 1:
+                        level.Theme = LevelTheme.Lego;
+                        break;
+                    case 2:
+                        level.Theme = LevelTheme.Snow;
+                        break;
+                    case 3:
+                        level.Theme = LevelTheme.Space;
+                        break;
+                    default:
+                        throw new InvalidDataException($"Theme value should be between 0-3, {value} given");
+                }
+            }
+            else
+            {
+                switch (level.Theme)
+                {
+                    case LevelTheme.Grass:
+                        writer?.Write(0);
+                        break;
+                    case LevelTheme.Lego:
+                        writer?.Write(1);
+                        break;
+                    case LevelTheme.Snow:
+                        writer?.Write(2);
+                        break;
+                    case LevelTheme.Space:
+                        writer?.Write(3);
+                        break;
+                }
             }
         }
 
