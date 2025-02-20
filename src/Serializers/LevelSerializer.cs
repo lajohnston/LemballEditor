@@ -11,9 +11,10 @@ namespace LemballEditor.Serializers
     public static class LevelSerializer
     {
         // Define a static array of Func<int, string>
-        private static readonly Action<Level, BinaryReader, BinaryWriter>[] DATA_FORMAT = new Action<Level, BinaryReader, BinaryWriter>[]
+        private static readonly Action<ILevel, BinaryReader, BinaryWriter>[] DATA_FORMAT = new Action<ILevel, BinaryReader, BinaryWriter>[]
         {
-            EnsureHeader
+            ProcessHeader,
+            ProcessUnknownA
         };
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace LemballEditor.Serializers
         /// <param name="reader">If given, the header will be read from the stream and asserted</param>
         /// <param name="writer">If given, the header will be written to the stream</param>
         /// <exception cref="InvalidDataException">If a reader is given and the data stream doesn't contain a valid header</exception>
-        private static void EnsureHeader(Level level, BinaryReader reader = null, BinaryWriter writer = null)
+        private static void ProcessHeader(ILevel level, BinaryReader reader = null, BinaryWriter writer = null)
         {
             // '  IA' followed by 18, 0, 0, 0
             byte[] header = { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 };
@@ -34,7 +35,7 @@ namespace LemballEditor.Serializers
 
                 if (!headerBytes.SequenceEqual(header))
                 {
-                    throw new InvalidDataException("Invalid binary format: Invalid header value");
+                    throw new InvalidDataException("Invalid header value");
                 }
             }
             else
@@ -44,11 +45,37 @@ namespace LemballEditor.Serializers
         }
 
         /// <summary>
+        /// Reads/Writes the UnknownA byte
+        /// </summary>
+        /// <param name="level">The level to serialize/deserialize</param>
+        /// <param name="reader">If given, will read the value and set it to the level</param>
+        /// <param name="writer">If given, will write the value to the stream</param>
+        private static void ProcessUnknownA(ILevel level, BinaryReader reader = null, BinaryWriter writer = null)
+        {
+            if (reader != null)
+            {
+                var value = reader.ReadUInt16();
+                try
+                {
+                    level.UnknownA = value;
+                }
+                catch (ArgumentException error)
+                {
+                    throw new InvalidDataException(error.Message);
+                }
+            }
+            else
+            {
+                writer?.Write(level.UnknownA);
+            }
+        }
+
+        /// <summary>
         /// Converts the given level to a Lemmings Paintball compatible binary format
         /// </summary>
         /// <param name="level">The level to serialize</param>
         /// <param name="writer">The writer to write the bytes to</param>
-        public static void Serialize(Level level, BinaryWriter writer)
+        public static void Serialize(ILevel level, BinaryWriter writer)
         {
             foreach (var func in DATA_FORMAT)
             {
@@ -62,7 +89,7 @@ namespace LemballEditor.Serializers
         /// <param name="level">The level to load the data to</param>
         /// <param name="reader">The reader to read the byte data</param>
         /// <exception cref="InvalidDataException">Thrown when the data is not valid</exception>
-        public static void Deserialize(Level level, BinaryReader reader)
+        public static void Deserialize(ILevel level, BinaryReader reader)
         {
             foreach (var func in DATA_FORMAT)
             {
