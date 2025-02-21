@@ -1,0 +1,19 @@
+﻿using FluentAssertions;
+using LemballEditor.Models;
+using LemballEditor.Serializers.Level;
+
+namespace LemballEditor.Tests.SerializerTests.LevelTests
+{
+    internal static class TestHelper
+    {
+        public static void AssertWrite(ILevel level, ILevelSerializer serializer, ushort expectedValue)
+        {
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+
+            serializer.Serialize(level, writer);
+
+            _ = stream.ToArray().Should().BeEquivalentTo(BitConverter.GetBytes(expectedValue));
+        }
+    }
+}
