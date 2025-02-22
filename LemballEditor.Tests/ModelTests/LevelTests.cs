@@ -12,17 +12,17 @@ namespace LemballEditor.Tests.ModelTests
             var level = new Level();
             _ = level.Theme.Should().Be(LevelTheme.Grass);
             _ = level.TimeLimitInSeconds.Should().BeNull();
-            _ = level.UnknownA.Should().Be(9);
+            _ = level.UnknownA.Should().Be(10);
             _ = level.NumberOfLemmings.Should().Be(1);
         }
 
         [TestMethod]
         public void UnknownA_ShouldStoreValidValues()
         {
-            var level = new Level();
-            _ = level.UnknownA.Should().Be(9);
-
-            level.UnknownA = 6;
+            var level = new Level
+            {
+                UnknownA = 6
+            };
             _ = level.UnknownA.Should().Be(6);
 
             level.UnknownA = 7;

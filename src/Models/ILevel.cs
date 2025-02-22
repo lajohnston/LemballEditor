@@ -17,9 +17,14 @@
     public interface ILevel
     {
         /// <summary>
+        /// The number of flags required to win
+        /// </summary>
+        ushort FlagsRequired { get; set; }
+
+        /// <summary>
         /// The number of starting Lemmings (1-4)
         /// </summary>
-        ushort NumberOfLemmings { get; set; }
+        byte NumberOfLemmings { get; set; }
 
         /// <summary>
         /// The level's theme
@@ -34,6 +39,6 @@
         /// <summary>
         /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
         /// </summary>
-        ushort UnknownA { get; set; }
+        byte UnknownA { get; set; }
     }
 }

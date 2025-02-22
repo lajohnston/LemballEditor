@@ -8,8 +8,8 @@ namespace LemballEditor.Models
         /// The number of Lemmings in the level
         /// TODO - Compute this value from the entrances
         /// </summary>
-        private ushort _numberOfLemmings;
-        public ushort NumberOfLemmings
+        private byte _numberOfLemmings;
+        public byte NumberOfLemmings
         {
             get => _numberOfLemmings;
             set
@@ -49,8 +49,8 @@ namespace LemballEditor.Models
         /// <summary>
         /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
         /// </summary>
-        private ushort _unknownA;
-        public ushort UnknownA
+        private byte _unknownA;
+        public byte UnknownA
         {
             get => _unknownA;
             set
@@ -72,7 +72,7 @@ namespace LemballEditor.Models
             NumberOfLemmings = 1;
             Theme = LevelTheme.Grass;
             TimeLimitInSeconds = null;
-            UnknownA = 9;
+            UnknownA = 10;
         }
     }
 }

@@ -13,9 +13,15 @@ namespace LemballEditor.Serializers.Level
         public void Deserialize(ILevel level, BinaryReader reader)
         {
             var value = reader.ReadUInt16();
+
+            if (value > byte.MaxValue)
+            {
+                throw new InvalidDataException($"NumberOfLemmings out of byte range. {value} given");
+            }
+
             try
             {
-                level.NumberOfLemmings = value;
+                level.NumberOfLemmings = (byte)value;
             }
             catch (ArgumentException error)
             {
@@ -25,7 +31,7 @@ namespace LemballEditor.Serializers.Level
 
         public void Serialize(ILevel level, BinaryWriter writer)
         {
-            writer?.Write(level.NumberOfLemmings);
+            writer?.Write((ushort)level.NumberOfLemmings);
         }
     }
 }

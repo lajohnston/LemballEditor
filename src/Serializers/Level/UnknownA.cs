@@ -17,9 +17,15 @@ namespace LemballEditor.Serializers.Level
         public void Deserialize(ILevel level, BinaryReader reader)
         {
             var value = reader.ReadUInt16();
+
+            if (value > byte.MaxValue)
+            {
+                throw new InvalidDataException($"UnknownA out of byte range. {value} given");
+            }
+
             try
             {
-                level.UnknownA = value;
+                level.UnknownA = (byte)value;
             }
             catch (ArgumentException error)
             {
@@ -29,7 +35,7 @@ namespace LemballEditor.Serializers.Level
 
         public void Serialize(ILevel level, BinaryWriter writer)
         {
-            writer?.Write(level.UnknownA);
+            writer?.Write((ushort)level.UnknownA);
         }
     }
 }

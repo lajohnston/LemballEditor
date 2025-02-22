@@ -9,9 +9,22 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     public sealed class UnknownATests
     {
         [TestMethod]
+        public void Deserialize_ShouldThrowAnExceptionIfTheValueIsAboveTheByteMaxSize()
+        {
+            ushort invalidValue = byte.MaxValue + 1;
+
+            using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
+            using var reader = new BinaryReader(stream);
+
+            var level = new Level();
+            var act = () => new UnknownA().Deserialize(level, reader);
+            _ = act.Should().Throw<InvalidDataException>().WithMessage($"UnknownA out of byte range. {invalidValue} given");
+        }
+
+        [TestMethod]
         public void Deserialize_ShouldThrowAnExceptionIfTheUnknownAValueIsInvalid()
         {
-            ushort invalidValue = 1;
+            byte invalidValue = 1;
             using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
             using var reader = new BinaryReader(stream);
 
@@ -19,7 +32,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var fakeErrorMessage = "Some Error";
             var mockLevel = new Mock<ILevel>();
 
-            _ = mockLevel.SetupSet(m => m.UnknownA = It.Is<ushort>(x => x == invalidValue))
+            _ = mockLevel.SetupSet(m => m.UnknownA = It.Is<byte>(x => x == invalidValue))
                     .Throws(() => new ArgumentException(fakeErrorMessage));
 
             var act = () => new UnknownA().Deserialize(mockLevel.Object, reader);
