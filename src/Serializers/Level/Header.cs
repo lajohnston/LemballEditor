@@ -24,7 +24,7 @@ namespace LemballEditor.Serializers.Level
 
         public void Serialize(ILevel level, BinaryWriter writer)
         {
-            writer?.Write(header);
+            writer.Write(header);
         }
     }
 }

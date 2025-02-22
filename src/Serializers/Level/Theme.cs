@@ -33,16 +33,16 @@ namespace LemballEditor.Serializers.Level
             switch (level.Theme)
             {
                 case LevelTheme.Grass:
-                    writer?.Write((ushort)0);
+                    writer.Write((ushort)0);
                     break;
                 case LevelTheme.Lego:
-                    writer?.Write((ushort)1);
+                    writer.Write((ushort)1);
                     break;
                 case LevelTheme.Snow:
-                    writer?.Write((ushort)2);
+                    writer.Write((ushort)2);
                     break;
                 case LevelTheme.Space:
-                    writer?.Write((ushort)3);
+                    writer.Write((ushort)3);
                     break;
             }
         }

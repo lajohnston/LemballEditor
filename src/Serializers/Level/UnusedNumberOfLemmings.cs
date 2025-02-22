@@ -31,7 +31,7 @@ namespace LemballEditor.Serializers.Level
 
         public void Serialize(ILevel level, BinaryWriter writer)
         {
-            writer?.Write((ushort)level.NumberOfLemmings);
+            writer.Write((ushort)level.NumberOfLemmings);
         }
     }
 }
