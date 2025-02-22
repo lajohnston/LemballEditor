@@ -89,6 +89,7 @@
     <Compile Include="src\Serializers\Level\ILevelSerializer.cs" />
     <Compile Include="src\Serializers\Level\LevelSerializer.cs" />
     <Compile Include="src\Serializers\Level\Theme.cs" />
+    <Compile Include="src\Serializers\Level\TimeLimit.cs" />
     <Compile Include="src\Serializers\Level\UnknownA.cs" />
     <Compile Include="src\Views\LevelBrowser\LevelBrowser.cs">
       <SubType>UserControl</SubType>

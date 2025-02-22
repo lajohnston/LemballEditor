@@ -18,6 +18,7 @@ namespace LemballEditor.Serializers.Level
                 new Header(),
                 new UnknownA(),
                 new Theme(),
+                new TimeLimit(),
             };
         }
 

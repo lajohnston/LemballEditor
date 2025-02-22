@@ -82,5 +82,29 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var result = serializeAndDeserialize(level);
             _ = result.Theme.Should().Be(LevelTheme.Space);
         }
+
+        [TestMethod]
+        public void ShouldGetAndSetTheTimeLimit()
+        {
+            var level = new Level()
+            {
+                TimeLimitInSeconds = 123
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.TimeLimitInSeconds.Should().Be(123);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetAnInfiniteTimeLimit_WhenThereIsNoTimeLimit()
+        {
+            var level = new Level()
+            {
+                TimeLimitInSeconds = null
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.TimeLimitInSeconds.Should().BeNull();
+        }
     }
 }
