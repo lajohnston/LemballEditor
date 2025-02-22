@@ -10,10 +10,11 @@ namespace LemballEditor.Tests.ModelTests
         public void Constructor_ShouldInitialiseSensibleDefaults()
         {
             var level = new Level();
+            _ = level.FlagsRequired.Should().Be(1);
+            _ = level.NumberOfLemmings.Should().Be(1);
             _ = level.Theme.Should().Be(LevelTheme.Grass);
             _ = level.TimeLimitInSeconds.Should().BeNull();
             _ = level.UnknownA.Should().Be(10);
-            _ = level.NumberOfLemmings.Should().Be(1);
             _ = level.UnknownB.Should().Be(0);
         }
 
@@ -163,6 +164,16 @@ namespace LemballEditor.Tests.ModelTests
             var level = new Level();
             var act = () => level.FlagsRequired = 5;
             _ = act.Should().Throw<ArgumentException>().WithMessage("Max FlagsRequired is 4. 5 given");
+        }
+
+        [TestMethod]
+        public void ShouldStoreAMapInstance()
+        {
+            var level = new Level();
+            var map = new Map();
+
+            level.Map = map;
+            _ = level.Map.Should().Be(map);
         }
     }
 }

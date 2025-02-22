@@ -23,6 +23,11 @@ namespace LemballEditor.Models
         }
 
         /// <summary>
+        /// The level map/terrain
+        /// </summary>
+        public IMap Map { get; set; }
+
+        /// <summary>
         /// The number of Lemmings in the level
         /// TODO - Compute this value from the entrances
         /// </summary>
@@ -92,6 +97,7 @@ namespace LemballEditor.Models
         /// </summary>
         public Level()
         {
+            FlagsRequired = 1;
             NumberOfLemmings = 1;
             Theme = LevelTheme.Grass;
             TimeLimitInSeconds = null;

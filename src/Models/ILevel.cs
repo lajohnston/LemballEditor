@@ -22,6 +22,11 @@
         byte FlagsRequired { get; set; }
 
         /// <summary>
+        /// The level map/terrain
+        /// </summary>
+        IMap Map { get; set; }
+
+        /// <summary>
         /// The number of starting Lemmings (1-4)
         /// </summary>
         byte NumberOfLemmings { get; set; }
