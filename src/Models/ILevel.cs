@@ -25,5 +25,10 @@
         /// The level's theme
         /// </summary>
         LevelTheme Theme { get; set; }
+
+        /// <summary>
+        /// The level time limit in seconds, or null if infinite. The max value is 599
+        /// </summary>
+        ushort? TimeLimitInSeconds { get; set; }
     }
 }

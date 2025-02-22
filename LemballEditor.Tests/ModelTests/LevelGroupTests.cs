@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
 
-namespace LemballEditor.Tests.Models
+namespace LemballEditor.Tests.ModelTests
 {
     [TestClass]
     public sealed class LevelGroupTests

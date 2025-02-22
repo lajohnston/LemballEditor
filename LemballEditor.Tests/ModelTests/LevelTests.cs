@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
 
-namespace LemballEditor.Tests.Models
+namespace LemballEditor.Tests.ModelTests
 {
     [TestClass]
     public class LevelTests
@@ -32,6 +32,48 @@ namespace LemballEditor.Tests.Models
             var act = () => level.UnknownA = 100;
 
             _ = act.Should().Throw<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void ShouldDefaultTheLevelThemeToGrass()
+        {
+            var level = new Level();
+            _ = level.Theme.Should().Be(LevelTheme.Grass);
+        }
+
+        [TestMethod]
+        public void ShouldStoreTheGivenLevelTheme()
+        {
+            var level = new Level
+            {
+                Theme = LevelTheme.Snow
+            };
+            _ = level.Theme.Should().Be(LevelTheme.Snow);
+        }
+
+        [TestMethod]
+        public void ShouldStoreTheTimeLimitInSeconds()
+        {
+            var level = new Level
+            {
+                TimeLimitInSeconds = 60
+            };
+            _ = level.TimeLimitInSeconds.Should().Be(60);
+        }
+
+        [TestMethod]
+        public void ShouldSetTheTimeLimitToInfiniteByDefault()
+        {
+            var level = new Level();
+            _ = level.TimeLimitInSeconds.Should().BeNull();
+        }
+
+        [TestMethod]
+        public void ShouldNotAllowTimeLimitValuesAbove599()
+        {
+            var level = new Level();
+            var act = () => level.TimeLimitInSeconds = 600;
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be no larger than 599");
         }
     }
 }

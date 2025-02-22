@@ -28,12 +28,31 @@ namespace LemballEditor.Models
         public LevelTheme Theme { get; set; }
 
         /// <summary>
+        /// The level time limit in seconds, or null if infinite. The max value is 599
+        /// </summary>
+        private ushort? _timeLimitInSeconds;
+        public ushort? TimeLimitInSeconds
+        {
+            get => _timeLimitInSeconds;
+            set
+            {
+                if (value > 599)
+                {
+                    throw new ArgumentException("Value should be no larger than 599");
+                }
+
+                _timeLimitInSeconds = value;
+            }
+        }
+
+        /// <summary>
         /// Creates a new level instance with sensible defaults
         /// </summary>
         public Level()
         {
             UnknownA = 9;
             Theme = LevelTheme.Grass;
+            TimeLimitInSeconds = null;
         }
     }
 }
