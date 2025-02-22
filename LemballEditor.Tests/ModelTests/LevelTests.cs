@@ -7,6 +7,16 @@ namespace LemballEditor.Tests.ModelTests
     public class LevelTests
     {
         [TestMethod]
+        public void Constructor_ShouldInitialiseSensibleDefaults()
+        {
+            var level = new Level();
+            _ = level.Theme.Should().Be(LevelTheme.Grass);
+            _ = level.TimeLimitInSeconds.Should().BeNull();
+            _ = level.UnknownA.Should().Be(9);
+            _ = level.NumberOfLemmings.Should().Be(1);
+        }
+
+        [TestMethod]
         public void UnknownA_ShouldStoreValidValues()
         {
             var level = new Level();
@@ -74,6 +84,42 @@ namespace LemballEditor.Tests.ModelTests
             var level = new Level();
             var act = () => level.TimeLimitInSeconds = 600;
             _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be no larger than 599");
+        }
+
+        [TestMethod]
+        public void ShouldNotAllowNumberOfLemmingsToBeZero()
+        {
+            var level = new Level();
+            var act = () => level.NumberOfLemmings = 0;
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be between 1-4. 0 given");
+        }
+
+        [TestMethod]
+        public void ShouldNotAllowNumberOfLemmingsToAboveFour()
+        {
+            var level = new Level();
+            var act = () => level.NumberOfLemmings = 5;
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be between 1-4. 5 given");
+        }
+
+        [TestMethod]
+        public void ShouldStoreTheNumberOfLemmings()
+        {
+            var level = new Level()
+            {
+                NumberOfLemmings = 1
+            };
+
+            _ = level.NumberOfLemmings.Should().Be(1);
+
+            level.NumberOfLemmings = 2;
+            _ = level.NumberOfLemmings.Should().Be(2);
+
+            level.NumberOfLemmings = 3;
+            _ = level.NumberOfLemmings.Should().Be(3);
+
+            level.NumberOfLemmings = 4;
+            _ = level.NumberOfLemmings.Should().Be(4);
         }
     }
 }

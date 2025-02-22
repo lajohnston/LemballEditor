@@ -17,9 +17,9 @@
     public interface ILevel
     {
         /// <summary>
-        /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
+        /// The number of starting Lemmings (1-4)
         /// </summary>
-        ushort UnknownA { get; set; }
+        ushort NumberOfLemmings { get; set; }
 
         /// <summary>
         /// The level's theme
@@ -30,5 +30,10 @@
         /// The level time limit in seconds, or null if infinite. The max value is 599
         /// </summary>
         ushort? TimeLimitInSeconds { get; set; }
+
+        /// <summary>
+        /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
+        /// </summary>
+        ushort UnknownA { get; set; }
     }
 }

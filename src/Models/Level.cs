@@ -5,20 +5,21 @@ namespace LemballEditor.Models
     public class Level : ILevel
     {
         /// <summary>
-        /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
+        /// The number of Lemmings in the level
+        /// TODO - Compute this value from the entrances
         /// </summary>
-        private ushort _unknownA;
-        public ushort UnknownA
+        private ushort _numberOfLemmings;
+        public ushort NumberOfLemmings
         {
-            get => _unknownA;
+            get => _numberOfLemmings;
             set
             {
-                if (value != 6 && value != 7 && value != 9 && value != 10)
+                if (value < 1 || value > 4)
                 {
-                    throw new ArgumentException($"Expected UnknownA to be the value of 6, 7, 9 or 10. {value} given");
+                    throw new ArgumentException($"Value should be between 1-4. {value} given");
                 }
 
-                _unknownA = value;
+                _numberOfLemmings = value;
             }
         }
 
@@ -46,13 +47,32 @@ namespace LemballEditor.Models
         }
 
         /// <summary>
+        /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
+        /// </summary>
+        private ushort _unknownA;
+        public ushort UnknownA
+        {
+            get => _unknownA;
+            set
+            {
+                if (value != 6 && value != 7 && value != 9 && value != 10)
+                {
+                    throw new ArgumentException($"Expected UnknownA to be the value of 6, 7, 9 or 10. {value} given");
+                }
+
+                _unknownA = value;
+            }
+        }
+
+        /// <summary>
         /// Creates a new level instance with sensible defaults
         /// </summary>
         public Level()
         {
-            UnknownA = 9;
+            NumberOfLemmings = 1;
             Theme = LevelTheme.Grass;
             TimeLimitInSeconds = null;
+            UnknownA = 9;
         }
     }
 }

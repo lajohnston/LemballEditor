@@ -36,6 +36,18 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         }
 
         [TestMethod]
+        public void ShouldGetAndSetTheNumberOfLemmings()
+        {
+            var level = new Level
+            {
+                NumberOfLemmings = 2
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.NumberOfLemmings.Should().Be(2);
+        }
+
+        [TestMethod]
         public void ShouldGetAndSetGrassTheme()
         {
             var level = new Level
