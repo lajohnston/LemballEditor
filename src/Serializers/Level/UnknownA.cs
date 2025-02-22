@@ -4,6 +4,14 @@ using System.IO;
 
 namespace LemballEditor.Serializers.Level
 {
+    /// <summary>
+    /// Serializes and deserializes the UnknownA ushort
+    /// A value of zero crashes the game, indicating it is read for something, but changing it to anything
+    /// above 1 doesn't seem to have any effect on the level.
+    ///
+    /// The value is usually 9 or 10 with the exception of Taxing Level_15 (6) and Mayhem Level_02 (7).
+    ///
+    /// </summary>
     public class UnknownA : ILevelSerializer
     {
         public void Deserialize(ILevel level, BinaryReader reader)
