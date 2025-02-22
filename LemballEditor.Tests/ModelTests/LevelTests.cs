@@ -14,10 +14,11 @@ namespace LemballEditor.Tests.ModelTests
             _ = level.TimeLimitInSeconds.Should().BeNull();
             _ = level.UnknownA.Should().Be(10);
             _ = level.NumberOfLemmings.Should().Be(1);
+            _ = level.UnknownB.Should().Be(0);
         }
 
         [TestMethod]
-        public void UnknownA_ShouldStoreValidValues()
+        public void ShouldStoreValidUnknownAValues()
         {
             var level = new Level
             {
@@ -36,12 +37,23 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
-        public void UnknownA_ShouldThrowAnArgumentException_IfTheValueIsNotValid()
+        public void ShouldThrowAnArgumentException_IfTheUnknownAValueIsNotValid()
         {
             var level = new Level();
             var act = () => level.UnknownA = 100;
 
             _ = act.Should().Throw<ArgumentException>();
+        }
+
+        [TestMethod]
+        public void ShouldStoreValidUnknownBValues()
+        {
+            var level = new Level
+            {
+                UnknownB = 33425
+            };
+
+            _ = level.UnknownB.Should().Be(33425);
         }
 
         [TestMethod]

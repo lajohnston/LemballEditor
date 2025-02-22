@@ -40,5 +40,10 @@
         /// An unknown value. It's always either 6, 7, 9 or 10 in the official levels
         /// </summary>
         byte UnknownA { get; set; }
+
+        /// <summary>
+        /// An unknown value
+        /// </summary>
+        ushort UnknownB { get; set; }
     }
 }

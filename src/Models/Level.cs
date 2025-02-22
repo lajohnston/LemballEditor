@@ -83,6 +83,11 @@ namespace LemballEditor.Models
         }
 
         /// <summary>
+        /// An unknown value
+        /// </summary>
+        public ushort UnknownB { get; set; }
+
+        /// <summary>
         /// Creates a new level instance with sensible defaults
         /// </summary>
         public Level()

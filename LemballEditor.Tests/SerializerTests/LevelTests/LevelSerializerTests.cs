@@ -36,6 +36,18 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         }
 
         [TestMethod]
+        public void ShouldGetAndSetUnknownB()
+        {
+            var level = new Level
+            {
+                UnknownB = 33425
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.UnknownB.Should().Be(33425);
+        }
+
+        [TestMethod]
         public void ShouldGetAndSetTheNumberOfLemmings()
         {
             var level = new Level
