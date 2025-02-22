@@ -5,6 +5,24 @@ namespace LemballEditor.Models
     public class Level : ILevel
     {
         /// <summary>
+        /// The number of flags required to win the level
+        /// </summary>
+        private byte _flagsRequired;
+        public byte FlagsRequired
+        {
+            get => _flagsRequired;
+            set
+            {
+                if (value < 1 || value > 4)
+                {
+                    throw new ArgumentException($"FlagsRequired should be between 1-4. {value} given");
+                }
+
+                _flagsRequired = value;
+            }
+        }
+
+        /// <summary>
         /// The number of Lemmings in the level
         /// TODO - Compute this value from the entrances
         /// </summary>
@@ -16,7 +34,7 @@ namespace LemballEditor.Models
             {
                 if (value < 1 || value > 4)
                 {
-                    throw new ArgumentException($"Value should be between 1-4. {value} given");
+                    throw new ArgumentException($"NumberOfLemmings should be between 1-4. {value} given");
                 }
 
                 _numberOfLemmings = value;
@@ -39,7 +57,7 @@ namespace LemballEditor.Models
             {
                 if (value > 599)
                 {
-                    throw new ArgumentException("Value should be no larger than 599");
+                    throw new ArgumentException("TimeLimitInSeconds should be no larger than 599");
                 }
 
                 _timeLimitInSeconds = value;

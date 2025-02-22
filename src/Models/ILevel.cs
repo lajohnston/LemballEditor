@@ -19,7 +19,7 @@
         /// <summary>
         /// The number of flags required to win
         /// </summary>
-        ushort FlagsRequired { get; set; }
+        byte FlagsRequired { get; set; }
 
         /// <summary>
         /// The number of starting Lemmings (1-4)

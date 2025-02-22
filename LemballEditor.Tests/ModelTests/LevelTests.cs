@@ -83,7 +83,7 @@ namespace LemballEditor.Tests.ModelTests
         {
             var level = new Level();
             var act = () => level.TimeLimitInSeconds = 600;
-            _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be no larger than 599");
+            _ = act.Should().Throw<ArgumentException>().WithMessage("TimeLimitInSeconds should be no larger than 599");
         }
 
         [TestMethod]
@@ -91,15 +91,15 @@ namespace LemballEditor.Tests.ModelTests
         {
             var level = new Level();
             var act = () => level.NumberOfLemmings = 0;
-            _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be between 1-4. 0 given");
+            _ = act.Should().Throw<ArgumentException>().WithMessage("NumberOfLemmings should be between 1-4. 0 given");
         }
 
         [TestMethod]
-        public void ShouldNotAllowNumberOfLemmingsToAboveFour()
+        public void ShouldNotAllowNumberOfLemmingsToBeAboveFour()
         {
             var level = new Level();
             var act = () => level.NumberOfLemmings = 5;
-            _ = act.Should().Throw<ArgumentException>().WithMessage("Value should be between 1-4. 5 given");
+            _ = act.Should().Throw<ArgumentException>().WithMessage("NumberOfLemmings should be between 1-4. 5 given");
         }
 
         [TestMethod]
@@ -120,6 +120,42 @@ namespace LemballEditor.Tests.ModelTests
 
             level.NumberOfLemmings = 4;
             _ = level.NumberOfLemmings.Should().Be(4);
+        }
+
+        [TestMethod]
+        public void ShouldStoreTheNumberOfFlagsRequiredToWinTheLevel()
+        {
+            var level = new Level()
+            {
+                FlagsRequired = 1
+            };
+
+            _ = level.FlagsRequired.Should().Be(1);
+
+            level.FlagsRequired = 2;
+            _ = level.FlagsRequired.Should().Be(2);
+
+            level.FlagsRequired = 3;
+            _ = level.FlagsRequired.Should().Be(3);
+
+            level.FlagsRequired = 4;
+            _ = level.FlagsRequired.Should().Be(4);
+        }
+
+        [TestMethod]
+        public void ShouldNotAllowFlagsRequiredToBeZero()
+        {
+            var level = new Level();
+            var act = () => level.FlagsRequired = 0;
+            _ = act.Should().Throw<ArgumentException>().WithMessage("FlagsRequired should be between 1-4. 0 given");
+        }
+
+        [TestMethod]
+        public void ShouldNotAllowFlagsRequiredToBeAboveFour()
+        {
+            var level = new Level();
+            var act = () => level.FlagsRequired = 5;
+            _ = act.Should().Throw<ArgumentException>().WithMessage("FlagsRequired should be between 1-4. 5 given");
         }
     }
 }
