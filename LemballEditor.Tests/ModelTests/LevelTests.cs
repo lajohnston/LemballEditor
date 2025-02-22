@@ -127,9 +127,12 @@ namespace LemballEditor.Tests.ModelTests
         {
             var level = new Level()
             {
-                FlagsRequired = 1
+                FlagsRequired = 0
             };
 
+            _ = level.FlagsRequired.Should().Be(0);
+
+            level.FlagsRequired = 1;
             _ = level.FlagsRequired.Should().Be(1);
 
             level.FlagsRequired = 2;
@@ -143,19 +146,11 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
-        public void ShouldNotAllowFlagsRequiredToBeZero()
-        {
-            var level = new Level();
-            var act = () => level.FlagsRequired = 0;
-            _ = act.Should().Throw<ArgumentException>().WithMessage("FlagsRequired should be between 1-4. 0 given");
-        }
-
-        [TestMethod]
         public void ShouldNotAllowFlagsRequiredToBeAboveFour()
         {
             var level = new Level();
             var act = () => level.FlagsRequired = 5;
-            _ = act.Should().Throw<ArgumentException>().WithMessage("FlagsRequired should be between 1-4. 5 given");
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Max FlagsRequired is 4. 5 given");
         }
     }
 }

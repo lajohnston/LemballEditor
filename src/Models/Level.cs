@@ -13,9 +13,9 @@ namespace LemballEditor.Models
             get => _flagsRequired;
             set
             {
-                if (value < 1 || value > 4)
+                if (value > 4)
                 {
-                    throw new ArgumentException($"FlagsRequired should be between 1-4. {value} given");
+                    throw new ArgumentException($"Max FlagsRequired is 4. {value} given");
                 }
 
                 _flagsRequired = value;

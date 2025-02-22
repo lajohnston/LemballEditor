@@ -19,7 +19,8 @@ namespace LemballEditor.Serializers.Level
                 new UnknownA(),
                 new Theme(),
                 new TimeLimit(),
-                new UnusedNumberOfLemmings()
+                new UnusedNumberOfLemmings(),
+                new FlagsRequiredIndicator(),
             };
         }
 

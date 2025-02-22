@@ -118,5 +118,17 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var result = serializeAndDeserialize(level);
             _ = result.TimeLimitInSeconds.Should().BeNull();
         }
+
+        [TestMethod]
+        public void ShouldGetAndSetTheFlagsRequiredIndicator()
+        {
+            var level = new Level()
+            {
+                FlagsRequired = 3
+            };
+
+            var result = serializeAndDeserialize(level);
+            _ = result.FlagsRequired.Should().Be(3);
+        }
     }
 }
