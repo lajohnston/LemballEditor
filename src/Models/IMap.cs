@@ -27,5 +27,21 @@ namespace LemballEditor.Models
         /// </summary>
         /// <returns></returns>
         IEnumerable<Tile> GetTileIterator();
+
+        /// <summary>
+        /// Sets the tile at the given coordinate
+        /// </summary>
+        /// <param name="xTile">0-based xTile coordinate</param>
+        /// <param name="yTile">0-based yTile cordinate</param>
+        /// <param name="tile">The tile to place at the given position</param>
+        void SetTile(byte xTile, byte yTile, Tile tile);
+
+        /// <summary>
+        /// Get the tile at the given coordinate, or null if none has been set there
+        /// </summary>
+        /// <param name="xTile">0-based xTile coordinate</param>
+        /// <param name="yTile">0-based yTile cordinate</param>
+        /// <returns>Tile, or null if none set</returns>
+        Tile GetTile(byte xTile, byte yTile);
     }
 }

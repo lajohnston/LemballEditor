@@ -26,7 +26,7 @@ namespace LemballEditor.Tests.ModelTests
             var map = new Map(10, 10);
             var tile = new Tile(123);
 
-            map.SetTile(tile, 9, 9);
+            map.SetTile(9, 9, tile);
 
             _ = map.GetTile(9, 9).Should().Be(tile);
         }
@@ -35,7 +35,7 @@ namespace LemballEditor.Tests.ModelTests
         public void SetTile_ShouldThrowAnExceptionIfTheXCoordinateIsOutOfBounds()
         {
             var map = new Map(10, 10);
-            var act = () => map.SetTile(new Tile(123), 10, 0);
+            var act = () => map.SetTile(10, 0, new Tile(123));
 
             _ = act.Should().Throw<IndexOutOfRangeException>().WithMessage("xTile 10 is out of bounds");
         }
@@ -44,7 +44,7 @@ namespace LemballEditor.Tests.ModelTests
         public void SetTile_ShouldThrowAnExceptionIfTheYCoordinateIsOutOfBounds()
         {
             var map = new Map(10, 10);
-            var act = () => map.SetTile(new Tile(123), 0, 10);
+            var act = () => map.SetTile(0, 10, new Tile(123));
 
             _ = act.Should().Throw<IndexOutOfRangeException>().WithMessage("yTile 10 is out of bounds");
         }
@@ -71,7 +71,7 @@ namespace LemballEditor.Tests.ModelTests
         public void SetTile_ShouldThrowAnException_WhenTheGivenTileIsNull()
         {
             var map = new Map(2, 2);
-            var act = () => map.SetTile(null, 0, 0);
+            var act = () => map.SetTile(0, 0, null);
 
             _ = act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
@@ -89,10 +89,10 @@ namespace LemballEditor.Tests.ModelTests
                 new(4,4),
             };
 
-            map.SetTile(tiles[0], 0, 0);
-            map.SetTile(tiles[1], 1, 0);
-            map.SetTile(tiles[2], 0, 1);
-            map.SetTile(tiles[3], 1, 1);
+            map.SetTile(0, 0, tiles[0]);
+            map.SetTile(1, 0, tiles[1]);
+            map.SetTile(0, 1, tiles[2]);
+            map.SetTile(1, 1, tiles[3]);
 
             var result = map.GetTileIterator().ToList();
             _ = result.Should().BeEquivalentTo(tiles);

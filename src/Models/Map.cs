@@ -67,10 +67,10 @@ namespace LemballEditor.Models
         /// <summary>
         /// Sets the tile at the given coordinate
         /// </summary>
-        /// <param name="tile">The tile to place at the given position</param>
         /// <param name="xTile">0-based xTile coordinate</param>
         /// <param name="yTile">0-based yTile cordinate</param>
-        public void SetTile(Tile tile, byte xTile, byte yTile)
+        /// <param name="tile">The tile to place at the given position</param>
+        public void SetTile(byte xTile, byte yTile, Tile tile)
         {
             var index = GetIndex(xTile, yTile);
 
