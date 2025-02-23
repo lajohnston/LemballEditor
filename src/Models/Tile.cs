@@ -10,7 +10,7 @@ namespace LemballEditor.Models
         /// <summary>
         /// The tile pattern reference
         /// </summary>
-        public ushort TileRef { get; set; }
+        public uint TileRef { get; set; }
 
         /// <summary>
         /// The elevation of the tile in pixels. Max value is 88 before the graphics get cropped
@@ -34,7 +34,7 @@ namespace LemballEditor.Models
         /// Creates a new tile with the given tileRef
         /// </summary>
         /// <param name="tileRef">The tile pattern reference</param>
-        public Tile(ushort tileRef)
+        public Tile(uint tileRef)
         {
             TileRef = tileRef;
             Elevation = 0;
@@ -45,7 +45,7 @@ namespace LemballEditor.Models
         /// </summary>
         /// <param name="tileRef"></param>
         /// <param name="elevation"></param>
-        public Tile(ushort tileRef, byte elevation)
+        public Tile(uint tileRef, byte elevation)
         {
             TileRef = tileRef;
             Elevation = elevation;
