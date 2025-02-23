@@ -8,12 +8,12 @@
         /// <summary>
         /// Number of X tiles
         /// </summary>
-        byte XTileSize { get; }
+        byte XTiles { get; }
 
         /// <summary>
         /// Number of Y tiles
         /// </summary>
-        byte YTileSize { get; }
+        byte YTiles { get; }
 
         /// <summary>
         /// The number of tiles in the level

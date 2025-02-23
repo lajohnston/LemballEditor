@@ -170,7 +170,7 @@ namespace LemballEditor.Tests.ModelTests
         public void ShouldStoreAMapInstance()
         {
             var level = new Level();
-            var map = new Map();
+            var map = new Map(64, 64);
 
             level.Map = map;
             _ = level.Map.Should().Be(map);
