@@ -36,6 +36,11 @@ namespace LemballEditor.Models
             YTiles = yTiles;
 
             tiles = new Tile[xTiles * yTiles];
+
+            for (var index = 0; index < TileCount; index++)
+            {
+                tiles[index] = new Tile();
+            }
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace LemballEditor.Models
         {
             var index = GetIndex(xTile, yTile);
 
-            tiles[index] = tile;
+            tiles[index] = tile ?? throw new ArgumentNullException();
         }
 
         /// <summary>

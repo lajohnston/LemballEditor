@@ -68,11 +68,12 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
-        public void GetTile_ShouldReturnNull_IfATileHasNotBeenSetAtTheGivenCoorindate()
+        public void SetTile_ShouldThrowAnException_WhenTheGivenTileIsNull()
         {
-            var map = new Map(10, 10);
+            var map = new Map(2, 2);
+            var act = () => map.SetTile(null, 0, 0);
 
-            _ = map.GetTile(0, 0).Should().BeNull();
+            _ = act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
         }
 
         [TestMethod]
@@ -89,12 +90,39 @@ namespace LemballEditor.Tests.ModelTests
             };
 
             map.SetTile(tiles[0], 0, 0);
-            map.SetTile(tiles[1], 0, 1);
-            map.SetTile(tiles[2], 1, 0);
+            map.SetTile(tiles[1], 1, 0);
+            map.SetTile(tiles[2], 0, 1);
             map.SetTile(tiles[3], 1, 1);
 
             var result = map.GetTileIterator().ToList();
             _ = result.Should().BeEquivalentTo(tiles);
+        }
+
+        [TestMethod]
+        public void Constructor_ShouldFillMapWithCopiesOfTheDefaultTile()
+        {
+            var defaultTile = new Tile();
+
+            var map = new Map(2, 2);
+
+            var tile1 = map.GetTile(0, 0);
+            var tile2 = map.GetTile(1, 0);
+            var tile3 = map.GetTile(0, 1);
+            var tile4 = map.GetTile(1, 1);
+
+            _ = tile1.TileRef.Should().Be(defaultTile.TileRef);
+            _ = tile2.TileRef.Should().Be(defaultTile.TileRef);
+            _ = tile3.TileRef.Should().Be(defaultTile.TileRef);
+            _ = tile4.TileRef.Should().Be(defaultTile.TileRef);
+
+            _ = tile1.Elevation.Should().Be(defaultTile.Elevation);
+            _ = tile2.Elevation.Should().Be(defaultTile.Elevation);
+            _ = tile3.Elevation.Should().Be(defaultTile.Elevation);
+            _ = tile4.Elevation.Should().Be(defaultTile.Elevation);
+
+            _ = tile1.Should().NotBe(tile2);
+            _ = tile2.Should().NotBe(tile3);
+            _ = tile3.Should().NotBe(tile4);
         }
     }
 }

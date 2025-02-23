@@ -7,11 +7,20 @@ namespace LemballEditor.Tests.ModelTests
     public class TileTests
     {
         [TestMethod]
-        public void Constructor_ShouldInitialiseWithTheTileRef()
+        public void Constructor_ShouldInitialiseWithTheDefaultTileRefAndZeroElevation()
+        {
+            var tile = new Tile();
+            _ = tile.TileRef.Should().Be(521);
+            _ = tile.Elevation.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void Constructor_ShouldInitialiseWithTheGivenTileRefAndZeroElevation()
         {
             ushort tileRef = 123;
             var tile = new Tile(tileRef);
             _ = tile.TileRef.Should().Be(123);
+            _ = tile.Elevation.Should().Be(0);
         }
 
         [TestMethod]
