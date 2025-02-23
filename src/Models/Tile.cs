@@ -27,7 +27,7 @@ namespace LemballEditor.Models
             {
                 if (value > 88)
                 {
-                    throw new ArgumentException("Max elevation is 88");
+                    throw new ArgumentException($"Max elevation is 88. {value} given");
                 }
 
                 _elevation = value;

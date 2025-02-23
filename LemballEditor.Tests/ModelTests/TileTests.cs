@@ -36,7 +36,7 @@ namespace LemballEditor.Tests.ModelTests
         public void Constructor_ShouldThrowAnException_WhenTheElevationValueIsOver88()
         {
             var act = () => new Tile(0, 89);
-            _ = act.Should().Throw<ArgumentException>().WithMessage("Max elevation is 88");
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Max elevation is 88. 89 given");
         }
 
         [TestMethod]
@@ -66,7 +66,7 @@ namespace LemballEditor.Tests.ModelTests
 
             var act = () => tile.Elevation = 89;
 
-            _ = act.Should().Throw<ArgumentException>().WithMessage("Max elevation is 88");
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Max elevation is 88. 89 given");
         }
     }
 }
