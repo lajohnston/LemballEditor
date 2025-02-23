@@ -11,10 +11,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Deserialize_ShouldThrowAnInvalidDataException_WhenHeaderIsNotValid()
         {
-            using var stream = new MemoryStream();
-            using var reader = new BinaryReader(stream);
-
             var invalidHeader = Encoding.UTF8.GetBytes("UNEXPECTED HEADER BYTES");
+            using var stream = new MemoryStream(invalidHeader);
+            using var reader = new BinaryReader(stream);
 
             var act = () => new Header().Deserialize(new Level(), reader);
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid header value");

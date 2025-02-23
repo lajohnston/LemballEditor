@@ -7,11 +7,27 @@ namespace LemballEditor.Tests.ModelTests
     public class TileTests
     {
         [TestMethod]
-        public void ShouldInitialiseWithTheTileRef()
+        public void Constructor_ShouldInitialiseWithTheTileRef()
         {
             ushort tileRef = 123;
             var tile = new Tile(tileRef);
             _ = tile.TileRef.Should().Be(123);
+        }
+
+        [TestMethod]
+        public void Constructor_ShouldInitialiseWithTheTileRefAndElevation()
+        {
+            ushort tileRef = 123;
+            var tile = new Tile(tileRef, 10);
+            _ = tile.TileRef.Should().Be(123);
+            _ = tile.Elevation.Should().Be(10);
+        }
+
+        [TestMethod]
+        public void Constructor_ShouldThrowAnException_WhenTheElevationValueIsOver88()
+        {
+            var act = () => new Tile(0, 89);
+            _ = act.Should().Throw<ArgumentException>().WithMessage("Max elevation is 88");
         }
 
         [TestMethod]

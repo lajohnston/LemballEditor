@@ -39,5 +39,16 @@ namespace LemballEditor.Models
             TileRef = tileRef;
             Elevation = 0;
         }
+
+        /// <summary>
+        /// Creates a new tile with the given tileRef and elevation
+        /// </summary>
+        /// <param name="tileRef"></param>
+        /// <param name="elevation"></param>
+        public Tile(ushort tileRef, byte elevation)
+        {
+            TileRef = tileRef;
+            Elevation = elevation;
+        }
     }
 }
