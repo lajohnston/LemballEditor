@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace LemballEditor.Models
 {
@@ -82,6 +83,19 @@ namespace LemballEditor.Models
             var index = GetIndex(xTile, yTile);
 
             return tiles[index];
+        }
+
+        /// <summary>
+        /// Returns an iterator that iterates through the tiles starting from 0, 0,
+        /// then along each xTile in the row, and each row
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<Tile> GetTileIterator()
+        {
+            foreach (var tile in tiles)
+            {
+                yield return tile;
+            }
         }
     }
 }

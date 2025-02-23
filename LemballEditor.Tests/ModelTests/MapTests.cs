@@ -74,5 +74,27 @@ namespace LemballEditor.Tests.ModelTests
 
             _ = map.GetTile(0, 0).Should().BeNull();
         }
+
+        [TestMethod]
+        public void GetTileIterator_ShouldIterateThroughEachTile()
+        {
+            var map = new Map(2, 2);
+
+            var tiles = new List<Tile>()
+            {
+                new(1,1),
+                new(2,2),
+                new(3,3),
+                new(4,4),
+            };
+
+            map.SetTile(tiles[0], 0, 0);
+            map.SetTile(tiles[1], 0, 1);
+            map.SetTile(tiles[2], 1, 0);
+            map.SetTile(tiles[3], 1, 1);
+
+            var result = map.GetTileIterator().ToList();
+            _ = result.Should().BeEquivalentTo(tiles);
+        }
     }
 }

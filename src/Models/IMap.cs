@@ -1,4 +1,6 @@
-﻿namespace LemballEditor.Models
+﻿using System.Collections.Generic;
+
+namespace LemballEditor.Models
 {
     /// <summary>
     /// A level map consisting of tiles
@@ -19,5 +21,11 @@
         /// The number of tiles in the level
         /// </summary>
         ushort TileCount { get; }
+
+        /// <summary>
+        /// Returns an iterator that iterates through the tiles sequentially
+        /// </summary>
+        /// <returns></returns>
+        IEnumerable<Tile> GetTileIterator();
     }
 }
