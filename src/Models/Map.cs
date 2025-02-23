@@ -61,7 +61,7 @@ namespace LemballEditor.Models
                 throw new IndexOutOfRangeException($"yTile {yTile} is out of bounds");
             }
 
-            return (yTile * YTiles) + xTile;
+            return (yTile * XTiles) + xTile;
         }
 
         /// <summary>

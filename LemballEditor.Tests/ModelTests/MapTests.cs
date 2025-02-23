@@ -23,12 +23,12 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldGetAndSetTheTileAtTheGivenCoordinate()
         {
-            var map = new Map(10, 10);
+            var map = new Map(2, 4);
             var tile = new Tile(123);
 
-            map.SetTile(9, 9, tile);
+            map.SetTile(1, 3, tile);
 
-            _ = map.GetTile(9, 9).Should().Be(tile);
+            _ = map.GetTile(1, 3).Should().Be(tile);
         }
 
         [TestMethod]
