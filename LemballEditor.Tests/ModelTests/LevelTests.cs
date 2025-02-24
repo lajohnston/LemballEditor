@@ -6,10 +6,12 @@ namespace LemballEditor.Tests.ModelTests
     [TestClass]
     public class LevelTests
     {
+        private static readonly IModelFactory modelFactory = new ModelFactory();
+
         [TestMethod]
         public void Constructor_ShouldInitialiseSensibleDefaults()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1);
             _ = level.FlagsRequired.Should().Be(1);
             _ = level.NumberOfLemmings.Should().Be(1);
             _ = level.Theme.Should().Be(LevelTheme.Grass);
@@ -21,10 +23,9 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldStoreValidUnknownAValues()
         {
-            var level = new Level
-            {
-                UnknownA = 6
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+
+            level.UnknownA = 6;
             _ = level.UnknownA.Should().Be(6);
 
             level.UnknownA = 7;
@@ -40,7 +41,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldThrowAnArgumentException_IfTheUnknownAValueIsNotValid()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1);
             var act = () => level.UnknownA = 100;
 
             _ = act.Should().Throw<ArgumentException>();
@@ -49,10 +50,8 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldStoreValidUnknownBValues()
         {
-            var level = new Level
-            {
-                UnknownB = 33425
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.UnknownB = 33425;
 
             _ = level.UnknownB.Should().Be(33425);
         }
@@ -60,41 +59,39 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldDefaultTheLevelThemeToGrass()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1);
             _ = level.Theme.Should().Be(LevelTheme.Grass);
         }
 
         [TestMethod]
         public void ShouldStoreTheGivenLevelTheme()
         {
-            var level = new Level
-            {
-                Theme = LevelTheme.Snow
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Snow;
+
             _ = level.Theme.Should().Be(LevelTheme.Snow);
         }
 
         [TestMethod]
         public void ShouldStoreTheTimeLimitInSeconds()
         {
-            var level = new Level
-            {
-                TimeLimitInSeconds = 60
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.TimeLimitInSeconds = 60;
+
             _ = level.TimeLimitInSeconds.Should().Be(60);
         }
 
         [TestMethod]
         public void ShouldSetTheTimeLimitToInfiniteByDefault()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1);
             _ = level.TimeLimitInSeconds.Should().BeNull();
         }
 
         [TestMethod]
         public void ShouldNotAllowTimeLimitValuesAbove599()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1); ;
             var act = () => level.TimeLimitInSeconds = 600;
             _ = act.Should().Throw<ArgumentException>().WithMessage("TimeLimitInSeconds should be no larger than 599");
         }
@@ -102,7 +99,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldNotAllowNumberOfLemmingsToBeZero()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1); ;
             var act = () => level.NumberOfLemmings = 0;
             _ = act.Should().Throw<ArgumentException>().WithMessage("NumberOfLemmings should be between 1-4. 0 given");
         }
@@ -110,7 +107,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldNotAllowNumberOfLemmingsToBeAboveFour()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1); ;
             var act = () => level.NumberOfLemmings = 5;
             _ = act.Should().Throw<ArgumentException>().WithMessage("NumberOfLemmings should be between 1-4. 5 given");
         }
@@ -118,11 +115,9 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldStoreTheNumberOfLemmings()
         {
-            var level = new Level()
-            {
-                NumberOfLemmings = 1
-            };
+            var level = modelFactory.CreateLevel(1, 1);
 
+            level.NumberOfLemmings = 1;
             _ = level.NumberOfLemmings.Should().Be(1);
 
             level.NumberOfLemmings = 2;
@@ -138,11 +133,9 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldStoreTheNumberOfFlagsRequiredToWinTheLevel()
         {
-            var level = new Level()
-            {
-                FlagsRequired = 0
-            };
+            var level = modelFactory.CreateLevel(1, 1);
 
+            level.FlagsRequired = 0;
             _ = level.FlagsRequired.Should().Be(0);
 
             level.FlagsRequired = 1;
@@ -161,7 +154,8 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldNotAllowFlagsRequiredToBeAboveFour()
         {
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1);
+
             var act = () => level.FlagsRequired = 5;
             _ = act.Should().Throw<ArgumentException>().WithMessage("Max FlagsRequired is 4. 5 given");
         }
@@ -169,11 +163,12 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldStoreAMapInstance()
         {
-            var level = new Level();
-            var map = new Map(64, 64);
+            var level = modelFactory.CreateLevel(1, 1);
 
-            level.Map = map;
-            _ = level.Map.Should().Be(map);
+            var newMap = modelFactory.CreateMap(4, 4);
+            level.Map = newMap;
+
+            _ = level.Map.Should().Be(newMap);
         }
     }
 }

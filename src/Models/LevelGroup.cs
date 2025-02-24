@@ -19,14 +19,14 @@ namespace LemballEditor.Models
         /// <summary>
         /// The level sequence
         /// </summary>
-        private readonly List<Level> levels;
+        private readonly List<ILevel> levels;
 
         /// <summary>
         /// Creates an empty level group
         /// </summary>
         public LevelGroup()
         {
-            levels = new List<Level>();
+            levels = new List<ILevel>();
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace LemballEditor.Models
         /// </summary>
         /// <param name="index">The 0-based index of the level</param>
         /// <returns>The level at that index, or null if there is none</returns>
-        public Level GetLevel(int index)
+        public ILevel GetLevel(int index)
         {
             return index < 0 || index >= levels.Count ? null : levels[index];
         }
@@ -43,7 +43,7 @@ namespace LemballEditor.Models
         /// Adds the given level at the end of the level group
         /// </summary>
         /// <param name="level">The level to add</param>
-        public void AddLevel(Level level)
+        public void AddLevel(ILevel level)
         {
             levels.Add(level);
         }

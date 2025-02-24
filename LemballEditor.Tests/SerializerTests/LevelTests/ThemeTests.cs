@@ -7,6 +7,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     [TestClass]
     public sealed class ThemeTests
     {
+        private static readonly IModelFactory modelFactory = new ModelFactory();
+
         [TestMethod]
         public void Deserialize_ShouldThrowAnExceptionIfTheThemeIsNotValid()
         {
@@ -14,14 +16,16 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
             using var reader = new BinaryReader(stream);
 
-            var act = () => new Theme().Deserialize(new Level(), reader);
+            var act = () => new Theme().Deserialize(modelFactory.CreateLevel(1, 1), reader);
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"Theme value should be between 0-3, {invalidValue} given");
         }
 
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheGrassTheme()
         {
-            var level = new Level() { Theme = LevelTheme.Grass };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Grass;
+
             ushort expectedValue = 0;
             var serializer = new Theme();
 
@@ -31,7 +35,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheLegoTheme()
         {
-            var level = new Level() { Theme = LevelTheme.Lego };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Lego;
+
             ushort expectedValue = 1;
             var serializer = new Theme();
 
@@ -41,7 +47,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheSnowTheme()
         {
-            var level = new Level() { Theme = LevelTheme.Snow };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Snow;
+
             ushort expectedValue = 2;
             var serializer = new Theme();
 
@@ -51,7 +59,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheSpaceTheme()
         {
-            var level = new Level() { Theme = LevelTheme.Space };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Space;
+
             ushort expectedValue = 3;
             var serializer = new Theme();
 

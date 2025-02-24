@@ -8,6 +8,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     [TestClass]
     public sealed class UnknownATests
     {
+        private static readonly IModelFactory modelFactory = new ModelFactory();
+
         [TestMethod]
         public void Deserialize_ShouldThrowAnExceptionIfTheValueIsAboveTheByteMaxSize()
         {
@@ -16,7 +18,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
             using var reader = new BinaryReader(stream);
 
-            var level = new Level();
+            var level = modelFactory.CreateLevel(1, 1);
             var act = () => new UnknownA().Deserialize(level, reader);
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"UnknownA out of byte range. {invalidValue} given");
         }
@@ -43,7 +45,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheUShortToTheStream()
         {
-            var level = new Level() { UnknownA = 10 };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.UnknownA = 10;
+
             ushort expectedValue = 10;
             var serializer = new UnknownA();
 

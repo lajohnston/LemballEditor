@@ -1,6 +1,6 @@
 ﻿namespace LemballEditor.Models
 {
-    public class LevelFactory : ILevelFactory
+    public class ModelFactory : IModelFactory
     {
         /// <summary>
         /// Creates a level containing a map of the given size

@@ -6,6 +6,8 @@ namespace LemballEditor.Tests.ModelTests
     [TestClass]
     public sealed class LevelGroupTests
     {
+        private static readonly IModelFactory modelFactory = new ModelFactory();
+
         [TestMethod]
         public void ShouldReturnNullIfTheLevelAtTheGivenIndexDoesNotExist()
         {
@@ -18,9 +20,9 @@ namespace LemballEditor.Tests.ModelTests
         {
             var group = new LevelGroup();
 
-            var level1 = new Level();
-            var level2 = new Level();
-            var level3 = new Level();
+            var level1 = modelFactory.CreateLevel(1, 1);
+            var level2 = modelFactory.CreateLevel(1, 1);
+            var level3 = modelFactory.CreateLevel(1, 1);
 
             group.AddLevel(level1);
             group.AddLevel(level2);

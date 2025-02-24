@@ -82,8 +82,10 @@
     <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedVSRException.cs" />
     <Compile Include="src\LegacyModels\VsrCompiler\VsrCompiler.cs" />
     <Compile Include="src\Models\ILevel.cs" />
+    <Compile Include="src\Models\IModelFactory.cs" />
     <Compile Include="src\Models\IMap.cs" />
     <Compile Include="src\Models\Level.cs" />
+    <Compile Include="src\Models\ModelFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />
     <Compile Include="src\Models\LevelPack.cs" />
     <Compile Include="src\Models\Map.cs" />

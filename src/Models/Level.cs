@@ -95,13 +95,14 @@ namespace LemballEditor.Models
         /// <summary>
         /// Creates a new level instance with sensible defaults
         /// </summary>
-        public Level()
+        public Level(IMap map)
         {
             FlagsRequired = 1;
             NumberOfLemmings = 1;
             Theme = LevelTheme.Grass;
             TimeLimitInSeconds = null;
             UnknownA = 10;
+            Map = map;
         }
     }
 }

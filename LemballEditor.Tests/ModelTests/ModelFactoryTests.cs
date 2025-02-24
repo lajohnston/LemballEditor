@@ -3,12 +3,12 @@ using LemballEditor.Models;
 namespace LemballEditor.Tests.ModelTests
 {
     [TestClass]
-    public class LevelFactoryTests
+    public class ModelFactoryTests
     {
         [TestMethod]
         public void CreateLevel_ShouldCreateALevelWithAMap()
         {
-            var factory = new LevelFactory();
+            var factory = new ModelFactory();
             var level = factory.CreateLevel(1, 2);
             _ = level.Should().BeAssignableTo<ILevel>();
 
@@ -21,7 +21,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void CreateMap_ShouldCreateAMapWithTheGivenSize()
         {
-            var factory = new LevelFactory();
+            var factory = new ModelFactory();
             var map = factory.CreateMap(1, 2);
             _ = map.XTiles.Should().Be(1);
             _ = map.YTiles.Should().Be(2);

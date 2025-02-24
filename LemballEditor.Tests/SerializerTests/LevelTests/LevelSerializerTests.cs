@@ -6,6 +6,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     [TestClass]
     public sealed class LevelSerializerTests
     {
+        private static readonly IModelFactory modelFactory = new ModelFactory();
+
         private ILevel serializeAndDeserialize(ILevel level)
         {
             using var stream = new MemoryStream();
@@ -16,7 +18,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             new Serializers.Level.LevelSerializer().Serialize(level, writer);
 
             // Deserialize the data
-            var result = new Level();
+            var result = modelFactory.CreateLevel(1, 1);
             _ = stream.Seek(0, SeekOrigin.Begin);
             new Serializers.Level.LevelSerializer().Deserialize(result, reader);
 
@@ -26,10 +28,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetUnknownA()
         {
-            var level = new Level
-            {
-                UnknownA = 10
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.UnknownA = 10;
 
             var result = serializeAndDeserialize(level);
             _ = result.UnknownA.Should().Be(10);
@@ -38,10 +38,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetUnknownB()
         {
-            var level = new Level
-            {
-                UnknownB = 33425
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.UnknownB = 33425;
 
             var result = serializeAndDeserialize(level);
             _ = result.UnknownB.Should().Be(33425);
@@ -50,10 +48,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetTheNumberOfLemmings()
         {
-            var level = new Level
-            {
-                NumberOfLemmings = 2
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.NumberOfLemmings = 2;
 
             var result = serializeAndDeserialize(level);
             _ = result.NumberOfLemmings.Should().Be(2);
@@ -62,10 +58,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetGrassTheme()
         {
-            var level = new Level
-            {
-                Theme = LevelTheme.Grass
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Grass;
 
             var result = serializeAndDeserialize(level);
             _ = result.Theme.Should().Be(LevelTheme.Grass);
@@ -74,10 +68,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetLegoTheme()
         {
-            var level = new Level()
-            {
-                Theme = LevelTheme.Lego
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Lego;
 
             var result = serializeAndDeserialize(level);
             _ = result.Theme.Should().Be(LevelTheme.Lego);
@@ -86,10 +78,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetSnowTheme()
         {
-            var level = new Level()
-            {
-                Theme = LevelTheme.Snow
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Snow;
 
             var result = serializeAndDeserialize(level);
             _ = result.Theme.Should().Be(LevelTheme.Snow);
@@ -98,10 +88,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetSpaceTheme()
         {
-            var level = new Level()
-            {
-                Theme = LevelTheme.Space
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.Theme = LevelTheme.Space;
 
             var result = serializeAndDeserialize(level);
             _ = result.Theme.Should().Be(LevelTheme.Space);
@@ -110,10 +98,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetTheTimeLimit()
         {
-            var level = new Level()
-            {
-                TimeLimitInSeconds = 123
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.TimeLimitInSeconds = 123;
 
             var result = serializeAndDeserialize(level);
             _ = result.TimeLimitInSeconds.Should().Be(123);
@@ -122,10 +108,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetAnInfiniteTimeLimit_WhenThereIsNoTimeLimit()
         {
-            var level = new Level()
-            {
-                TimeLimitInSeconds = null
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.TimeLimitInSeconds = null;
 
             var result = serializeAndDeserialize(level);
             _ = result.TimeLimitInSeconds.Should().BeNull();
@@ -134,13 +118,23 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void ShouldGetAndSetTheFlagsRequiredIndicator()
         {
-            var level = new Level()
-            {
-                FlagsRequired = 3
-            };
+            var level = modelFactory.CreateLevel(1, 1);
+            level.FlagsRequired = 3;
 
             var result = serializeAndDeserialize(level);
             _ = result.FlagsRequired.Should().Be(3);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetTheLevelMap()
+        {
+            var level = modelFactory.CreateLevel(1, 1);
+            var map = level.Map;
+
+            var resultMap = serializeAndDeserialize(level).Map;
+
+            _ = resultMap.XTiles.Should().Be(map.XTiles);
+            _ = resultMap.YTiles.Should().Be(map.YTiles);
         }
     }
 }
