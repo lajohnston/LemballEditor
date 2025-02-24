@@ -8,17 +8,17 @@ namespace LemballEditor.Models
         /// <summary>
         /// Number of X tiles
         /// </summary>
-        public byte XTiles { get; private set; }
+        public ushort XTiles { get; private set; }
 
         /// <summary>
         /// Number of Y tiles
         /// </summary>
-        public byte YTiles { get; private set; }
+        public ushort YTiles { get; private set; }
 
         /// <summary>
         /// Total number of tiles
         /// </summary>
-        public ushort TileCount => (ushort)(XTiles * YTiles);
+        public int TileCount => XTiles * YTiles;
 
         /// <summary>
         /// The map tiles
@@ -30,7 +30,7 @@ namespace LemballEditor.Models
         /// </summary>
         /// <param name="xTiles">The number of xTiles</param>
         /// <param name="yTiles">The number of yTiles</param>
-        public Map(byte xTiles, byte yTiles)
+        public Map(ushort xTiles, ushort yTiles)
         {
             XTiles = xTiles;
             YTiles = yTiles;
@@ -49,7 +49,7 @@ namespace LemballEditor.Models
         /// <param name="xTile">0-based xTile coordinate</param>
         /// <param name="yTile">0-based yTile cordinate</param>
         /// <returns>The tile index in the tiles array</returns>
-        private int GetIndex(byte xTile, byte yTile)
+        private int GetIndex(ushort xTile, ushort yTile)
         {
             if (xTile >= XTiles)
             {
@@ -70,7 +70,7 @@ namespace LemballEditor.Models
         /// <param name="xTile">0-based xTile coordinate</param>
         /// <param name="yTile">0-based yTile cordinate</param>
         /// <param name="tile">The tile to place at the given position</param>
-        public void SetTile(byte xTile, byte yTile, Tile tile)
+        public void SetTile(ushort xTile, ushort yTile, Tile tile)
         {
             var index = GetIndex(xTile, yTile);
 
@@ -83,7 +83,7 @@ namespace LemballEditor.Models
         /// <param name="xTile">0-based xTile coordinate</param>
         /// <param name="yTile">0-based yTile cordinate</param>
         /// <returns>Tile, or null if none set</returns>
-        public Tile GetTile(byte xTile, byte yTile)
+        public Tile GetTile(ushort xTile, ushort yTile)
         {
             var index = GetIndex(xTile, yTile);
 
