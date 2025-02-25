@@ -5,13 +5,8 @@ namespace LemballEditor.Models
     /// <summary>
     /// A tile in the level map
     /// </summary>
-    public class Tile
+    public class Tile : ITile
     {
-        /// <summary>
-        /// The default tile ref if none is given. This is a standard grass/ground style
-        /// </summary>
-        private static readonly uint DEFAULT_TILE_REF = 521;
-
         /// <summary>
         /// The tile pattern reference
         /// </summary>
@@ -35,24 +30,12 @@ namespace LemballEditor.Models
         }
         private byte _elevation;
 
-        public Tile() : this(DEFAULT_TILE_REF)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new tile with the given tileRef
-        /// </summary>
-        /// <param name="tileRef">The tile pattern reference</param>
-        public Tile(uint tileRef) : this(tileRef, 0)
-        {
-        }
-
         /// <summary>
         /// Creates a new tile with the given tileRef and elevation
         /// </summary>
         /// <param name="tileRef"></param>
         /// <param name="elevation"></param>
-        public Tile(uint tileRef, byte elevation)
+        public Tile(uint tileRef = 521, byte elevation = 0)
         {
             TileRef = tileRef;
             Elevation = elevation;

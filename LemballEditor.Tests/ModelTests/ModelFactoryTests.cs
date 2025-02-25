@@ -26,5 +26,35 @@ namespace LemballEditor.Tests.ModelTests
             _ = map.XTiles.Should().Be(1);
             _ = map.YTiles.Should().Be(2);
         }
+
+        [TestMethod]
+        public void CreateTile_ShouldCreateAMapTileWithTheDefaultGroundTileAndElevationOfZero()
+        {
+            var factory = new ModelFactory();
+            var tile = factory.CreateTile();
+
+            _ = tile.TileRef.Should().Be(521);
+            _ = tile.Elevation.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void CreateTile_ShouldCreateAMapTileWithTheGivenTileRef()
+        {
+            var factory = new ModelFactory();
+            var tile = factory.CreateTile(123);
+
+            _ = tile.TileRef.Should().Be(123);
+            _ = tile.Elevation.Should().Be(0);
+        }
+
+        [TestMethod]
+        public void CreateTile_ShouldCreateAMapTileWithTheGivenTileRefAndElevation()
+        {
+            var factory = new ModelFactory();
+            var tile = factory.CreateTile(123, 10);
+
+            _ = tile.TileRef.Should().Be(123);
+            _ = tile.Elevation.Should().Be(10);
+        }
     }
 }

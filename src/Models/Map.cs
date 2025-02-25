@@ -23,23 +23,24 @@ namespace LemballEditor.Models
         /// <summary>
         /// The map tiles
         /// </summary>
-        private readonly Tile[] tiles;
+        private readonly ITile[] tiles;
 
         /// <summary>
         /// Creates a new map of the given size in tiles
         /// </summary>
+        /// <param name="modelFactory">Instance of a model factory</param>
         /// <param name="xTiles">The number of xTiles</param>
         /// <param name="yTiles">The number of yTiles</param>
-        public Map(ushort xTiles, ushort yTiles)
+        public Map(IModelFactory modelFactory, ushort xTiles, ushort yTiles)
         {
             XTiles = xTiles;
             YTiles = yTiles;
 
-            tiles = new Tile[xTiles * yTiles];
+            tiles = new ITile[xTiles * yTiles];
 
             for (var index = 0; index < TileCount; index++)
             {
-                tiles[index] = new Tile();
+                tiles[index] = modelFactory.CreateTile();
             }
         }
 
@@ -70,7 +71,7 @@ namespace LemballEditor.Models
         /// <param name="xTile">0-based xTile coordinate</param>
         /// <param name="yTile">0-based yTile cordinate</param>
         /// <param name="tile">The tile to place at the given position</param>
-        public void SetTile(ushort xTile, ushort yTile, Tile tile)
+        public void SetTile(ushort xTile, ushort yTile, ITile tile)
         {
             var index = GetIndex(xTile, yTile);
 
@@ -82,8 +83,8 @@ namespace LemballEditor.Models
         /// </summary>
         /// <param name="xTile">0-based xTile coordinate</param>
         /// <param name="yTile">0-based yTile cordinate</param>
-        /// <returns>Tile, or null if none set</returns>
-        public Tile GetTile(ushort xTile, ushort yTile)
+        /// <returns>Tile</returns>
+        public ITile GetTile(ushort xTile, ushort yTile)
         {
             var index = GetIndex(xTile, yTile);
 
@@ -95,7 +96,7 @@ namespace LemballEditor.Models
         /// then along each xTile in the row, and each row
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<Tile> GetTileIterator()
+        public IEnumerable<ITile> GetTileIterator()
         {
             foreach (var tile in tiles)
             {

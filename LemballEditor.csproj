@@ -84,6 +84,7 @@
     <Compile Include="src\Models\ILevel.cs" />
     <Compile Include="src\Models\IModelFactory.cs" />
     <Compile Include="src\Models\IMap.cs" />
+    <Compile Include="src\Models\ITile.cs" />
     <Compile Include="src\Models\Level.cs" />
     <Compile Include="src\Models\ModelFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />

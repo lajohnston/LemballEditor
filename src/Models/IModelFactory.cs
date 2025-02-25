@@ -17,5 +17,13 @@
         /// <param name="yTiles">The Y size of the map in tiles</param>
         /// <returns>Map instance</returns>
         IMap CreateMap(ushort xTiles, ushort yTiles);
+
+        /// <summary>
+        /// Creates a new map tile
+        /// </summary>
+        /// <param name="tileRef">The tile pattern reference</param>
+        /// <param name="elevation">The tile column's elevation in pixels</param>
+        /// <returns>Tile instance</returns>
+        ITile CreateTile(ushort tileRef = 521, byte elevation = 0);
     }
 }
