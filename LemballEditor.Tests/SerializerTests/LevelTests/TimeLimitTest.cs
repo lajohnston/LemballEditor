@@ -19,7 +19,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var level = modelFactory.CreateLevel(1, 1);
             level.TimeLimitInSeconds = 100;
 
-            new TimeLimit().Deserialize(level, reader);
+            _ = new TimeLimit().Deserialize(reader, level);
 
             _ = level.TimeLimitInSeconds.Should().BeNull();
         }
@@ -34,7 +34,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var level = modelFactory.CreateLevel(1, 1);
             level.TimeLimitInSeconds = 100;
 
-            new TimeLimit().Deserialize(level, reader);
+            _ = new TimeLimit().Deserialize(reader, level);
 
             _ = level.TimeLimitInSeconds.Should().Be(599);
         }

@@ -8,9 +8,9 @@ namespace LemballEditor.Serializers.Level
     /// This is a ushort storing the number of Lemmings in the level, but it appears it's unused and
     /// the value is instead computed from other data
     /// </summary>
-    public class UnusedNumberOfLemmings : ILevelSerializer
+    public class UnusedNumberOfLemmings : ISerializer<ILevel>
     {
-        public void Deserialize(ILevel level, BinaryReader reader)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
             var value = reader.ReadUInt16();
 
@@ -27,6 +27,8 @@ namespace LemballEditor.Serializers.Level
             {
                 throw new InvalidDataException(error.Message);
             }
+
+            return level;
         }
 
         public void Serialize(ILevel level, BinaryWriter writer)

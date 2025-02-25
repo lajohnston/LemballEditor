@@ -19,7 +19,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var reader = new BinaryReader(stream);
 
             var level = modelFactory.CreateLevel(1, 1);
-            var act = () => new UnusedNumberOfLemmings().Deserialize(level, reader);
+            var act = () => new UnusedNumberOfLemmings().Deserialize(reader, level);
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"NumberOfLemmings out of byte range. {invalidValue} given");
         }
 
@@ -37,7 +37,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             _ = mockLevel.SetupSet(m => m.NumberOfLemmings = It.Is<byte>(x => x == invalidValue))
                     .Throws(() => new ArgumentException(fakeErrorMessage));
 
-            var act = () => new UnusedNumberOfLemmings().Deserialize(mockLevel.Object, reader);
+            var act = () => new UnusedNumberOfLemmings().Deserialize(reader, mockLevel.Object);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage(fakeErrorMessage);
         }

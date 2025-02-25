@@ -9,12 +9,13 @@ namespace LemballEditor.Serializers.Level
     /// Common values are 0, 240, 260, but also high numbers such as 33425. Perhaps they are 2
     /// separate byte values, or flags
     /// </summary>
-    public class UnknownB : ILevelSerializer
+    public class UnknownB : ISerializer<ILevel>
     {
-        public void Deserialize(ILevel level, BinaryReader reader)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
             var value = reader.ReadUInt16();
             level.UnknownB = value;
+            return level;
         }
 
         public void Serialize(ILevel level, BinaryWriter writer)

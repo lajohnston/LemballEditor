@@ -16,7 +16,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
             using var reader = new BinaryReader(stream);
 
-            var act = () => new Theme().Deserialize(modelFactory.CreateLevel(1, 1), reader);
+            var act = () => new Theme().Deserialize(reader, modelFactory.CreateLevel(1, 1));
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"Theme value should be between 0-3, {invalidValue} given");
         }
 

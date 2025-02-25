@@ -6,12 +6,13 @@ namespace LemballEditor.Serializers.Level
     /// <summary>
     /// Serializes/deserializes the level's time limit in seconds, of '600' for an unlimited time limit
     /// </summary>
-    public class TimeLimit : ILevelSerializer
+    public class TimeLimit : ISerializer<ILevel>
     {
-        public void Deserialize(ILevel level, BinaryReader reader)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
             var value = reader.ReadUInt16();
             level.TimeLimitInSeconds = value > 599 ? null : (ushort?)value;
+            return level;
         }
 
         public void Serialize(ILevel level, BinaryWriter writer)

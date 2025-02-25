@@ -12,9 +12,9 @@ namespace LemballEditor.Serializers.Level
     /// The value is usually 9 or 10 with the exception of Taxing Level_15 (6) and Mayhem Level_02 (7).
     ///
     /// </summary>
-    public class UnknownA : ILevelSerializer
+    public class UnknownA : ISerializer<ILevel>
     {
-        public void Deserialize(ILevel level, BinaryReader reader)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
             var value = reader.ReadUInt16();
 
@@ -31,6 +31,8 @@ namespace LemballEditor.Serializers.Level
             {
                 throw new InvalidDataException(error.Message);
             }
+
+            return level;
         }
 
         public void Serialize(ILevel level, BinaryWriter writer)

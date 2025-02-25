@@ -19,7 +19,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var reader = new BinaryReader(stream);
 
             var level = modelFactory.CreateLevel(1, 1);
-            var act = () => new FlagsRequiredIndicator().Deserialize(level, reader);
+            var act = () => new FlagsRequiredIndicator().Deserialize(reader, level);
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"FlagsRequiredIndicator out of byte range. {invalidValue} given");
         }
 
@@ -36,7 +36,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             _ = mockLevel.SetupSet(m => m.FlagsRequired = It.Is<byte>(x => x == invalidValue))
                     .Throws(() => new ArgumentException(fakeErrorMessage));
 
-            var act = () => new FlagsRequiredIndicator().Deserialize(mockLevel.Object, reader);
+            var act = () => new FlagsRequiredIndicator().Deserialize(reader, mockLevel.Object);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage(fakeErrorMessage);
         }
@@ -50,7 +50,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var level = modelFactory.CreateLevel(1, 1);
             level.FlagsRequired = 4;
 
-            new FlagsRequiredIndicator().Deserialize(level, reader);
+            _ = new FlagsRequiredIndicator().Deserialize(reader, level);
 
             _ = level.FlagsRequired.Should().Be(0);
         }

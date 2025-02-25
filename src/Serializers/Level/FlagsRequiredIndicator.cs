@@ -8,11 +8,11 @@ namespace LemballEditor.Serializers.Level
     /// A value storing the number of flags required in the level selector. The value doesn't
     /// seem to be used by the level itself
     /// </summary>
-    public class FlagsRequiredIndicator : ILevelSerializer
+    public class FlagsRequiredIndicator : ISerializer<ILevel>
     {
         private static readonly ushort NO_FLAGS_REQUIRED = 7;
 
-        public void Deserialize(ILevel level, BinaryReader reader)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
             var value = reader.ReadUInt16();
 
@@ -29,6 +29,8 @@ namespace LemballEditor.Serializers.Level
             {
                 throw new InvalidDataException(error.Message);
             }
+
+            return level;
         }
 
         public void Serialize(ILevel level, BinaryWriter writer)

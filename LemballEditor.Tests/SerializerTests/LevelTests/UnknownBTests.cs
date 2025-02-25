@@ -19,7 +19,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             var level = modelFactory.CreateLevel(1, 1);
             level.UnknownB = 0;
 
-            new UnknownB().Deserialize(level, reader);
+            new UnknownB().Deserialize(reader, level);
 
             _ = level.UnknownB.Should().Be(33425);
         }

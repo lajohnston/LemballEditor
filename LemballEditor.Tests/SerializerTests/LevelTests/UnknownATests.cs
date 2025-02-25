@@ -19,7 +19,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var reader = new BinaryReader(stream);
 
             var level = modelFactory.CreateLevel(1, 1);
-            var act = () => new UnknownA().Deserialize(level, reader);
+            var act = () => new UnknownA().Deserialize(reader, level);
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"UnknownA out of byte range. {invalidValue} given");
         }
 
@@ -37,7 +37,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             _ = mockLevel.SetupSet(m => m.UnknownA = It.Is<byte>(x => x == invalidValue))
                     .Throws(() => new ArgumentException(fakeErrorMessage));
 
-            var act = () => new UnknownA().Deserialize(mockLevel.Object, reader);
+            var act = () => new UnknownA().Deserialize(reader, mockLevel.Object);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage(fakeErrorMessage);
         }

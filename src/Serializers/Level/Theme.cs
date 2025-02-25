@@ -3,9 +3,9 @@ using System.IO;
 
 namespace LemballEditor.Serializers.Level
 {
-    public class Theme : ILevelSerializer
+    public class Theme : ISerializer<ILevel>
     {
-        public void Deserialize(ILevel level, BinaryReader reader)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
             var value = reader.ReadUInt16();
 
@@ -26,6 +26,8 @@ namespace LemballEditor.Serializers.Level
                 default:
                     throw new InvalidDataException($"Theme value should be between 0-3, {value} given");
             }
+
+            return level;
         }
 
         public void Serialize(ILevel level, BinaryWriter writer)

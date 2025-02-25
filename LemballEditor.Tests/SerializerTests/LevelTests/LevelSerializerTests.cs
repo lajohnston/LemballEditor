@@ -20,7 +20,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             // Deserialize the data
             var result = modelFactory.CreateLevel(1, 1);
             _ = stream.Seek(0, SeekOrigin.Begin);
-            new Serializers.Level.LevelSerializer().Deserialize(result, reader);
+            _ = new Serializers.Level.LevelSerializer().Deserialize(reader, result);
 
             return result;
         }

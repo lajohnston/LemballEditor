@@ -91,8 +91,8 @@
     <Compile Include="src\Models\LevelPack.cs" />
     <Compile Include="src\Models\Map.cs" />
     <Compile Include="src\Models\Tile.cs" />
-    <Compile Include="src\Serializers\Level\Header.cs" />
-    <Compile Include="src\Serializers\Level\ILevelSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Constant.cs" />
+    <Compile Include="src\Serializers\Level\ISerializer.cs" />
     <Compile Include="src\Serializers\Level\LevelSerializer.cs" />
     <Compile Include="src\Serializers\Level\Theme.cs" />
     <Compile Include="src\Serializers\Level\TimeLimit.cs" />
