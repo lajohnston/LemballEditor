@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using LemballEditor.Models;
 using LemballEditor.Serializers.Level;
 using System.Text;
 
@@ -8,8 +7,6 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     [TestClass]
     public sealed class ConstantTests
     {
-        private static readonly IModelFactory modelFactory = new ModelFactory();
-
         [TestMethod]
         public void Deserialize_ShouldThrowAnInvalidDataException_WhenTheReadDataDoesNotMatchTheConstantData()
         {

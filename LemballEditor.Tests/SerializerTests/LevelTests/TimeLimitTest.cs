@@ -7,8 +7,6 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     [TestClass]
     public sealed class TimeLimitTest
     {
-        private static readonly IModelFactory modelFactory = new ModelFactory();
-
         [TestMethod]
         public void Deserialize_ShouldSetTimeLimitToNull_WhenValueIs600()
         {
@@ -16,7 +14,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(value));
             using var reader = new BinaryReader(stream);
 
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.TimeLimitInSeconds = 100;
 
             _ = new TimeLimit().Deserialize(reader, level);
@@ -31,7 +29,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(value));
             using var reader = new BinaryReader(stream);
 
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.TimeLimitInSeconds = 100;
 
             _ = new TimeLimit().Deserialize(reader, level);
@@ -42,7 +40,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteA600UShort_WhenThereIsNotTimeLimit()
         {
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.TimeLimitInSeconds = null;
 
             ushort expectedValue = 600;
@@ -54,7 +52,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheTimeLimitUShort_WhenThereIsATimeLimit()
         {
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.TimeLimitInSeconds = 599;
 
             ushort expectedValue = 599;

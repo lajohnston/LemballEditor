@@ -7,8 +7,6 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
     [TestClass]
     public sealed class ThemeTests
     {
-        private static readonly IModelFactory modelFactory = new ModelFactory();
-
         [TestMethod]
         public void Deserialize_ShouldThrowAnExceptionIfTheThemeIsNotValid()
         {
@@ -16,14 +14,14 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
             using var reader = new BinaryReader(stream);
 
-            var act = () => new Theme().Deserialize(reader, modelFactory.CreateLevel(1, 1));
+            var act = () => new Theme().Deserialize(reader, ModelFactory.LevelFactory(1, 1));
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"Theme value should be between 0-3, {invalidValue} given");
         }
 
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheGrassTheme()
         {
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.Theme = LevelTheme.Grass;
 
             ushort expectedValue = 0;
@@ -35,7 +33,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheLegoTheme()
         {
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.Theme = LevelTheme.Lego;
 
             ushort expectedValue = 1;
@@ -47,7 +45,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheSnowTheme()
         {
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.Theme = LevelTheme.Snow;
 
             ushort expectedValue = 2;
@@ -59,7 +57,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheCorrectUShortValueForTheSpaceTheme()
         {
-            var level = modelFactory.CreateLevel(1, 1);
+            var level = ModelFactory.LevelFactory(1, 1);
             level.Theme = LevelTheme.Space;
 
             ushort expectedValue = 3;

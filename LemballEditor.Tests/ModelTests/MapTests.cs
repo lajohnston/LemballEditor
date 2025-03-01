@@ -6,15 +6,13 @@ namespace LemballEditor.Tests.ModelTests
     [TestClass]
     public class MapTests
     {
-        private static readonly IModelFactory modelFactory = new ModelFactory();
-
         [TestMethod]
         public void ShouldReturnTheNumberOfTiles()
         {
             byte xTiles = 64;
             byte yTiles = 64;
 
-            var map = modelFactory.CreateMap(xTiles, yTiles);
+            var map = ModelFactory.MapFactory(xTiles, yTiles);
 
             _ = map.XTiles.Should().Be(64);
             _ = map.YTiles.Should().Be(64);
@@ -25,7 +23,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldGetAndSetTheTileAtTheGivenCoordinate()
         {
-            var map = modelFactory.CreateMap(2, 4);
+            var map = ModelFactory.MapFactory(2, 4);
             var tile = new Tile(123);
 
             map.SetTile(1, 3, tile);
@@ -36,7 +34,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void SetTile_ShouldThrowAnExceptionIfTheXCoordinateIsOutOfBounds()
         {
-            var map = modelFactory.CreateMap(10, 10);
+            var map = ModelFactory.MapFactory(10, 10);
             var act = () => map.SetTile(10, 0, new Tile(123));
 
             _ = act.Should().Throw<IndexOutOfRangeException>().WithMessage("xTile 10 is out of bounds");
@@ -45,7 +43,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void SetTile_ShouldThrowAnExceptionIfTheYCoordinateIsOutOfBounds()
         {
-            var map = modelFactory.CreateMap(10, 10);
+            var map = ModelFactory.MapFactory(10, 10);
             var act = () => map.SetTile(0, 10, new Tile(123));
 
             _ = act.Should().Throw<IndexOutOfRangeException>().WithMessage("yTile 10 is out of bounds");
@@ -54,7 +52,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void GetTile_ShouldThrowAnExceptionIfTheXCoordinateIsOutOfBounds()
         {
-            var map = modelFactory.CreateMap(10, 10);
+            var map = ModelFactory.MapFactory(10, 10);
             var act = () => map.GetTile(10, 0);
 
             _ = act.Should().Throw<IndexOutOfRangeException>().WithMessage("xTile 10 is out of bounds");
@@ -63,7 +61,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void GetTile_ShouldThrowAnExceptionIfTheYCoordinateIsOutOfBounds()
         {
-            var map = modelFactory.CreateMap(10, 10);
+            var map = ModelFactory.MapFactory(10, 10);
             var act = () => map.GetTile(0, 10);
 
             _ = act.Should().Throw<IndexOutOfRangeException>().WithMessage("yTile 10 is out of bounds");
@@ -72,7 +70,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void SetTile_ShouldThrowAnException_WhenTheGivenTileIsNull()
         {
-            var map = modelFactory.CreateMap(2, 2);
+            var map = ModelFactory.MapFactory(2, 2);
             var act = () => map.SetTile(0, 0, null);
 
             _ = act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null.");
@@ -81,7 +79,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void GetTileIterator_ShouldIterateThroughEachTile()
         {
-            var map = modelFactory.CreateMap(2, 2);
+            var map = ModelFactory.MapFactory(2, 2);
 
             var tiles = new List<Tile>()
             {
@@ -105,7 +103,7 @@ namespace LemballEditor.Tests.ModelTests
         {
             var defaultTile = new Tile();
 
-            var map = modelFactory.CreateMap(2, 2);
+            var map = ModelFactory.MapFactory(2, 2);
 
             var tile1 = map.GetTile(0, 0);
             var tile2 = map.GetTile(1, 0);

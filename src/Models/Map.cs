@@ -28,10 +28,10 @@ namespace LemballEditor.Models
         /// <summary>
         /// Creates a new map of the given size in tiles
         /// </summary>
-        /// <param name="modelFactory">Instance of a model factory</param>
+        /// <param name="tileFactory">Function that returns a new tile</param>
         /// <param name="xTiles">The number of xTiles</param>
         /// <param name="yTiles">The number of yTiles</param>
-        public Map(IModelFactory modelFactory, ushort xTiles, ushort yTiles)
+        public Map(Func<ushort, byte, ITile> tileFactory, ushort xTiles, ushort yTiles)
         {
             XTiles = xTiles;
             YTiles = yTiles;
@@ -40,7 +40,7 @@ namespace LemballEditor.Models
 
             for (var index = 0; index < TileCount; index++)
             {
-                tiles[index] = modelFactory.CreateTile();
+                tiles[index] = tileFactory(521, 0);
             }
         }
 

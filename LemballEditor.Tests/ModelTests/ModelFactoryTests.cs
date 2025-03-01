@@ -8,8 +8,7 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void CreateLevel_ShouldCreateALevelWithAMap()
         {
-            var factory = new ModelFactory();
-            var level = factory.CreateLevel(1, 2);
+            var level = ModelFactory.LevelFactory(1, 2);
             _ = level.Should().BeAssignableTo<ILevel>();
 
             var map = level.Map;
@@ -21,37 +20,15 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void CreateMap_ShouldCreateAMapWithTheGivenSize()
         {
-            var factory = new ModelFactory();
-            var map = factory.CreateMap(1, 2);
+            var map = ModelFactory.MapFactory(1, 2);
             _ = map.XTiles.Should().Be(1);
             _ = map.YTiles.Should().Be(2);
         }
 
         [TestMethod]
-        public void CreateTile_ShouldCreateAMapTileWithTheDefaultGroundTileAndElevationOfZero()
-        {
-            var factory = new ModelFactory();
-            var tile = factory.CreateTile();
-
-            _ = tile.TileRef.Should().Be(521);
-            _ = tile.Elevation.Should().Be(0);
-        }
-
-        [TestMethod]
-        public void CreateTile_ShouldCreateAMapTileWithTheGivenTileRef()
-        {
-            var factory = new ModelFactory();
-            var tile = factory.CreateTile(123);
-
-            _ = tile.TileRef.Should().Be(123);
-            _ = tile.Elevation.Should().Be(0);
-        }
-
-        [TestMethod]
         public void CreateTile_ShouldCreateAMapTileWithTheGivenTileRefAndElevation()
         {
-            var factory = new ModelFactory();
-            var tile = factory.CreateTile(123, 10);
+            var tile = ModelFactory.TileFactory(123, 10);
 
             _ = tile.TileRef.Should().Be(123);
             _ = tile.Elevation.Should().Be(10);

@@ -13,7 +13,7 @@ namespace LemballEditor.Serializers.Level
         private static readonly byte[] LEVEL_HEADER = { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 };
 
         /// <summary>
-        /// An ordered list of sub-serializes to call
+        /// An ordered list of sub-serializers to call
         /// </summary>
         private readonly List<ISerializer<ILevel>> propertySerializers;
 
