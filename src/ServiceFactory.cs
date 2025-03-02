@@ -1,4 +1,6 @@
 ﻿using LemballEditor.Models;
+using LemballEditor.Serializers.Level;
+using LemballEditor.Serializers.Level.Map;
 using System;
 
 namespace LemballEditor
@@ -33,5 +35,15 @@ namespace LemballEditor
         /// <param name="yTiles">The Y size of the map in tiles</param>
         /// <returns>Map instance</returns>
         public static readonly Func<ushort, ushort, IMap> CreateMap = (xSize, ySize) => new Map(CreateTile, xSize, ySize);
+
+        /// <summary>
+        /// Creates a MapSerializer
+        /// </summary>
+        public static readonly Func<MapSerializer> CreateMapSerializer = () => new MapSerializer(CreateMap, CreateTile);
+
+        /// <summary>
+        /// Creates a LevelSerializer
+        /// </summary>
+        public static readonly Func<LevelSerializer> CreateLevelSerializer = () => new LevelSerializer(CreateMapSerializer());
     }
 }

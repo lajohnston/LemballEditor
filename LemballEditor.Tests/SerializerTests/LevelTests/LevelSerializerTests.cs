@@ -13,12 +13,14 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
 
             // Serialize data
             using var writer = new BinaryWriter(stream);
-            new Serializers.Level.LevelSerializer().Serialize(level, writer);
+
+            var serializer = ServiceFactory.CreateLevelSerializer();
+            serializer.Serialize(level, writer);
 
             // Deserialize the data
             var result = ServiceFactory.CreateLevel(1, 1);
             _ = stream.Seek(0, SeekOrigin.Begin);
-            _ = new Serializers.Level.LevelSerializer().Deserialize(reader, result);
+            _ = serializer.Deserialize(reader, result);
 
             return result;
         }

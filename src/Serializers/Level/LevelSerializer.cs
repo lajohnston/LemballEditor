@@ -1,4 +1,5 @@
 ﻿using LemballEditor.Models;
+using LemballEditor.Serializers.Level.Map;
 using System.Collections.Generic;
 using System.IO;
 
@@ -20,7 +21,7 @@ namespace LemballEditor.Serializers.Level
         /// <summary>
         /// Creates a level serializer
         /// </summary>
-        public LevelSerializer()
+        public LevelSerializer(MapSerializer mapSerializer)
         {
             propertySerializers = new List<ISerializer<ILevel>>()
             {
@@ -31,6 +32,7 @@ namespace LemballEditor.Serializers.Level
                 new UnusedNumberOfLemmings(),
                 new FlagsRequiredIndicator(),
                 new UnknownB(),
+                mapSerializer
             };
         }
 

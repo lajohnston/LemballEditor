@@ -93,6 +93,9 @@
     <Compile Include="src\Serializers\Level\Constant.cs" />
     <Compile Include="src\Serializers\Level\ISerializer.cs" />
     <Compile Include="src\Serializers\Level\LevelSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Map\MapSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Map\Size.cs" />
+    <Compile Include="src\Serializers\Level\Map\TileMap.cs" />
     <Compile Include="src\Serializers\Level\Theme.cs" />
     <Compile Include="src\Serializers\Level\TimeLimit.cs" />
     <Compile Include="src\Serializers\Level\FlagsRequiredIndicator.cs" />
