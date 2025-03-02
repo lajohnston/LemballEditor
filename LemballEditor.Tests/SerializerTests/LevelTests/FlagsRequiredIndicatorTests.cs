@@ -16,7 +16,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(invalidValue));
             using var reader = new BinaryReader(stream);
 
-            var level = ModelFactory.LevelFactory(1, 1);
+            var level = ServiceFactory.CreateLevel(1, 1);
             var act = () => new FlagsRequiredIndicator().Deserialize(reader, level);
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"FlagsRequiredIndicator out of byte range. {invalidValue} given");
         }
@@ -45,7 +45,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(7));
             using var reader = new BinaryReader(stream);
 
-            var level = ModelFactory.LevelFactory(1, 1);
+            var level = ServiceFactory.CreateLevel(1, 1);
             level.FlagsRequired = 4;
 
             _ = new FlagsRequiredIndicator().Deserialize(reader, level);
@@ -56,7 +56,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheUShortToTheStream()
         {
-            var level = ModelFactory.LevelFactory(1, 1);
+            var level = ServiceFactory.CreateLevel(1, 1);
             level.FlagsRequired = 2;
 
             var serializer = new FlagsRequiredIndicator();
@@ -67,7 +67,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteAUShortOfSevenToTheStream_WhenNoFlagsAreRequired()
         {
-            var level = ModelFactory.LevelFactory(1, 1);
+            var level = ServiceFactory.CreateLevel(1, 1);
             level.FlagsRequired = 0;
 
             ushort expectedValue = 7;

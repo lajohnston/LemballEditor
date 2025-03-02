@@ -31,7 +31,7 @@ namespace LemballEditor.Models
         /// <param name="tileFactory">Function that returns a new tile</param>
         /// <param name="xTiles">The number of xTiles</param>
         /// <param name="yTiles">The number of yTiles</param>
-        public Map(Func<ushort, byte, ITile> tileFactory, ushort xTiles, ushort yTiles)
+        public Map(Func<uint, byte, ITile> tileFactory, ushort xTiles, ushort yTiles)
         {
             XTiles = xTiles;
             YTiles = yTiles;

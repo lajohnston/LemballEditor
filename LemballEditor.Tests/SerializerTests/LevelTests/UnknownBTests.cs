@@ -14,7 +14,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
             using var stream = new MemoryStream(BitConverter.GetBytes(value));
             using var reader = new BinaryReader(stream);
 
-            var level = ModelFactory.LevelFactory(1, 1);
+            var level = ServiceFactory.CreateLevel(1, 1);
             level.UnknownB = 0;
 
             _ = new UnknownB().Deserialize(reader, level);
@@ -25,7 +25,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         [TestMethod]
         public void Serialize_ShouldWriteTheUShortToTheStream()
         {
-            var level = ModelFactory.LevelFactory(1, 1);
+            var level = ServiceFactory.CreateLevel(1, 1);
             level.UnknownB = 10;
 
             ushort expectedValue = 10;

@@ -1,16 +1,22 @@
-﻿using System;
+﻿using LemballEditor.Models;
+using System;
 
-namespace LemballEditor.Models
+namespace LemballEditor
 {
-    public static class ModelFactory
+    /// <summary>
+    /// Contains factory methods to create the various models and serializers
+    /// </summary>
+    public static class ServiceFactory
     {
+
+
         /// <summary>
         /// Creates a level containing a map of the given size
         /// </summary>
         /// <param name="mapSizeX">The map X size in tiles</param>
         /// <param name="mapSizeY">The map Y size in tiles</param>
         /// <returns>Level instance</returns>
-        public static readonly Func<ushort, ushort, ILevel> LevelFactory = (xSize, ySize) => new Level(MapFactory(xSize, ySize));
+        public static readonly Func<ushort, ushort, ILevel> CreateLevel = (xSize, ySize) => new Level(CreateMap(xSize, ySize));
 
         /// <summary>
         /// Creates a new map tile
@@ -18,7 +24,7 @@ namespace LemballEditor.Models
         /// <param name="tileRef">The tile pattern reference</param>
         /// <param name="elevation">The tile column's elevation in pixels</param>
         /// <returns>Tile instance</returns>
-        public static readonly Func<ushort, byte, ITile> TileFactory = (tileRef, elevation) => new Tile(tileRef, elevation);
+        public static readonly Func<uint, byte, ITile> CreateTile = (tileRef, elevation) => new Tile(tileRef, elevation);
 
         /// <summary>
         /// Creates a map of the given size
@@ -26,6 +32,6 @@ namespace LemballEditor.Models
         /// <param name="xTiles">The X size of the map in tiles</param>
         /// <param name="yTiles">The Y size of the map in tiles</param>
         /// <returns>Map instance</returns>
-        public static readonly Func<ushort, ushort, IMap> MapFactory = (xSize, ySize) => new Map(TileFactory, xSize, ySize);
+        public static readonly Func<ushort, ushort, IMap> CreateMap = (xSize, ySize) => new Map(CreateTile, xSize, ySize);
     }
 }
