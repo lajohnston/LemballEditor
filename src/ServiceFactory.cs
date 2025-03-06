@@ -1,4 +1,5 @@
 ﻿using LemballEditor.Models;
+using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
 using System;
@@ -10,8 +11,6 @@ namespace LemballEditor
     /// </summary>
     public static class ServiceFactory
     {
-
-
         /// <summary>
         /// Creates a level containing a map of the given size
         /// </summary>
@@ -45,5 +44,20 @@ namespace LemballEditor
         /// Creates a LevelSerializer
         /// </summary>
         public static readonly Func<LevelSerializer> CreateLevelSerializer = () => new LevelSerializer(CreateMapSerializer());
+
+        /// <summary>
+        /// Creates a VSRSerializer
+        /// </summary>
+        public static readonly Func<VsrSerializer> CreateVsrSerializer = () => new VsrSerializer();
+
+        /// <summary>
+        /// Creates a VSR model
+        /// </summary>
+        public static readonly Func<Vsr> CreateVsr = () => new Vsr(CreateLevelPack());
+
+        /// <summary>
+        /// Creates a LevelPack model
+        /// </summary>
+        public static readonly Func<LevelPack> CreateLevelPack = () => new LevelPack();
     }
 }

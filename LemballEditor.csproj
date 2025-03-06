@@ -85,6 +85,8 @@
     <Compile Include="src\Models\IMap.cs" />
     <Compile Include="src\Models\ITile.cs" />
     <Compile Include="src\Models\Level.cs" />
+    <Compile Include="src\Models\Vsr.cs" />
+    <Compile Include="src\Serializers\VsrSerializer.cs" />
     <Compile Include="src\ServiceFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />
     <Compile Include="src\Models\LevelPack.cs" />
