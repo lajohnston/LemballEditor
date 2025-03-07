@@ -1,4 +1,8 @@
 ﻿using FluentAssertions;
+using LemballEditor.Models;
+using LemballEditor.Serializers;
+using LemballEditor.Serializers.Level;
+using Moq;
 using System.Text;
 
 namespace LemballEditor.Tests.SerializerTests
@@ -83,6 +87,76 @@ namespace LemballEditor.Tests.SerializerTests
             _ = vsr.TaxingDirectoryPointer.Should().Be(funPointerAddress + (36 * 2));
             _ = vsr.MayhemDirectoryPointer.Should().Be(funPointerAddress + (36 * 3));
             _ = vsr.NetworkDirectoryPointer.Should().Be(funPointerAddress + (36 * 4));
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldNotCallTheLevelPackDeserializer_WhenLevelPackIsNotSet()
+        {
+            var data = GetValidData(744, 1000);
+
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            vsr.LevelPack = null;
+
+            var levelPackSerializerMock = new Moq.Mock<ISerializer<LevelPack>>();
+
+            var serializer = new VsrSerializer(levelPackSerializerMock.Object);
+            _ = serializer.Deserialize(reader, vsr);
+
+            levelPackSerializerMock.Verify(
+                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelPack>()),
+                Times.Never);
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldPassTheReaderPointingToTheFunAddressToTheLevelPackSerializer_WhenLevelPackIsSet()
+        {
+            uint funDirectoryAddress = 1000;
+            var data = GetValidData(744, funDirectoryAddress);
+
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            vsr.LevelPack = ServiceFactory.CreateLevelPack();
+
+            var levelPackSerializerMock = new Moq.Mock<ISerializer<LevelPack>>();
+
+            var serializer = new VsrSerializer(levelPackSerializerMock.Object);
+            _ = serializer.Deserialize(reader, vsr);
+
+            levelPackSerializerMock.Verify(
+                m => m.Deserialize(
+                    It.Is<BinaryReader>(givenReader => givenReader == reader && reader.BaseStream.Position == funDirectoryAddress),
+                    It.IsAny<LevelPack>()
+                ),
+                Times.Once());
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldPassTheLevelPackToALevelPackSerializer_WhenALevelPackIsSet()
+        {
+            var data = GetValidData(744, 1000);
+
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            vsr.LevelPack = ServiceFactory.CreateLevelPack();
+
+            var levelPackSerializerMock = new Moq.Mock<ISerializer<LevelPack>>();
+
+            var serializer = new VsrSerializer(levelPackSerializerMock.Object);
+            _ = serializer.Deserialize(reader, vsr);
+
+            levelPackSerializerMock.Verify(
+                m => m.Deserialize(
+                    It.IsAny<BinaryReader>(),
+                    It.Is<LevelPack>(givenLevelPack => givenLevelPack == vsr.LevelPack)
+                ),
+                Times.Once());
         }
     }
 }

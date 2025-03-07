@@ -48,12 +48,17 @@ namespace LemballEditor
         /// <summary>
         /// Creates a VSRSerializer
         /// </summary>
-        public static readonly Func<VsrSerializer> CreateVsrSerializer = () => new VsrSerializer();
+        public static readonly Func<VsrSerializer> CreateVsrSerializer = () => new VsrSerializer(CreateLevelPackSerializer());
+
+        /// <summary>
+        /// Creates a LevelPackSerializer
+        /// </summary>
+        public static readonly Func<LevelPackSerializer> CreateLevelPackSerializer = () => new LevelPackSerializer();
 
         /// <summary>
         /// Creates a VSR model
         /// </summary>
-        public static readonly Func<Vsr> CreateVsr = () => new Vsr(CreateLevelPack());
+        public static readonly Func<Vsr> CreateVsr = () => new Vsr();
 
         /// <summary>
         /// Creates a LevelPack model

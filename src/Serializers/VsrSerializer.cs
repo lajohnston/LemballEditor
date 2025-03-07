@@ -11,7 +11,15 @@ namespace LemballEditor.Serializers
     /// </summary>
     public class VsrSerializer : ISerializer<Vsr>
     {
-        private readonly ISerializer<LevelGroup> levelGroupSerializer;
+        /// <summary>
+        /// Serializer that serialises and deserialises data to and from a level pack
+        /// </summary>
+        private readonly ISerializer<LevelPack> levelPackSerializer;
+
+        public VsrSerializer(ISerializer<LevelPack> levelPackSerializer)
+        {
+            this.levelPackSerializer = levelPackSerializer;
+        }
 
         private uint GetFunDirectoryPointer(BinaryReader reader)
         {
@@ -62,6 +70,12 @@ namespace LemballEditor.Serializers
             // Set asset data, excluding the level files at the end (from FUN onwards)
             _ = reader.BaseStream.Seek(0, SeekOrigin.Begin);
             vsr.AssetData = reader.ReadBytes((int)funDirectoryAddress);
+
+            // Level data
+            if (vsr.LevelPack != null)
+            {
+                _ = levelPackSerializer.Deserialize(reader, vsr.LevelPack);
+            }
 
             return vsr;
         }

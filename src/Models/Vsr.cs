@@ -38,15 +38,6 @@
         /// <summary>
         /// The levels within the VSR
         /// </summary>
-        public LevelPack LevelPack { get; private set; }
-
-        /// <summary>
-        /// Creates a VSR model
-        /// </summary>
-        /// <param name="levelPack">The levels within the VSR</param>
-        public Vsr(LevelPack levelPack)
-        {
-            LevelPack = levelPack;
-        }
+        public LevelPack LevelPack { get; set; }
     }
 }
