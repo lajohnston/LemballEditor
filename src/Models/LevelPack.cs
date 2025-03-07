@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace LemballEditor.Models
 {
@@ -30,11 +31,21 @@ namespace LemballEditor.Models
         /// <summary>
         /// Retrieves the level group for the given group name
         /// </summary>
-        /// <param name="group">The name of the level group</param>
+        /// <param name="groupName">The name of the level group</param>
         /// <returns>The level group</returns>
-        public LevelGroup GetLevelGroup(LevelGroupName group)
+        public LevelGroup GetLevelGroup(LevelGroupName groupName)
         {
-            return levelGroups[group];
+            return levelGroups[groupName];
+        }
+
+        /// <summary>
+        /// Sets the level group for the given group name
+        /// </summary>
+        /// <param name="groupName">The name of the level group</param>
+        /// <param name="levelGroup">The level group</returns>
+        public void SetLevelGroup(LevelGroupName groupName, LevelGroup levelGroup)
+        {
+            levelGroups[groupName] = levelGroup ?? throw new ArgumentNullException();
         }
     }
 }
