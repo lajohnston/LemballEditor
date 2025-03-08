@@ -7,9 +7,30 @@ namespace LemballEditor.Serializers
 {
     public class LevelPackSerializer : ISerializer<LevelPack>
     {
-        public LevelPack Deserialize(BinaryReader reader, LevelPack levelPack = null)
+        private readonly ISerializer<LevelGroup> levelGroupSerializer;
+        private readonly Func<LevelGroup> levelGroupFactory;
+
+        public LevelPackSerializer(ISerializer<LevelGroup> levelGroupSerializer, Func<LevelGroup> levelGroupFactory)
         {
-            throw new NotImplementedException();
+            this.levelGroupSerializer = levelGroupSerializer;
+            this.levelGroupFactory = levelGroupFactory;
+        }
+
+        /// <summary>
+        /// Deserialize binary data containing level directories into a LevelPack instance
+        /// </summary>
+        /// <param name="reader">BinaryReader reading the stream</param>
+        /// <param name="levelPack">The levelPack to apply the data to</param>
+        /// <returns>The deserialized level pack data</returns>
+        public LevelPack Deserialize(BinaryReader reader, LevelPack levelPack)
+        {
+            foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
+            {
+                var levelGroup = levelGroupSerializer.Deserialize(reader, levelGroupFactory());
+                levelPack.SetLevelGroup(levelGroupName, levelGroup);
+            }
+
+            return levelPack;
         }
 
         public void Serialize(LevelPack result, BinaryWriter writer)

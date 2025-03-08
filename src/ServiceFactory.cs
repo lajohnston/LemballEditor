@@ -53,7 +53,12 @@ namespace LemballEditor
         /// <summary>
         /// Creates a LevelPackSerializer
         /// </summary>
-        public static readonly Func<LevelPackSerializer> CreateLevelPackSerializer = () => new LevelPackSerializer();
+        public static readonly Func<LevelPackSerializer> CreateLevelPackSerializer = () => new LevelPackSerializer(CreateLevelGroupSerializer(), CreateLevelGroup);
+
+        /// <summary>
+        /// Creates a LevelGroupSerializer
+        /// </summary>
+        public static readonly Func<LevelGroupSerializer> CreateLevelGroupSerializer = () => new LevelGroupSerializer();
 
         /// <summary>
         /// Creates a VSR model
@@ -64,5 +69,10 @@ namespace LemballEditor
         /// Creates a LevelPack model
         /// </summary>
         public static readonly Func<LevelPack> CreateLevelPack = () => new LevelPack();
+
+        /// <summary>
+        /// Creates a LevelGroup model
+        /// </summary>
+        public static readonly Func<LevelGroup> CreateLevelGroup = () => new LevelGroup();
     }
 }
