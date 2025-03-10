@@ -2,6 +2,7 @@
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
+using LemballEditor.Serializers.Vsr;
 using System;
 
 namespace LemballEditor

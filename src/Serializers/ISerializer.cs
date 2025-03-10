@@ -4,8 +4,8 @@ namespace LemballEditor.Serializers.Level
 {
     public interface ISerializer<TResult>
     {
-        TResult Deserialize(BinaryReader reader, TResult result);
+        TResult Deserialize(BinaryReader reader, TResult model);
 
-        void Serialize(TResult result, BinaryWriter writer);
+        void Serialize(TResult model, BinaryWriter writer);
     }
 }

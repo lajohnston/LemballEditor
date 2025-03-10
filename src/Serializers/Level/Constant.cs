@@ -9,17 +9,24 @@ namespace LemballEditor.Serializers.Level
     public class Constant<TResult> : ISerializer<TResult>
     {
         /// <summary>
-        /// The data to stream
+        /// The data to assert/stream
         /// </summary>
         private readonly byte[] data;
+
+        /// <summary>
+        /// The exception message if the deserialized data doesn't match the constant
+        /// </summary>
+        private readonly string errorMessage;
 
         /// <summary>
         /// Creates an instance of the Constant serializer
         /// </summary>
         /// <param name="data">The constant data to assert and write</param>
-        public Constant(byte[] data)
+        /// <param name="errorMessage">The exception message if the deserialized data doesn't match the constant</param>
+        public Constant(byte[] data, string errorMessage = "Invalid value")
         {
             this.data = data;
+            this.errorMessage = errorMessage;
         }
 
         /// <summary>
@@ -33,7 +40,7 @@ namespace LemballEditor.Serializers.Level
 
             if (!headerBytes.SequenceEqual(data))
             {
-                throw new InvalidDataException("Invalid value");
+                throw new InvalidDataException(errorMessage);
             }
 
             return result;

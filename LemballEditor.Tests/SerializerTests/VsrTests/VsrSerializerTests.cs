@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
-using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
+using LemballEditor.Serializers.Vsr;
 using Moq;
 using System.Text;
 
-namespace LemballEditor.Tests.SerializerTests
+namespace LemballEditor.Tests.SerializerTests.VsrTests
 {
     [TestClass]
     public class VsrSerializerTests
@@ -100,7 +100,7 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = null;
 
-            var levelPackSerializerMock = new Moq.Mock<ISerializer<LevelPack>>();
+            var levelPackSerializerMock = new Mock<ISerializer<LevelPack>>();
 
             var serializer = new VsrSerializer(levelPackSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
@@ -122,7 +122,7 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = ServiceFactory.CreateLevelPack();
 
-            var levelPackSerializerMock = new Moq.Mock<ISerializer<LevelPack>>();
+            var levelPackSerializerMock = new Mock<ISerializer<LevelPack>>();
 
             var serializer = new VsrSerializer(levelPackSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
@@ -146,7 +146,7 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = ServiceFactory.CreateLevelPack();
 
-            var levelPackSerializerMock = new Moq.Mock<ISerializer<LevelPack>>();
+            var levelPackSerializerMock = new Mock<ISerializer<LevelPack>>();
 
             var serializer = new VsrSerializer(levelPackSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);

@@ -4,12 +4,12 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace LemballEditor.Serializers
+namespace LemballEditor.Serializers.Vsr
 {
     /// <summary>
     /// Deserializes a full VSR file
     /// </summary>
-    public class VsrSerializer : ISerializer<Vsr>
+    public class VsrSerializer : ISerializer<Models.Vsr>
     {
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
@@ -45,7 +45,7 @@ namespace LemballEditor.Serializers
         /// <param name="reader">BinaryReader reading the VSR stream</param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException">If the data isn't valid VSR data</exception>
-        public Vsr Deserialize(BinaryReader reader, Vsr vsr)
+        public Models.Vsr Deserialize(BinaryReader reader, Models.Vsr vsr)
         {
             var header = Encoding.ASCII.GetString(reader.ReadBytes(4));
 
@@ -80,7 +80,7 @@ namespace LemballEditor.Serializers
             return vsr;
         }
 
-        public void Serialize(Vsr result, BinaryWriter writer)
+        public void Serialize(Models.Vsr result, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }
