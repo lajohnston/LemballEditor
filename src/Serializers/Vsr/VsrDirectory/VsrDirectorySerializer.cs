@@ -17,7 +17,7 @@ namespace LemballEditor.Serializers.Vsr.VsrDirectory
             propertySerializers = new List<ISerializer<Models.VsrDirectory>>()
             {
                 new Constant<Models.VsrDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
-
+                new DirectorySize(),
             };
         }
 
