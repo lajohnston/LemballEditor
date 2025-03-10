@@ -1,4 +1,5 @@
 ﻿using LemballEditor.Serializers.Level;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -12,12 +13,18 @@ namespace LemballEditor.Serializers.Vsr.VsrDirectory
         /// </summary>
         private readonly List<ISerializer<Models.VsrDirectory>> propertySerializers;
 
+        private readonly FileCount fileCountSerializer;
+
         public VsrDirectorySerializer()
         {
+            fileCountSerializer = new FileCount();
+
             propertySerializers = new List<ISerializer<Models.VsrDirectory>>()
             {
                 new Constant<Models.VsrDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DirectorySize(),
+                fileCountSerializer,
+                new Constant<Models.VsrDirectory>(BitConverter.GetBytes((uint) 3))
             };
         }
 
