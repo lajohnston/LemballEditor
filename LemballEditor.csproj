@@ -89,6 +89,7 @@
     <Compile Include="src\Models\Vsr\Vsr.cs" />
     <Compile Include="src\Serializers\Vsr\VsrDirectory\DirectorySize.cs" />
     <Compile Include="src\Serializers\Vsr\VsrDirectory\FileCount.cs" />
+    <Compile Include="src\Serializers\Vsr\VsrDirectory\FileStatAddress.cs" />
     <Compile Include="src\Serializers\Vsr\VsrDirectory\VsrDirectorySerializer.cs" />
     <Compile Include="src\Serializers\LevelGroupSerializer.cs" />
     <Compile Include="src\Serializers\LevelPackSerializer.cs" />

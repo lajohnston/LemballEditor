@@ -24,16 +24,17 @@ namespace LemballEditor.Serializers.Vsr.VsrDirectory
                 new Constant<Models.VsrDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DirectorySize(),
                 fileCountSerializer,
-                new Constant<Models.VsrDirectory>(BitConverter.GetBytes((uint) 3))
+                new Constant<Models.VsrDirectory>(BitConverter.GetBytes((uint) 3)),
+                new FileStatAddress(),
             };
         }
 
         /// <summary>
-        /// 
+        /// Deserialize a directory within a VSR file
         /// </summary>
-        /// <param name="reader"></param>
-        /// <param name="directory"></param>
-        /// <returns></returns>
+        /// <param name="reader">Reader to read the input stream</param>
+        /// <param name="directory">The directory model to set the files to</param>
+        /// <returns>The given directory</returns>
         public Models.VsrDirectory Deserialize(BinaryReader reader, Models.VsrDirectory directory)
         {
             foreach (var serializer in propertySerializers)
