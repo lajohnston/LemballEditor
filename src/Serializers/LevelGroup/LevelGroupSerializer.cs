@@ -6,25 +6,32 @@ using System.Text;
 
 namespace LemballEditor.Serializers.LevelGroup
 {
+    /// <summary>
+    /// Gathers temporary serialized data for deserializing a LevelGroup
+    /// </summary>
+    public class PendingLevelGroup
+    {
+        public uint LevelCount { get; set; }
+    }
+
+    /// <summary>
+    /// Serialises and deserialises LevelGroup data from VSR binary data
+    /// </summary>
     public class LevelGroupSerializer : ISerializer<Models.LevelGroup>
     {
         /// <summary>
         /// An ordered list of sub-serializers to call
         /// </summary>
-        private readonly List<ISerializer<Models.LevelGroup>> propertySerializers;
-
-        private readonly LevelCount fileCountSerializer;
+        private readonly List<ISerializer<PendingLevelGroup>> propertySerializers;
 
         public LevelGroupSerializer()
         {
-            fileCountSerializer = new LevelCount();
-
-            propertySerializers = new List<ISerializer<Models.LevelGroup>>()
+            propertySerializers = new List<ISerializer<PendingLevelGroup>>()
             {
-                new Constant<Models.LevelGroup>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
+                new Constant<PendingLevelGroup>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DataSize(),
-                fileCountSerializer,
-                new Constant<Models.LevelGroup>(BitConverter.GetBytes((uint) 3)),
+                new LevelCount(),
+                new Constant<PendingLevelGroup>(BitConverter.GetBytes((uint) 3)),
             };
         }
 
@@ -36,9 +43,11 @@ namespace LemballEditor.Serializers.LevelGroup
         /// <returns>The given directory</returns>
         public Models.LevelGroup Deserialize(BinaryReader reader, Models.LevelGroup levelGroup)
         {
+            var pendingLevelGroup = new PendingLevelGroup();
+
             foreach (var serializer in propertySerializers)
             {
-                _ = serializer.Deserialize(reader, levelGroup);
+                _ = serializer.Deserialize(reader, pendingLevelGroup);
             }
 
             return levelGroup;

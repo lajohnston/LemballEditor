@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using LemballEditor.Models;
 using LemballEditor.Serializers.LevelGroup;
 
 namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
@@ -8,7 +7,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
     public class LevelCountTests
     {
         [TestMethod]
-        public void Deserialize_ShouldStoreTheGivenNumberOfFilesForLater()
+        public void Deserialize_ShouldStoreTheNumberOfLevelsInThePendingLevelGroup()
         {
             uint numberOfFiles = 28;
             var data = BitConverter.GetBytes(numberOfFiles);
@@ -16,12 +15,12 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
 
-            var levelGroup = new LevelGroup();
+            var model = new PendingLevelGroup();
 
             var serializer = new LevelCount();
-            _ = serializer.Deserialize(reader, levelGroup);
+            _ = serializer.Deserialize(reader, model);
 
-            _ = serializer.DeserializedFileCount.Should().Be(numberOfFiles);
+            _ = model.LevelCount.Should().Be(numberOfFiles);
             _ = stream.Position.Should().Be(4);
         }
 
@@ -31,10 +30,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var levelGroup = new LevelGroup();
+            var model = new PendingLevelGroup();
 
             var serializer = new LevelCount();
-            _ = serializer.Deserialize(reader, levelGroup).Should().Be(levelGroup);
+            _ = serializer.Deserialize(reader, model).Should().Be(model);
         }
     }
 }

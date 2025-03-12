@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using LemballEditor.Models;
 using LemballEditor.Serializers.LevelGroup;
 
 namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
@@ -13,10 +12,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var levelGroup = new LevelGroup();
+            var model = new PendingLevelGroup();
 
             var serializer = new DataSize();
-            _ = serializer.Deserialize(reader, levelGroup);
+            _ = serializer.Deserialize(reader, model);
 
             _ = stream.Position.Should().Be(4);
         }
@@ -27,10 +26,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var levelGroup = new LevelGroup();
+            var model = new PendingLevelGroup();
 
             var serializer = new DataSize();
-            _ = serializer.Deserialize(reader, levelGroup).Should().Be(levelGroup);
+            _ = serializer.Deserialize(reader, model).Should().Be(model);
         }
     }
 }

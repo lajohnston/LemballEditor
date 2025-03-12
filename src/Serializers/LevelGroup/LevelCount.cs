@@ -4,18 +4,16 @@ using System.IO;
 
 namespace LemballEditor.Serializers.LevelGroup
 {
-    public class LevelCount : ISerializer<Models.LevelGroup>
+    public class LevelCount : ISerializer<PendingLevelGroup>
     {
-        public uint DeserializedFileCount { get; private set; }
-
-        public Models.LevelGroup Deserialize(BinaryReader reader, Models.LevelGroup directory)
+        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
         {
-            DeserializedFileCount = reader.ReadUInt32();
+            model.LevelCount = reader.ReadUInt32();
 
-            return directory;
+            return model;
         }
 
-        public void Serialize(Models.LevelGroup directory, BinaryWriter writer)
+        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }
