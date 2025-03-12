@@ -9,7 +9,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
         [TestMethod]
         public void Deserialize_ShouldStoreTheNumberOfLevelsInThePendingLevelGroup()
         {
-            uint numberOfFiles = 28;
+            uint numberOfFiles = 29;
             var data = BitConverter.GetBytes(numberOfFiles);
 
             using var stream = new MemoryStream(data);
@@ -20,8 +20,25 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             var serializer = new LevelCount();
             _ = serializer.Deserialize(reader, model);
 
-            _ = model.LevelCount.Should().Be(numberOfFiles);
+            _ = model.LevelCount.Should().Be((byte)numberOfFiles);
             _ = stream.Position.Should().Be(4);
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldThrowAnInvalidDataExceptionIfTheNumberOfLevelsAreAbove29()
+        {
+            uint numberOfFiles = 30;
+            var data = BitConverter.GetBytes(numberOfFiles);
+
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+
+            var model = new PendingLevelGroup();
+
+            var serializer = new LevelCount();
+            var act = () => serializer.Deserialize(reader, model);
+
+            _ = act.Should().Throw<InvalidDataException>().WithMessage($"Number of levels in level group higher than 29 maximum: {numberOfFiles}");
         }
 
         [TestMethod]

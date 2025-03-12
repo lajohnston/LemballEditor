@@ -11,7 +11,7 @@ namespace LemballEditor.Serializers.LevelGroup
     /// </summary>
     public class PendingLevelGroup
     {
-        public uint LevelCount { get; set; }
+        public byte LevelCount { get; set; }
     }
 
     /// <summary>
