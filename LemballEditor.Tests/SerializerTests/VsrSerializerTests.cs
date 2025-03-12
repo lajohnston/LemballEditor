@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
+using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
-using LemballEditor.Serializers.Vsr;
 using Moq;
 using System.Text;
 
-namespace LemballEditor.Tests.SerializerTests.VsrTests
+namespace LemballEditor.Tests.SerializerTests
 {
     [TestClass]
     public class VsrSerializerTests

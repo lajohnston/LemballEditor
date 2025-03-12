@@ -7,10 +7,10 @@ namespace LemballEditor.Serializers
 {
     public class LevelPackSerializer : ISerializer<LevelPack>
     {
-        private readonly ISerializer<LevelGroup> levelGroupSerializer;
-        private readonly Func<LevelGroup> levelGroupFactory;
+        private readonly ISerializer<Models.LevelGroup> levelGroupSerializer;
+        private readonly Func<Models.LevelGroup> levelGroupFactory;
 
-        public LevelPackSerializer(ISerializer<LevelGroup> levelGroupSerializer, Func<LevelGroup> levelGroupFactory)
+        public LevelPackSerializer(ISerializer<Models.LevelGroup> levelGroupSerializer, Func<Models.LevelGroup> levelGroupFactory)
         {
             this.levelGroupSerializer = levelGroupSerializer;
             this.levelGroupFactory = levelGroupFactory;

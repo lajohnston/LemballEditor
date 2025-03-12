@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
-using LemballEditor.Serializers.Vsr.VsrDirectory;
+using LemballEditor.Serializers.LevelGroup;
 
-namespace LemballEditor.Tests.SerializerTests.VsrTests
+namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 {
     [TestClass]
-    public class VsrDirectorySerializerTests
+    public class LevelGroupSerializerTests
     {
         [TestMethod]
         public void Deserialize_ShouldThrowAnInvalidDataException_WhenTheDataDoesNotBeginWithValidHeader()
@@ -15,10 +15,10 @@ namespace LemballEditor.Tests.SerializerTests.VsrTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var directory = new VsrDirectory();
-            var serializer = new VsrDirectorySerializer();
+            var levelGroup = new LevelGroup();
+            var serializer = new LevelGroupSerializer();
 
-            var act = () => serializer.Deserialize(reader, directory);
+            var act = () => serializer.Deserialize(reader, levelGroup);
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid directory header");
         }
     }

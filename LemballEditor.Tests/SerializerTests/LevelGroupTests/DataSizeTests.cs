@@ -1,11 +1,11 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
-using LemballEditor.Serializers.Vsr.VsrDirectory;
+using LemballEditor.Serializers.LevelGroup;
 
-namespace LemballEditor.Tests.SerializerTests.VsrTests
+namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 {
     [TestClass]
-    public class DirectorySizeTests
+    public class DataSizeTests
     {
         [TestMethod]
         public void Deserialize_ShouldSkipTheDirectorySize()
@@ -13,10 +13,10 @@ namespace LemballEditor.Tests.SerializerTests.VsrTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var directory = new VsrDirectory();
+            var levelGroup = new LevelGroup();
 
-            var serializer = new DirectorySize();
-            _ = serializer.Deserialize(reader, directory);
+            var serializer = new DataSize();
+            _ = serializer.Deserialize(reader, levelGroup);
 
             _ = stream.Position.Should().Be(4);
         }
@@ -27,10 +27,10 @@ namespace LemballEditor.Tests.SerializerTests.VsrTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var directory = new VsrDirectory();
+            var levelGroup = new LevelGroup();
 
-            var serializer = new DirectorySize();
-            _ = serializer.Deserialize(reader, directory).Should().Be(directory);
+            var serializer = new DataSize();
+            _ = serializer.Deserialize(reader, levelGroup).Should().Be(levelGroup);
         }
     }
 }

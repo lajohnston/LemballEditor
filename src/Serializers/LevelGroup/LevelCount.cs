@@ -2,20 +2,20 @@
 using System;
 using System.IO;
 
-namespace LemballEditor.Serializers.Vsr.VsrDirectory
+namespace LemballEditor.Serializers.LevelGroup
 {
-    public class FileCount : ISerializer<Models.VsrDirectory>
+    public class LevelCount : ISerializer<Models.LevelGroup>
     {
         public uint DeserializedFileCount { get; private set; }
 
-        public Models.VsrDirectory Deserialize(BinaryReader reader, Models.VsrDirectory directory)
+        public Models.LevelGroup Deserialize(BinaryReader reader, Models.LevelGroup directory)
         {
             DeserializedFileCount = reader.ReadUInt32();
 
             return directory;
         }
 
-        public void Serialize(Models.VsrDirectory directory, BinaryWriter writer)
+        public void Serialize(Models.LevelGroup directory, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }

@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace LemballEditor.Serializers.Vsr
+namespace LemballEditor.Serializers
 {
     /// <summary>
     /// Deserializes a full VSR file
