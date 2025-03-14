@@ -88,6 +88,7 @@
     <Compile Include="src\Models\Level.cs" />
     <Compile Include="src\Models\Vsr\Vsr.cs" />
     <Compile Include="src\Serializers\LevelGroup\DataSize.cs" />
+    <Compile Include="src\Serializers\LevelGroup\FileNameList.cs" />
     <Compile Include="src\Serializers\LevelGroup\LevelCount.cs" />
     <Compile Include="src\Serializers\LevelGroup\LevelGroupSerializer.cs" />
     <Compile Include="src\Serializers\LevelPackSerializer.cs" />
