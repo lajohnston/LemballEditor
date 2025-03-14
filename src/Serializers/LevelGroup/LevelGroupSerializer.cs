@@ -7,14 +7,6 @@ using System.Text;
 namespace LemballEditor.Serializers.LevelGroup
 {
     /// <summary>
-    /// Gathers temporary serialized data for deserializing a LevelGroup
-    /// </summary>
-    public class PendingLevelGroup
-    {
-        public byte LevelCount { get; set; }
-    }
-
-    /// <summary>
     /// Serialises and deserialises LevelGroup data from VSR binary data
     /// </summary>
     public class LevelGroupSerializer : ISerializer<Models.LevelGroup>

@@ -90,6 +90,7 @@
     <Compile Include="src\Serializers\LevelGroup\FileNameList.cs" />
     <Compile Include="src\Serializers\LevelGroup\LevelCount.cs" />
     <Compile Include="src\Serializers\LevelGroup\LevelGroupSerializer.cs" />
+    <Compile Include="src\Serializers\LevelGroup\PendingLevelGroup.cs" />
     <Compile Include="src\Serializers\LevelPackSerializer.cs" />
     <Compile Include="src\Serializers\VsrSerializer.cs" />
     <Compile Include="src\ServiceFactory.cs" />
