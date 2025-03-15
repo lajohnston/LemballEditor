@@ -90,7 +90,7 @@ namespace LemballEditor.Tests.SerializerTests
         }
 
         [TestMethod]
-        public void Deserialize_ShouldNotCallTheLevelPackDeserializer_WhenLevelPackIsNotSet()
+        public void Deserialize_ShouldNotCallTheLevelGroupDeserializer_WhenLevelPackIsNotSet()
         {
             var data = GetValidData(744, 1000);
 
@@ -100,43 +100,18 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = null;
 
-            var levelPackSerializerMock = new Mock<ISerializer<LevelPack>>();
+            var levelGroupSerializerMock = new Mock<ISerializer<Models.LevelGroup>>();
 
-            var serializer = new VsrSerializer(levelPackSerializerMock.Object);
+            var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
 
-            levelPackSerializerMock.Verify(
-                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelPack>()),
+            levelGroupSerializerMock.Verify(
+                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<Models.LevelGroup>()),
                 Times.Never);
         }
 
         [TestMethod]
-        public void Deserialize_ShouldPassTheReaderPointingToTheFunAddressToTheLevelPackSerializer_WhenLevelPackIsSet()
-        {
-            uint funDirectoryAddress = 1000;
-            var data = GetValidData(744, funDirectoryAddress);
-
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.LevelPack = ServiceFactory.CreateLevelPack();
-
-            var levelPackSerializerMock = new Mock<ISerializer<LevelPack>>();
-
-            var serializer = new VsrSerializer(levelPackSerializerMock.Object);
-            _ = serializer.Deserialize(reader, vsr);
-
-            levelPackSerializerMock.Verify(
-                m => m.Deserialize(
-                    It.Is<BinaryReader>(givenReader => givenReader == reader && reader.BaseStream.Position == funDirectoryAddress),
-                    It.IsAny<LevelPack>()
-                ),
-                Times.Once());
-        }
-
-        [TestMethod]
-        public void Deserialize_ShouldPassTheLevelPackToALevelPackSerializer_WhenALevelPackIsSet()
+        public void Deserialize_ShouldPassEachLevelGroupInTheLevelPackToTheLevelGroupSerializer()
         {
             var data = GetValidData(744, 1000);
 
@@ -146,17 +121,52 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = ServiceFactory.CreateLevelPack();
 
-            var levelPackSerializerMock = new Mock<ISerializer<LevelPack>>();
+            var levelGroupSerializerMock = new Mock<ISerializer<Models.LevelGroup>>();
+            var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
 
-            var serializer = new VsrSerializer(levelPackSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
 
-            levelPackSerializerMock.Verify(
+            foreach (var groupName in Enum.GetValues(typeof(LevelGroupName)).Cast<LevelGroupName>())
+            {
+                levelGroupSerializerMock.Verify(
+                    m => m.Deserialize(
+                        It.Is<BinaryReader>(r => r == reader),
+                        It.Is<Models.LevelGroup>(lg => lg == vsr.LevelPack.GetLevelGroup(groupName))
+                    )
+                );
+            }
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldSetTheLevelGroupsReturnedFromTheLevelGroupSerializerToTheLevelPack()
+        {
+            var data = GetValidData(744, 1000);
+
+            using var stream = new MemoryStream(data);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            var levelPack = ServiceFactory.CreateLevelPack();
+            vsr.LevelPack = levelPack;
+
+            var serializedLevelGroups = new List<Models.LevelGroup>() { new(), new(), new(), new(), new(), };
+
+            var levelGroupSerializerMock = new Mock<ISerializer<Models.LevelGroup>>();
+            _ = levelGroupSerializerMock.Setup(
                 m => m.Deserialize(
-                    It.IsAny<BinaryReader>(),
-                    It.Is<LevelPack>(givenLevelPack => givenLevelPack == vsr.LevelPack)
-                ),
-                Times.Once());
+                    reader,
+                    It.IsAny<Models.LevelGroup>()
+                )
+            ).Returns(new Queue<Models.LevelGroup>(serializedLevelGroups).Dequeue);
+
+            var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
+            _ = serializer.Deserialize(reader, vsr);
+
+            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(serializedLevelGroups[0]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(serializedLevelGroups[1]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(serializedLevelGroups[2]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(serializedLevelGroups[3]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(serializedLevelGroups[4]);
         }
     }
 }

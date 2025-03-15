@@ -31,7 +31,7 @@ namespace LemballEditor.Serializers.LevelGroup
         /// Deserialize a directory within a VSR file
         /// </summary>
         /// <param name="reader">Reader to read the input stream</param>
-        /// <param name="directory">The directory model to set the files to</param>
+        /// <param name="levelGroup">The LevelGroup to set the files to</param>
         /// <returns>The given directory</returns>
         public Models.LevelGroup Deserialize(BinaryReader reader, Models.LevelGroup levelGroup)
         {

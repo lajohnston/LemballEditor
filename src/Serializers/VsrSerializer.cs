@@ -14,11 +14,11 @@ namespace LemballEditor.Serializers
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
-        private readonly ISerializer<LevelPack> levelPackSerializer;
+        private readonly ISerializer<Models.LevelGroup> levelGroupSerializer;
 
-        public VsrSerializer(ISerializer<LevelPack> levelPackSerializer)
+        public VsrSerializer(ISerializer<Models.LevelGroup> levelGroupSerializer)
         {
-            this.levelPackSerializer = levelPackSerializer;
+            this.levelGroupSerializer = levelGroupSerializer;
         }
 
         private uint GetFunDirectoryPointer(BinaryReader reader)
@@ -74,7 +74,11 @@ namespace LemballEditor.Serializers
             // Level data
             if (vsr.LevelPack != null)
             {
-                _ = levelPackSerializer.Deserialize(reader, vsr.LevelPack);
+                foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
+                {
+                    var levelGroup = levelGroupSerializer.Deserialize(reader, vsr.LevelPack.GetLevelGroup(levelGroupName));
+                    vsr.LevelPack.SetLevelGroup(levelGroupName, levelGroup);
+                }
             }
 
             return vsr;
