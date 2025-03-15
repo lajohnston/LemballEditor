@@ -15,7 +15,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
 
-            var model = new PendingLevelGroup();
+            var model = new LevelGroupContext();
 
             var serializer = new LevelCount();
             _ = serializer.Deserialize(reader, model);
@@ -33,7 +33,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
 
-            var model = new PendingLevelGroup();
+            var model = new LevelGroupContext();
 
             var serializer = new LevelCount();
             var act = () => serializer.Deserialize(reader, model);
@@ -47,7 +47,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var model = new PendingLevelGroup();
+            var model = new LevelGroupContext();
 
             var serializer = new LevelCount();
             _ = serializer.Deserialize(reader, model).Should().Be(model);

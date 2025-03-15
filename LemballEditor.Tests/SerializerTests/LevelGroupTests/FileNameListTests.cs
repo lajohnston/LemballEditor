@@ -23,7 +23,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new PendingLevelGroup
+            var group = new LevelGroupContext
             {
                 LevelCount = numberOfLevels
             };
@@ -49,7 +49,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new PendingLevelGroup
+            var group = new LevelGroupContext
             {
                 LevelCount = numberOfLevels
             };
@@ -72,7 +72,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new PendingLevelGroup
+            var group = new LevelGroupContext
             {
                 LevelCount = numberOfLevels
             };
@@ -98,7 +98,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new PendingLevelGroup
+            var group = new LevelGroupContext
             {
                 LevelCount = numberOfLevels
             };
@@ -124,7 +124,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new PendingLevelGroup
+            var group = new LevelGroupContext
             {
                 LevelCount = numberOfLevels
             };
@@ -144,7 +144,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var writer = new BinaryWriter(stream);
             using var reader = new BinaryReader(stream);
 
-            var group = new PendingLevelGroup
+            var group = new LevelGroupContext
             {
                 LevelCount = numberOfLevels
             };

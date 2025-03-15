@@ -2,6 +2,7 @@
 using LemballEditor.Models;
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
+using LemballEditor.Serializers.LevelGroup;
 using Moq;
 using System.Text;
 
@@ -10,6 +11,11 @@ namespace LemballEditor.Tests.SerializerTests
     [TestClass]
     public class VsrSerializerTests
     {
+        private Mock<ISerializer<(Models.LevelGroup, LevelGroupContext)>> CreateMockLevelGroupSerializer()
+        {
+            return new Mock<ISerializer<(Models.LevelGroup, LevelGroupContext)>>();
+        }
+
         private byte[] GetValidData(uint funPointerAddress, uint funDirectoryAddress)
         {
             var demoFileAddress = funPointerAddress + 188;
@@ -100,13 +106,13 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = null;
 
-            var levelGroupSerializerMock = new Mock<ISerializer<Models.LevelGroup>>();
+            var levelGroupSerializerMock = CreateMockLevelGroupSerializer();
 
             var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
 
             levelGroupSerializerMock.Verify(
-                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<Models.LevelGroup>()),
+                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<(Models.LevelGroup, LevelGroupContext)>()),
                 Times.Never);
         }
 
@@ -121,7 +127,7 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = ServiceFactory.CreateVsr();
             vsr.LevelPack = ServiceFactory.CreateLevelPack();
 
-            var levelGroupSerializerMock = new Mock<ISerializer<Models.LevelGroup>>();
+            var levelGroupSerializerMock = CreateMockLevelGroupSerializer();
             var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
 
             _ = serializer.Deserialize(reader, vsr);
@@ -131,7 +137,7 @@ namespace LemballEditor.Tests.SerializerTests
                 levelGroupSerializerMock.Verify(
                     m => m.Deserialize(
                         It.Is<BinaryReader>(r => r == reader),
-                        It.Is<Models.LevelGroup>(lg => lg == vsr.LevelPack.GetLevelGroup(groupName))
+                        It.Is<(Models.LevelGroup, LevelGroupContext)>((lg, _) => lg == vsr.LevelPack.GetLevelGroup(groupName))
                     )
                 );
             }
@@ -151,11 +157,11 @@ namespace LemballEditor.Tests.SerializerTests
 
             var serializedLevelGroups = new List<Models.LevelGroup>() { new(), new(), new(), new(), new(), };
 
-            var levelGroupSerializerMock = new Mock<ISerializer<Models.LevelGroup>>();
+            var levelGroupSerializerMock = CreateMockLevelGroupSerializer();
             _ = levelGroupSerializerMock.Setup(
                 m => m.Deserialize(
                     reader,
-                    It.IsAny<Models.LevelGroup>()
+                    It.IsAny<(Models.LevelGroup, LevelGroupContext)>()
                 )
             ).Returns(new Queue<Models.LevelGroup>(serializedLevelGroups).Dequeue);
 

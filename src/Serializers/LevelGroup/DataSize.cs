@@ -6,16 +6,16 @@ namespace LemballEditor.Serializers.LevelGroup
     /// <summary>
     /// Serializes/Deserializes the directory size uint
     /// </summary>
-    public class DataSize : ISerializer<PendingLevelGroup>
+    public class DataSize : ISerializer<LevelGroupContext>
     {
-        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
+        public LevelGroupContext Deserialize(BinaryReader reader, LevelGroupContext model)
         {
             _ = reader.ReadUInt32();
 
             return model;
         }
 
-        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
+        public void Serialize(LevelGroupContext model, BinaryWriter writer)
         {
             throw new System.NotImplementedException();
         }

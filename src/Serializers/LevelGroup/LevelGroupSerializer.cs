@@ -9,21 +9,21 @@ namespace LemballEditor.Serializers.LevelGroup
     /// <summary>
     /// Serialises and deserialises LevelGroup data from VSR binary data
     /// </summary>
-    public class LevelGroupSerializer : ISerializer<Models.LevelGroup>
+    public class LevelGroupSerializer : ISerializer<ValueTuple<Models.LevelGroup, LevelGroupContext>>
     {
         /// <summary>
         /// An ordered list of sub-serializers to call
         /// </summary>
-        private readonly List<ISerializer<PendingLevelGroup>> propertySerializers;
+        private readonly List<ISerializer<LevelGroupContext>> propertySerializers;
 
         public LevelGroupSerializer()
         {
-            propertySerializers = new List<ISerializer<PendingLevelGroup>>()
+            propertySerializers = new List<ISerializer<LevelGroupContext>>()
             {
-                new Constant<PendingLevelGroup>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
+                new Constant<LevelGroupContext>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DataSize(),
                 new LevelCount(),
-                new Constant<PendingLevelGroup>(BitConverter.GetBytes((uint) 3)),
+                new Constant<LevelGroupContext>(BitConverter.GetBytes((uint) 3)),
             };
         }
 
@@ -33,21 +33,23 @@ namespace LemballEditor.Serializers.LevelGroup
         /// <param name="reader">Reader to read the input stream</param>
         /// <param name="levelGroup">The LevelGroup to set the files to</param>
         /// <returns>The given directory</returns>
-        public Models.LevelGroup Deserialize(BinaryReader reader, Models.LevelGroup levelGroup)
+        public (Models.LevelGroup, LevelGroupContext) Deserialize(BinaryReader reader, (Models.LevelGroup, LevelGroupContext) models)
         {
-            var pendingLevelGroup = new PendingLevelGroup();
+            var (levelGroup, context) = models;
+
+            var pendingLevelGroup = new LevelGroupContext();
 
             foreach (var serializer in propertySerializers)
             {
                 _ = serializer.Deserialize(reader, pendingLevelGroup);
             }
 
-            return levelGroup;
+            return models;
         }
 
-        public void Serialize(Models.LevelGroup model, BinaryWriter writer)
+        public void Serialize((Models.LevelGroup, LevelGroupContext) model, BinaryWriter writer)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

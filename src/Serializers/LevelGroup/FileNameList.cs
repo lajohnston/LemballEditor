@@ -7,13 +7,13 @@ namespace LemballEditor.Serializers.LevelGroup
     /// <summary>
     /// Serializes/Deserializes the level file names (not the in-game level titles)
     /// </summary>
-    public class FileNameList : ISerializer<PendingLevelGroup>
+    public class FileNameList : ISerializer<LevelGroupContext>
     {
         /// <summary>
         /// Validates the file name list and returns the given mode if it's valid
         /// </summary>
         /// <exception cref="InvalidDataException">If the file name list contains unexpected data</exception>
-        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
+        public LevelGroupContext Deserialize(BinaryReader reader, LevelGroupContext model)
         {
             for (var levelNumber = 0; levelNumber < model.LevelCount; levelNumber++)
             {
@@ -38,7 +38,7 @@ namespace LemballEditor.Serializers.LevelGroup
         /// <summary>
         /// Writes the sequential file name list to the stream
         /// </summary>
-        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
+        public void Serialize(LevelGroupContext model, BinaryWriter writer)
         {
             for (var levelNumber = 0; levelNumber < model.LevelCount; levelNumber++)
             {

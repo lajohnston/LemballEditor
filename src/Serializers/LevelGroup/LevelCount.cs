@@ -4,9 +4,9 @@ using System.IO;
 
 namespace LemballEditor.Serializers.LevelGroup
 {
-    public class LevelCount : ISerializer<PendingLevelGroup>
+    public class LevelCount : ISerializer<LevelGroupContext>
     {
-        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
+        public LevelGroupContext Deserialize(BinaryReader reader, LevelGroupContext model)
         {
             var levelCount = reader.ReadUInt32();
 
@@ -20,7 +20,7 @@ namespace LemballEditor.Serializers.LevelGroup
             return model;
         }
 
-        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
+        public void Serialize(LevelGroupContext model, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }

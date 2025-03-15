@@ -16,9 +16,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var reader = new BinaryReader(stream);
 
             var levelGroup = new LevelGroup();
+            var levelGroupContext = new LevelGroupContext();
             var serializer = new LevelGroupSerializer();
 
-            var act = () => serializer.Deserialize(reader, levelGroup);
+            var act = () => serializer.Deserialize(reader, (levelGroup, levelGroupContext));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid directory header");
         }
     }
