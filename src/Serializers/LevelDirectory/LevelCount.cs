@@ -2,11 +2,11 @@
 using System;
 using System.IO;
 
-namespace LemballEditor.Serializers.LevelGroup
+namespace LemballEditor.Serializers.LevelDirectory
 {
-    public class LevelCount : ISerializer<LevelGroupContext>
+    public class LevelCount : ISerializer<LevelDirectoryContext>
     {
-        public LevelGroupContext Deserialize(BinaryReader reader, LevelGroupContext model)
+        public LevelDirectoryContext Deserialize(BinaryReader reader, LevelDirectoryContext model)
         {
             var levelCount = reader.ReadUInt32();
 
@@ -20,7 +20,7 @@ namespace LemballEditor.Serializers.LevelGroup
             return model;
         }
 
-        public void Serialize(LevelGroupContext model, BinaryWriter writer)
+        public void Serialize(LevelDirectoryContext model, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }

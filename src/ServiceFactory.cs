@@ -2,7 +2,7 @@
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
-using LemballEditor.Serializers.LevelGroup;
+using LemballEditor.Serializers.LevelDirectory;
 using System;
 
 namespace LemballEditor
@@ -54,7 +54,7 @@ namespace LemballEditor
         /// <summary>
         /// Creates a LevelGroupSerializer
         /// </summary>
-        public static readonly Func<LevelGroupSerializer> CreateLevelGroupSerializer = () => new LevelGroupSerializer();
+        public static readonly Func<LevelDirectorySerializer> CreateLevelGroupSerializer = () => new LevelDirectorySerializer();
 
         /// <summary>
         /// Creates a VSR model

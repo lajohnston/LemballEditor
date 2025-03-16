@@ -86,11 +86,11 @@
     <Compile Include="src\Models\ITile.cs" />
     <Compile Include="src\Models\Level.cs" />
     <Compile Include="src\Models\Vsr.cs" />
-    <Compile Include="src\Serializers\LevelGroup\DataSize.cs" />
-    <Compile Include="src\Serializers\LevelGroup\FileNameList.cs" />
-    <Compile Include="src\Serializers\LevelGroup\LevelCount.cs" />
-    <Compile Include="src\Serializers\LevelGroup\LevelGroupSerializer.cs" />
-    <Compile Include="src\Serializers\LevelGroup\LevelGroupContext.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\DataSize.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\FileNameList.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelCount.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelDirectorySerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelDirectoryContext.cs" />
     <Compile Include="src\Serializers\VsrSerializer.cs" />
     <Compile Include="src\ServiceFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />

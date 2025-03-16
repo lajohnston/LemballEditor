@@ -1,6 +1,6 @@
 ﻿using LemballEditor.Models;
 using LemballEditor.Serializers.Level;
-using LemballEditor.Serializers.LevelGroup;
+using LemballEditor.Serializers.LevelDirectory;
 using System;
 using System.IO;
 using System.Text;
@@ -15,9 +15,9 @@ namespace LemballEditor.Serializers
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
-        private readonly ISerializer<(Models.LevelGroup, LevelGroupContext)> levelGroupSerializer;
+        private readonly ISerializer<(Models.LevelGroup, LevelDirectoryContext)> levelGroupSerializer;
 
-        public VsrSerializer(ISerializer<(Models.LevelGroup, LevelGroupContext)> levelGroupSerializer)
+        public VsrSerializer(ISerializer<(Models.LevelGroup, LevelDirectoryContext)> levelGroupSerializer)
         {
             this.levelGroupSerializer = levelGroupSerializer;
         }
@@ -77,10 +77,11 @@ namespace LemballEditor.Serializers
             {
                 foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
                 {
-                    var levelGroupContext = new LevelGroupContext();
+                    var existingGroup = vsr.LevelPack.GetLevelGroup(levelGroupName);
+                    var levelGroupContext = new LevelDirectoryContext();
                     var (levelGroup, _) = levelGroupSerializer.Deserialize(
                         reader,
-                        (vsr.LevelPack.GetLevelGroup(levelGroupName), levelGroupContext)
+                        (existingGroup, levelGroupContext)
                     );
 
                     vsr.LevelPack.SetLevelGroup(levelGroupName, levelGroup);

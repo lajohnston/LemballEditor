@@ -1,21 +1,21 @@
 ﻿using LemballEditor.Serializers.Level;
 using System.IO;
 
-namespace LemballEditor.Serializers.LevelGroup
+namespace LemballEditor.Serializers.LevelDirectory
 {
     /// <summary>
     /// Serializes/Deserializes the directory size uint
     /// </summary>
-    public class DataSize : ISerializer<LevelGroupContext>
+    public class DataSize : ISerializer<LevelDirectoryContext>
     {
-        public LevelGroupContext Deserialize(BinaryReader reader, LevelGroupContext model)
+        public LevelDirectoryContext Deserialize(BinaryReader reader, LevelDirectoryContext model)
         {
             _ = reader.ReadUInt32();
 
             return model;
         }
 
-        public void Serialize(LevelGroupContext model, BinaryWriter writer)
+        public void Serialize(LevelDirectoryContext model, BinaryWriter writer)
         {
             throw new System.NotImplementedException();
         }

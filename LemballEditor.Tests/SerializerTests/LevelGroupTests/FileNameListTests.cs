@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LemballEditor.Serializers.LevelGroup;
+using LemballEditor.Serializers.LevelDirectory;
 using System.Text;
 
 namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
@@ -23,7 +23,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelGroupContext
+            var group = new LevelDirectoryContext
             {
                 LevelCount = numberOfLevels
             };
@@ -49,7 +49,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelGroupContext
+            var group = new LevelDirectoryContext
             {
                 LevelCount = numberOfLevels
             };
@@ -72,7 +72,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelGroupContext
+            var group = new LevelDirectoryContext
             {
                 LevelCount = numberOfLevels
             };
@@ -98,7 +98,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelGroupContext
+            var group = new LevelDirectoryContext
             {
                 LevelCount = numberOfLevels
             };
@@ -124,7 +124,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelGroupContext
+            var group = new LevelDirectoryContext
             {
                 LevelCount = numberOfLevels
             };
@@ -144,7 +144,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var writer = new BinaryWriter(stream);
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelGroupContext
+            var group = new LevelDirectoryContext
             {
                 LevelCount = numberOfLevels
             };

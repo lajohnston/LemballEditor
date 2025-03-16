@@ -2,7 +2,7 @@
 using LemballEditor.Models;
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
-using LemballEditor.Serializers.LevelGroup;
+using LemballEditor.Serializers.LevelDirectory;
 using Moq;
 using System.Text;
 
@@ -11,9 +11,9 @@ namespace LemballEditor.Tests.SerializerTests
     [TestClass]
     public class VsrSerializerTests
     {
-        private Mock<ISerializer<(Models.LevelGroup, LevelGroupContext)>> CreateMockLevelGroupSerializer()
+        private Mock<ISerializer<(Models.LevelGroup, LevelDirectoryContext)>> CreateMockLevelGroupSerializer()
         {
-            return new Mock<ISerializer<(Models.LevelGroup, LevelGroupContext)>>();
+            return new Mock<ISerializer<(Models.LevelGroup, LevelDirectoryContext)>>();
         }
 
         private byte[] GetValidData(uint funPointerAddress, uint funDirectoryAddress)
@@ -112,7 +112,7 @@ namespace LemballEditor.Tests.SerializerTests
             _ = serializer.Deserialize(reader, vsr);
 
             levelGroupSerializerMock.Verify(
-                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<(Models.LevelGroup, LevelGroupContext)>()),
+                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()),
                 Times.Never);
         }
 
@@ -128,8 +128,14 @@ namespace LemballEditor.Tests.SerializerTests
             vsr.LevelPack = ServiceFactory.CreateLevelPack();
 
             var levelGroupSerializerMock = CreateMockLevelGroupSerializer();
-            var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
+            _ = levelGroupSerializerMock.Setup(
+                m => m.Deserialize(
+                    reader,
+                    It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()
+                )
+            ).Returns<BinaryReader, (Models.LevelGroup, LevelDirectoryContext)>((reader, models) => models);
 
+            var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
 
             foreach (var groupName in Enum.GetValues(typeof(LevelGroupName)).Cast<LevelGroupName>())
@@ -137,7 +143,7 @@ namespace LemballEditor.Tests.SerializerTests
                 levelGroupSerializerMock.Verify(
                     m => m.Deserialize(
                         It.Is<BinaryReader>(r => r == reader),
-                        It.Is<(Models.LevelGroup, LevelGroupContext)>((lg, _) => lg == vsr.LevelPack.GetLevelGroup(groupName))
+                        It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()
                     )
                 );
             }
@@ -155,24 +161,32 @@ namespace LemballEditor.Tests.SerializerTests
             var levelPack = ServiceFactory.CreateLevelPack();
             vsr.LevelPack = levelPack;
 
-            var serializedLevelGroups = new List<Models.LevelGroup>() { new(), new(), new(), new(), new(), };
+            var serializedGroups = new List<Models.LevelGroup>();
+            var serializedModels = new List<(Models.LevelGroup, LevelDirectoryContext)>();
+            for (var i = 0; i < 5; i++)
+            {
+                var group = new Models.LevelGroup();
+                serializedGroups.Add(group);
+                serializedModels.Add((group, new LevelDirectoryContext()));
+            }
+            ;
 
             var levelGroupSerializerMock = CreateMockLevelGroupSerializer();
             _ = levelGroupSerializerMock.Setup(
                 m => m.Deserialize(
-                    reader,
-                    It.IsAny<(Models.LevelGroup, LevelGroupContext)>()
+                    It.IsAny<BinaryReader>(),
+                    It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()
                 )
-            ).Returns(new Queue<Models.LevelGroup>(serializedLevelGroups).Dequeue);
+            ).Returns(new Queue<(Models.LevelGroup, LevelDirectoryContext)>(serializedModels).Dequeue);
 
             var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
             _ = serializer.Deserialize(reader, vsr);
 
-            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(serializedLevelGroups[0]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(serializedLevelGroups[1]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(serializedLevelGroups[2]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(serializedLevelGroups[3]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(serializedLevelGroups[4]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(serializedGroups[0]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(serializedGroups[1]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(serializedGroups[2]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(serializedGroups[3]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(serializedGroups[4]);
         }
     }
 }
