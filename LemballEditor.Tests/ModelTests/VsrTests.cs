@@ -42,5 +42,24 @@ namespace LemballEditor.Tests.ModelTests
 
             _ = vsr.LevelPack.Should().Be(levelPack);
         }
+
+        [TestMethod]
+        public void ShouldReturnTheFunAddressBasedOnTheAssetDataSize()
+        {
+            var vsr = new Vsr
+            {
+                AssetData = new byte[5]
+            };
+
+            _ = vsr.FunAddress.Should().Be(5);
+        }
+
+        [TestMethod]
+        public void ShouldReturnANullFunAddressIfTheAssetDataIsNotSet()
+        {
+            var vsr = new Vsr();
+
+            _ = vsr.FunAddress.Should().Be(null);
+        }
     }
 }

@@ -36,6 +36,22 @@
         public byte[] AssetData { get; set; }
 
         /// <summary>
+        /// The address of the Fun level directory, or null if unknown
+        /// </summary>
+        public uint? FunAddress
+        {
+            get
+            {
+                if (AssetData == null)
+                {
+                    return null;
+                }
+
+                return (uint)AssetData.Length;
+            }
+        }
+
+        /// <summary>
         /// The levels within the VSR
         /// </summary>
         public LevelPack LevelPack { get; set; }
