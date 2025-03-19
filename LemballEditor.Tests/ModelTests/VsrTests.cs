@@ -7,21 +7,33 @@ namespace LemballEditor.Tests.ModelTests
     public class VsrTests
     {
         [TestMethod]
+        public void ShouldSetTheDirectoryPointersToZeroByDefault()
+        {
+            var vsr = ServiceFactory.CreateVsr();
+
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Fun).Should().Be(0);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Tricky).Should().Be(0);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Taxing).Should().Be(0);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Mayhem).Should().Be(0);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Network).Should().Be(0);
+        }
+
+        [TestMethod]
         public void ShouldStoreTheDirectoryPointers()
         {
             var vsr = ServiceFactory.CreateVsr();
 
-            vsr.FunDirectoryPointer = 1;
-            vsr.TrickyDirectoryPointer = 2;
-            vsr.TaxingDirectoryPointer = 3;
-            vsr.MayhemDirectoryPointer = 4;
-            vsr.NetworkDirectoryPointer = 5;
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Fun, 1);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Tricky, 2);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Taxing, 3);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Mayhem, 4);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 5);
 
-            _ = vsr.FunDirectoryPointer.Should().Be(1);
-            _ = vsr.TrickyDirectoryPointer.Should().Be(2);
-            _ = vsr.TaxingDirectoryPointer.Should().Be(3);
-            _ = vsr.MayhemDirectoryPointer.Should().Be(4);
-            _ = vsr.NetworkDirectoryPointer.Should().Be(5);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Fun).Should().Be(1);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Tricky).Should().Be(2);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Taxing).Should().Be(3);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Mayhem).Should().Be(4);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Network).Should().Be(5);
         }
 
         [TestMethod]

@@ -88,11 +88,11 @@ namespace LemballEditor.Tests.SerializerTests
             var serializer = ServiceFactory.CreateVsrSerializer();
             _ = serializer.Deserialize(reader, vsr);
 
-            _ = vsr.FunDirectoryPointer.Should().Be(funPointerAddress);
-            _ = vsr.TrickyDirectoryPointer.Should().Be(funPointerAddress + 36);
-            _ = vsr.TaxingDirectoryPointer.Should().Be(funPointerAddress + (36 * 2));
-            _ = vsr.MayhemDirectoryPointer.Should().Be(funPointerAddress + (36 * 3));
-            _ = vsr.NetworkDirectoryPointer.Should().Be(funPointerAddress + (36 * 4));
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Fun).Should().Be(funPointerAddress);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Tricky).Should().Be(funPointerAddress + 36);
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Taxing).Should().Be(funPointerAddress + (36 * 2));
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Mayhem).Should().Be(funPointerAddress + (36 * 3));
+            _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Network).Should().Be(funPointerAddress + (36 * 4));
         }
 
         [TestMethod]

@@ -58,11 +58,11 @@ namespace LemballEditor.Serializers
             var funDirectoryPointer = GetFunDirectoryPointer(reader);
 
             // Set pointers
-            vsr.FunDirectoryPointer = funDirectoryPointer;
-            vsr.TrickyDirectoryPointer = funDirectoryPointer + 36;
-            vsr.TaxingDirectoryPointer = funDirectoryPointer + (36 * 2);
-            vsr.MayhemDirectoryPointer = funDirectoryPointer + (36 * 3);
-            vsr.NetworkDirectoryPointer = funDirectoryPointer + (36 * 4);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Fun, funDirectoryPointer);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Tricky, funDirectoryPointer + 36);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Taxing, funDirectoryPointer + (36 * 2));
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Mayhem, funDirectoryPointer + (36 * 3));
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Network, funDirectoryPointer + (36 * 4));
 
             // Get the FUN directory address
             _ = reader.BaseStream.Seek(funDirectoryPointer, SeekOrigin.Begin);
