@@ -12,7 +12,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var model = new LevelDirectoryContext();
+            var model = new LevelDirectory();
 
             var serializer = new DataSize();
             _ = serializer.Deserialize(reader, model);
@@ -26,7 +26,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var model = new LevelDirectoryContext();
+            var model = new LevelDirectory();
 
             var serializer = new DataSize();
             _ = serializer.Deserialize(reader, model).Should().Be(model);

@@ -12,9 +12,9 @@ namespace LemballEditor.Tests.SerializerTests
     [TestClass]
     public class VsrSerializerTests
     {
-        private (VsrSerializer, Mock<ISerializer<(Models.LevelGroup, LevelDirectoryContext)>>) CreateVsrSerializer()
+        private (VsrSerializer, Mock<ISerializer<LevelDirectory>>) CreateVsrSerializer()
         {
-            var levelGroupSerializerMock = new Mock<ISerializer<(Models.LevelGroup, LevelDirectoryContext)>>();
+            var levelGroupSerializerMock = new Mock<ISerializer<LevelDirectory>>();
             var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
             return (serializer, levelGroupSerializerMock);
         }
@@ -39,7 +39,7 @@ namespace LemballEditor.Tests.SerializerTests
             data.AddRange(Encoding.ASCII.GetBytes("Demo_00"));          // Demo_00 string
             data.AddRange(new byte[funDirectoryAddress]);               // Padding
 
-            return data.ToArray();
+            return [.. data];
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace LemballEditor.Tests.SerializerTests
         {
             List<byte> data = [.. Encoding.ASCII.GetBytes("CRID"), .. new byte[200]];
 
-            using var stream = new MemoryStream(data.ToArray());
+            using var stream = new MemoryStream([.. data]);
             using var reader = new BinaryReader(stream);
 
             var serializer = ServiceFactory.CreateVsrSerializer();
@@ -121,7 +121,7 @@ namespace LemballEditor.Tests.SerializerTests
             _ = serializer.Deserialize(reader, vsr);
 
             levelGroupSerializerMock.Verify(
-                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()),
+                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelDirectory>()),
                 Times.Never);
         }
 
@@ -141,9 +141,9 @@ namespace LemballEditor.Tests.SerializerTests
             _ = levelGroupSerializerMock.Setup(
                 m => m.Deserialize(
                     reader,
-                    It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()
+                    It.IsAny<LevelDirectory>()
                 )
-            ).Returns<BinaryReader, (Models.LevelGroup, LevelDirectoryContext)>((reader, models) => models);
+            ).Returns<BinaryReader, LevelDirectory>((reader, model) => model);
 
             _ = serializer.Deserialize(reader, vsr);
 
@@ -152,7 +152,7 @@ namespace LemballEditor.Tests.SerializerTests
                 levelGroupSerializerMock.Verify(
                     m => m.Deserialize(
                         It.Is<BinaryReader>(r => r == reader),
-                        It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()
+                        It.IsAny<LevelDirectory>()
                     )
                 );
             }
@@ -170,13 +170,10 @@ namespace LemballEditor.Tests.SerializerTests
             var levelPack = ServiceFactory.CreateLevelPack();
             vsr.LevelPack = levelPack;
 
-            var serializedGroups = new List<Models.LevelGroup>();
-            var serializedModels = new List<(Models.LevelGroup, LevelDirectoryContext)>();
+            var serializedModels = new List<LevelDirectory>();
             for (var i = 0; i < 5; i++)
             {
-                var group = new Models.LevelGroup();
-                serializedGroups.Add(group);
-                serializedModels.Add((group, new LevelDirectoryContext()));
+                serializedModels.Add(new LevelDirectory() { LevelGroup = new Models.LevelGroup() });
             }
 
             var (serializer, levelGroupSerializerMock) = CreateVsrSerializer();
@@ -184,17 +181,17 @@ namespace LemballEditor.Tests.SerializerTests
             _ = levelGroupSerializerMock.Setup(
                 m => m.Deserialize(
                     It.IsAny<BinaryReader>(),
-                    It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>()
+                    It.IsAny<LevelDirectory>()
                 )
-            ).Returns(new Queue<(Models.LevelGroup, LevelDirectoryContext)>(serializedModels).Dequeue);
+            ).Returns(new Queue<LevelDirectory>(serializedModels).Dequeue);
 
             _ = serializer.Deserialize(reader, vsr);
 
-            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(serializedGroups[0]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(serializedGroups[1]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(serializedGroups[2]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(serializedGroups[3]);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(serializedGroups[4]);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(serializedModels[0].LevelGroup);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(serializedModels[1].LevelGroup);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(serializedModels[2].LevelGroup);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(serializedModels[3].LevelGroup);
+            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(serializedModels[4].LevelGroup);
         }
 
         [TestMethod]
@@ -209,7 +206,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var vsr = new Vsr
             {
-                AssetData = assetData.ToArray(),
+                AssetData = [.. assetData],
                 LevelPack = new LevelPack(),
             };
 
@@ -253,7 +250,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             _ = mockLevelGroupSerializer.Setup(
                 m => m.Serialize(
-                    It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>(),
+                    It.IsAny<LevelDirectory>(),
                     It.IsAny<BinaryWriter>()
                 )
             ).Callback(() =>
@@ -300,12 +297,12 @@ namespace LemballEditor.Tests.SerializerTests
 
             _ = mockLevelGroupSerializer.Setup(
                 m => m.Serialize(
-                    It.IsAny<(Models.LevelGroup, LevelDirectoryContext)>(),
+                    It.IsAny<LevelDirectory>(),
                     It.IsAny<BinaryWriter>()
                 )
-            ).Callback<(Models.LevelGroup, LevelDirectoryContext), BinaryWriter>((models, writer) =>
+            ).Callback<LevelDirectory, BinaryWriter>((model, writer) =>
             {
-                givenBaseAddresses.Add(models.Item2.BaseAddress);
+                givenBaseAddresses.Add(model.BaseAddress);
                 stream.Position += 100;
             });
 

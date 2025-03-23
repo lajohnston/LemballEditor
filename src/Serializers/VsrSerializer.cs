@@ -1,6 +1,5 @@
 ﻿using LemballEditor.Models;
 using LemballEditor.Serializers.Level;
-using LemballEditor.Serializers.LevelDirectory;
 using System;
 using System.IO;
 using System.Text;
@@ -15,9 +14,9 @@ namespace LemballEditor.Serializers
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
-        private readonly ISerializer<(Models.LevelGroup, LevelDirectoryContext)> levelGroupSerializer;
+        private readonly ISerializer<LevelDirectory.LevelDirectory> levelGroupSerializer;
 
-        public VsrSerializer(ISerializer<(Models.LevelGroup, LevelDirectoryContext)> levelGroupSerializer)
+        public VsrSerializer(ISerializer<LevelDirectory.LevelDirectory> levelGroupSerializer)
         {
             this.levelGroupSerializer = levelGroupSerializer;
         }
@@ -83,14 +82,15 @@ namespace LemballEditor.Serializers
             {
                 foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
                 {
-                    var existingGroup = vsr.LevelPack.GetLevelGroup(levelGroupName);
-                    var levelGroupContext = new LevelDirectoryContext();
-                    var (levelGroup, _) = levelGroupSerializer.Deserialize(
+                    var levelGroupContext = levelGroupSerializer.Deserialize(
                         reader,
-                        (existingGroup, levelGroupContext)
+                        new LevelDirectory.LevelDirectory()
+                        {
+                            LevelGroup = vsr.LevelPack.GetLevelGroup(levelGroupName)
+                        }
                     );
 
-                    vsr.LevelPack.SetLevelGroup(levelGroupName, levelGroup);
+                    vsr.LevelPack.SetLevelGroup(levelGroupName, levelGroupContext.LevelGroup);
                 }
             }
 
@@ -112,13 +112,13 @@ namespace LemballEditor.Serializers
             foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
             {
                 var directoryAddress = (uint)stream.Position;
-                var context = new LevelDirectoryContext
+                var context = new LevelDirectory.LevelDirectory
                 {
                     BaseAddress = directoryAddress
                 };
 
                 var levelGroup = vsr.LevelPack.GetLevelGroup(levelGroupName);
-                levelGroupSerializer.Serialize((levelGroup, context), writer);
+                levelGroupSerializer.Serialize(context, writer);
 
                 var endPosition = stream.Position;
 

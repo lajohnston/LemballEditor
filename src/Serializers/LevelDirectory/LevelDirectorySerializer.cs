@@ -9,21 +9,21 @@ namespace LemballEditor.Serializers.LevelDirectory
     /// <summary>
     /// Serialises and deserialises LevelGroup data from VSR binary data
     /// </summary>
-    public class LevelDirectorySerializer : ISerializer<ValueTuple<Models.LevelGroup, LevelDirectoryContext>>
+    public class LevelDirectorySerializer : ISerializer<LevelDirectory>
     {
         /// <summary>
         /// An ordered list of sub-serializers to call
         /// </summary>
-        private readonly List<ISerializer<LevelDirectoryContext>> propertySerializers;
+        private readonly List<ISerializer<LevelDirectory>> propertySerializers;
 
         public LevelDirectorySerializer()
         {
-            propertySerializers = new List<ISerializer<LevelDirectoryContext>>()
+            propertySerializers = new List<ISerializer<LevelDirectory>>()
             {
-                new Constant<LevelDirectoryContext>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
+                new Constant<LevelDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DataSize(),
                 new LevelCount(),
-                new Constant<LevelDirectoryContext>(BitConverter.GetBytes((uint) 3)),
+                new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3)),
             };
         }
 
@@ -33,19 +33,17 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <param name="reader">Reader to read the input stream</param>
         /// <param name="levelGroup">The LevelGroup to set the files to</param>
         /// <returns>The given directory</returns>
-        public (Models.LevelGroup, LevelDirectoryContext) Deserialize(BinaryReader reader, (Models.LevelGroup, LevelDirectoryContext) models)
+        public LevelDirectory Deserialize(BinaryReader reader, LevelDirectory model)
         {
-            var (levelGroup, context) = models;
-
             foreach (var serializer in propertySerializers)
             {
-                _ = serializer.Deserialize(reader, context);
+                _ = serializer.Deserialize(reader, model);
             }
 
-            return models;
+            return model;
         }
 
-        public void Serialize((Models.LevelGroup, LevelDirectoryContext) model, BinaryWriter writer)
+        public void Serialize(LevelDirectory model, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }

@@ -4,9 +4,9 @@ using System.IO;
 
 namespace LemballEditor.Serializers.LevelDirectory
 {
-    public class LevelCount : ISerializer<LevelDirectoryContext>
+    public class LevelCount : ISerializer<LevelDirectory>
     {
-        public LevelDirectoryContext Deserialize(BinaryReader reader, LevelDirectoryContext model)
+        public LevelDirectory Deserialize(BinaryReader reader, LevelDirectory model)
         {
             var levelCount = reader.ReadUInt32();
 
@@ -20,7 +20,7 @@ namespace LemballEditor.Serializers.LevelDirectory
             return model;
         }
 
-        public void Serialize(LevelDirectoryContext model, BinaryWriter writer)
+        public void Serialize(LevelDirectory model, BinaryWriter writer)
         {
             throw new NotImplementedException();
         }
