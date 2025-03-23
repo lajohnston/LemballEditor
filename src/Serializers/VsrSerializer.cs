@@ -22,6 +22,12 @@ namespace LemballEditor.Serializers
             this.levelGroupSerializer = levelGroupSerializer;
         }
 
+        /// <summary>
+        /// Locates the address that points to the FUN directory in the VSR data
+        /// </summary>
+        /// <param name="reader">Reader reading the source VSR</param>
+        /// <returns>The pointer address</returns>
+        /// <exception cref="InvalidDataException">If the data does not appear valid</exception>
         private uint GetFunDirectoryPointer(BinaryReader reader)
         {
             // Read 150 bytes from address 908
@@ -91,9 +97,36 @@ namespace LemballEditor.Serializers
             return vsr;
         }
 
-        public void Serialize(Models.Vsr result, BinaryWriter writer)
+        /// <summary>
+        /// Serializes a Vsr instance into a stream to produce Lemmings Paintball compatible VSR data
+        /// </summary>
+        /// <param name="vsr">The VSR instance</param>
+        /// <param name="writer">Writer for the stream</param>
+        public void Serialize(Models.Vsr vsr, BinaryWriter writer)
         {
-            throw new NotImplementedException();
+            var stream = writer.BaseStream;
+            var basePosition = stream.Position;
+
+            writer.Write(vsr.AssetData);
+
+            foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
+            {
+                var directoryAddress = (uint)stream.Position;
+                var context = new LevelDirectoryContext
+                {
+                    BaseAddress = directoryAddress
+                };
+
+                var levelGroup = vsr.LevelPack.GetLevelGroup(levelGroupName);
+                levelGroupSerializer.Serialize((levelGroup, context), writer);
+
+                var endPosition = stream.Position;
+
+                stream.Position = basePosition + vsr.GetLevelDirectoryPointer(levelGroupName);
+                writer.Write(directoryAddress);
+
+                stream.Position = endPosition;
+            }
         }
     }
 }
