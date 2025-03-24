@@ -45,7 +45,10 @@ namespace LemballEditor.Serializers.LevelDirectory
 
         public void Serialize(LevelDirectory model, BinaryWriter writer)
         {
-            throw new NotImplementedException();
+            foreach (var serializer in propertySerializers)
+            {
+                serializer.Serialize(model, writer);
+            }
         }
     }
 }

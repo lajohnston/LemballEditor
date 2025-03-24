@@ -21,5 +21,29 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             var act = () => serializer.Deserialize(reader, levelGroupContext);
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid directory header");
         }
+
+        [TestMethod]
+        public void ShouldSerializeAndDeserializeTheLevelDirectory()
+        {
+            var originalLevelGroup = new LevelGroup();
+            var originContext = new LevelDirectory() { LevelGroup = originalLevelGroup };
+
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+
+            var serializer = new LevelDirectorySerializer();
+
+            var serializeAct = () => serializer.Serialize(originContext, writer);
+            _ = serializeAct.Should().NotThrow();
+
+            using var reader = new BinaryReader(stream);
+            stream.Position = 0;
+
+            var deserializedLevelGroup = new LevelGroup();
+            var deserializedContext = new LevelDirectory() { LevelGroup = deserializedLevelGroup };
+
+            var deserializeAct = () => serializer.Deserialize(reader, deserializedContext);
+            _ = deserializeAct.Should().NotThrow();
+        }
     }
 }
