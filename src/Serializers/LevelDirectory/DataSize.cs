@@ -17,7 +17,7 @@ namespace LemballEditor.Serializers.LevelDirectory
 
         public void Serialize(LevelDirectory model, BinaryWriter writer)
         {
-            // Do nothing yet
+            writer.Write((uint)0);
         }
     }
 }

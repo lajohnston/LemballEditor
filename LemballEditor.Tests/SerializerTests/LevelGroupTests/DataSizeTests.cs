@@ -31,5 +31,19 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             var serializer = new DataSize();
             _ = serializer.Deserialize(reader, model).Should().Be(model);
         }
+
+        [TestMethod]
+        public void Serialize_ShouldWriteAnEmptyUintForNow()
+        {
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+
+            var model = new LevelDirectory();
+
+            var serializer = new DataSize();
+            serializer.Serialize(model, writer);
+
+            _ = stream.ToArray().Should().BeEquivalentTo(new byte[] { 0, 0, 0, 0 });
+        }
     }
 }
