@@ -24,6 +24,7 @@ namespace LemballEditor.Serializers.LevelDirectory
                 new DataSize(),
                 new LevelCount(),
                 new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3)),
+                new FileNameList(),
             };
         }
 
