@@ -1,5 +1,6 @@
 ﻿using LemballEditor.Models;
 using LemballEditor.Serializers.Level;
+using LemballEditor.Serializers.LevelDirectory;
 using System;
 using System.IO;
 using System.Text;
@@ -114,7 +115,7 @@ namespace LemballEditor.Serializers
                 var directoryAddress = (uint)stream.Position;
                 var context = new LevelDirectory.LevelDirectory
                 {
-                    BaseAddress = directoryAddress
+                    DirectoryAddress = directoryAddress
                 };
 
                 var levelGroup = vsr.LevelPack.GetLevelGroup(levelGroupName);

@@ -1,5 +1,4 @@
 ﻿using LemballEditor.Serializers.Level;
-using System;
 using System.IO;
 
 namespace LemballEditor.Serializers.LevelDirectory
@@ -15,14 +14,14 @@ namespace LemballEditor.Serializers.LevelDirectory
                 throw new InvalidDataException($"Number of levels in level group higher than 29 maximum: {levelCount}");
             }
 
-            model.LevelCount = (byte)levelCount;
+            model.FixedLevelCount = (byte)levelCount;
 
             return model;
         }
 
         public void Serialize(LevelDirectory model, BinaryWriter writer)
         {
-            throw new NotImplementedException();
+            writer.Write((uint)model.FixedLevelCount);
         }
     }
 }

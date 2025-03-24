@@ -20,7 +20,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             var serializer = new LevelCount();
             _ = serializer.Deserialize(reader, model);
 
-            _ = model.LevelCount.Should().Be((byte)numberOfFiles);
+            _ = model.FixedLevelCount.Should().Be((byte)numberOfFiles);
             _ = stream.Position.Should().Be(4);
         }
 
@@ -51,6 +51,20 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var serializer = new LevelCount();
             _ = serializer.Deserialize(reader, model).Should().Be(model);
+        }
+
+        [TestMethod]
+        public void Serialize_ShouldWriteTheFixedLevelCountIndicatedByTheContext()
+        {
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+
+            var model = new LevelDirectory() { FixedLevelCount = 12 };
+
+            var serializer = new LevelCount();
+            serializer.Serialize(model, writer);
+
+            _ = stream.ToArray().Should().BeEquivalentTo(BitConverter.GetBytes((uint)model.FixedLevelCount));
         }
     }
 }

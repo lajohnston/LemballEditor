@@ -302,7 +302,7 @@ namespace LemballEditor.Tests.SerializerTests
                 )
             ).Callback<LevelDirectory, BinaryWriter>((model, writer) =>
             {
-                givenBaseAddresses.Add(model.BaseAddress);
+                givenBaseAddresses.Add(model.DirectoryAddress);
                 stream.Position += 100;
             });
 

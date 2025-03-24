@@ -25,7 +25,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var group = new LevelDirectory
             {
-                LevelCount = numberOfLevels
+                FixedLevelCount = numberOfLevels
             };
 
             var serializer = new FileNameList();
@@ -51,7 +51,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var group = new LevelDirectory
             {
-                LevelCount = numberOfLevels
+                FixedLevelCount = numberOfLevels
             };
 
             var serializer = new FileNameList();
@@ -74,7 +74,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var group = new LevelDirectory
             {
-                LevelCount = numberOfLevels
+                FixedLevelCount = numberOfLevels
             };
 
             var serializer = new FileNameList();
@@ -100,7 +100,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var group = new LevelDirectory
             {
-                LevelCount = numberOfLevels
+                FixedLevelCount = numberOfLevels
             };
 
             var serializer = new FileNameList();
@@ -126,7 +126,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var group = new LevelDirectory
             {
-                LevelCount = numberOfLevels
+                FixedLevelCount = numberOfLevels
             };
 
             var serializer = new FileNameList();
@@ -146,7 +146,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
 
             var group = new LevelDirectory
             {
-                LevelCount = numberOfLevels
+                FixedLevelCount = numberOfLevels
             };
 
             var expected = new List<byte>();

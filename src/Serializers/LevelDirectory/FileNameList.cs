@@ -15,7 +15,7 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <exception cref="InvalidDataException">If the file name list contains unexpected data</exception>
         public LevelDirectory Deserialize(BinaryReader reader, LevelDirectory model)
         {
-            for (var levelNumber = 0; levelNumber < model.LevelCount; levelNumber++)
+            for (var levelNumber = 0; levelNumber < model.FixedLevelCount; levelNumber++)
             {
                 var name = Encoding.ASCII.GetString(reader.ReadBytes(8));
 
@@ -40,7 +40,7 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// </summary>
         public void Serialize(LevelDirectory model, BinaryWriter writer)
         {
-            for (var levelNumber = 0; levelNumber < model.LevelCount; levelNumber++)
+            for (var levelNumber = 0; levelNumber < model.FixedLevelCount; levelNumber++)
             {
                 writer.Write(Encoding.ASCII.GetBytes("Level_" + levelNumber.ToString("00")));
                 writer.Write(new byte[4]);
