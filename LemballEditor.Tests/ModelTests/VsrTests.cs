@@ -47,15 +47,6 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
-        public void ShouldStoreALevelPack()
-        {
-            var levelPack = new LevelPack();
-            var vsr = new Vsr { LevelPack = levelPack };
-
-            _ = vsr.LevelPack.Should().Be(levelPack);
-        }
-
-        [TestMethod]
         public void ShouldReturnTheFunAddressBasedOnTheAssetDataSize()
         {
             var vsr = new Vsr

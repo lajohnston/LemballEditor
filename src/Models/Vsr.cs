@@ -46,11 +46,6 @@ namespace LemballEditor.Models
         }
 
         /// <summary>
-        /// The levels within the VSR
-        /// </summary>
-        public LevelPack LevelPack { get; set; }
-
-        /// <summary>
         /// Sets the directory pointer for the given level group
         /// </summary>
         /// <param name="levelGroupName">The level group name</param>

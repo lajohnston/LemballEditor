@@ -78,23 +78,6 @@ namespace LemballEditor.Serializers
             _ = reader.BaseStream.Seek(0, SeekOrigin.Begin);
             vsr.AssetData = reader.ReadBytes((int)funDirectoryAddress);
 
-            // Level data
-            if (vsr.LevelPack != null)
-            {
-                foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
-                {
-                    var levelGroupContext = levelGroupSerializer.Deserialize(
-                        reader,
-                        new LevelDirectory.LevelDirectory()
-                        {
-                            LevelGroup = vsr.LevelPack.GetLevelGroup(levelGroupName)
-                        }
-                    );
-
-                    vsr.LevelPack.SetLevelGroup(levelGroupName, levelGroupContext.LevelGroup);
-                }
-            }
-
             return vsr;
         }
 
@@ -109,25 +92,6 @@ namespace LemballEditor.Serializers
             var basePosition = stream.Position;
 
             writer.Write(vsr.AssetData);
-
-            foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
-            {
-                var directoryAddress = (uint)stream.Position;
-                var context = new LevelDirectory.LevelDirectory
-                {
-                    DirectoryAddress = directoryAddress
-                };
-
-                var levelGroup = vsr.LevelPack.GetLevelGroup(levelGroupName);
-                levelGroupSerializer.Serialize(context, writer);
-
-                var endPosition = stream.Position;
-
-                stream.Position = basePosition + vsr.GetLevelDirectoryPointer(levelGroupName);
-                writer.Write(directoryAddress);
-
-                stream.Position = endPosition;
-            }
         }
     }
 }

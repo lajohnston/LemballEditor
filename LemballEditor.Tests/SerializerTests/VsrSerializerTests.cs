@@ -115,7 +115,6 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(stream);
 
             var vsr = ServiceFactory.CreateVsr();
-            vsr.LevelPack = null;
 
             var (serializer, levelGroupSerializerMock) = CreateVsrSerializer();
             _ = serializer.Deserialize(reader, vsr);
@@ -123,75 +122,6 @@ namespace LemballEditor.Tests.SerializerTests
             levelGroupSerializerMock.Verify(
                 m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelDirectory>()),
                 Times.Never);
-        }
-
-        [TestMethod]
-        public void Deserialize_ShouldPassEachLevelGroupInTheLevelPackToTheLevelGroupSerializer()
-        {
-            var data = GetValidData(744, 1000);
-
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.LevelPack = ServiceFactory.CreateLevelPack();
-
-            var (serializer, levelGroupSerializerMock) = CreateVsrSerializer();
-
-            _ = levelGroupSerializerMock.Setup(
-                m => m.Deserialize(
-                    reader,
-                    It.IsAny<LevelDirectory>()
-                )
-            ).Returns<BinaryReader, LevelDirectory>((reader, model) => model);
-
-            _ = serializer.Deserialize(reader, vsr);
-
-            foreach (var groupName in Enum.GetValues(typeof(LevelGroupName)).Cast<LevelGroupName>())
-            {
-                levelGroupSerializerMock.Verify(
-                    m => m.Deserialize(
-                        It.Is<BinaryReader>(r => r == reader),
-                        It.IsAny<LevelDirectory>()
-                    )
-                );
-            }
-        }
-
-        [TestMethod]
-        public void Deserialize_ShouldSetTheLevelGroupsReturnedFromTheLevelGroupSerializerToTheLevelPack()
-        {
-            var data = GetValidData(744, 1000);
-
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
-
-            var vsr = ServiceFactory.CreateVsr();
-            var levelPack = ServiceFactory.CreateLevelPack();
-            vsr.LevelPack = levelPack;
-
-            var serializedModels = new List<LevelDirectory>();
-            for (var i = 0; i < 5; i++)
-            {
-                serializedModels.Add(new LevelDirectory() { LevelGroup = new Models.LevelGroup() });
-            }
-
-            var (serializer, levelGroupSerializerMock) = CreateVsrSerializer();
-
-            _ = levelGroupSerializerMock.Setup(
-                m => m.Deserialize(
-                    It.IsAny<BinaryReader>(),
-                    It.IsAny<LevelDirectory>()
-                )
-            ).Returns(new Queue<LevelDirectory>(serializedModels).Dequeue);
-
-            _ = serializer.Deserialize(reader, vsr);
-
-            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(serializedModels[0].LevelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(serializedModels[1].LevelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(serializedModels[2].LevelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(serializedModels[3].LevelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(serializedModels[4].LevelGroup);
         }
 
         [TestMethod]
@@ -207,7 +137,6 @@ namespace LemballEditor.Tests.SerializerTests
             var vsr = new Vsr
             {
                 AssetData = [.. assetData],
-                LevelPack = new LevelPack(),
             };
 
             var pointerStart = 8;
@@ -226,90 +155,6 @@ namespace LemballEditor.Tests.SerializerTests
 
             var dataAfterPointers = data.Skip(pointerStart + 20);
             _ = dataAfterPointers.Should().BeEquivalentTo(assetData.Skip(pointerStart + 20));
-        }
-
-        [TestMethod]
-        public void Serialize_ShouldSetTheAddressesOfEachLevelDirectory()
-        {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
-
-            var vsr = new Vsr
-            {
-                AssetData = new byte[100],
-                LevelPack = new LevelPack(),
-            };
-
-            vsr.SetLevelDirectoryPointer(LevelGroupName.Fun, 8);
-            vsr.SetLevelDirectoryPointer(LevelGroupName.Tricky, 12);
-            vsr.SetLevelDirectoryPointer(LevelGroupName.Taxing, 16);
-            vsr.SetLevelDirectoryPointer(LevelGroupName.Mayhem, 20);
-            vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 24);
-
-            var (vsrSerializer, mockLevelGroupSerializer) = CreateVsrSerializer();
-
-            _ = mockLevelGroupSerializer.Setup(
-                m => m.Serialize(
-                    It.IsAny<LevelDirectory>(),
-                    It.IsAny<BinaryWriter>()
-                )
-            ).Callback(() =>
-            {
-                stream.Position += 100;
-            });
-
-            var serializer = new VsrSerializer(mockLevelGroupSerializer.Object);
-            serializer.Serialize(vsr, writer);
-
-            using var reader = new BinaryReader(stream);
-
-            stream.Position = vsr.GetLevelDirectoryPointer(LevelGroupName.Fun);
-            _ = reader.ReadUInt32().Should().Be(vsr.FunAddress);
-
-            stream.Position = vsr.GetLevelDirectoryPointer(LevelGroupName.Tricky);
-            _ = reader.ReadUInt32().Should().Be(vsr.FunAddress + 100);
-
-            stream.Position = vsr.GetLevelDirectoryPointer(LevelGroupName.Taxing);
-            _ = reader.ReadUInt32().Should().Be(vsr.FunAddress + 200);
-
-            stream.Position = vsr.GetLevelDirectoryPointer(LevelGroupName.Mayhem);
-            _ = reader.ReadUInt32().Should().Be(vsr.FunAddress + 300);
-
-            stream.Position = vsr.GetLevelDirectoryPointer(LevelGroupName.Network);
-            _ = reader.ReadUInt32().Should().Be(vsr.FunAddress + 400);
-        }
-
-        [TestMethod]
-        public void Serialize_ShouldSetTheDirectoryAddressToEachLevelGroupContext()
-        {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
-
-            var vsr = new Vsr
-            {
-                AssetData = new byte[100],
-                LevelPack = new LevelPack(),
-            };
-
-            var (vsrSerializer, mockLevelGroupSerializer) = CreateVsrSerializer();
-
-            var givenBaseAddresses = new List<uint>();
-
-            _ = mockLevelGroupSerializer.Setup(
-                m => m.Serialize(
-                    It.IsAny<LevelDirectory>(),
-                    It.IsAny<BinaryWriter>()
-                )
-            ).Callback<LevelDirectory, BinaryWriter>((model, writer) =>
-            {
-                givenBaseAddresses.Add(model.DirectoryAddress);
-                stream.Position += 100;
-            });
-
-            var serializer = new VsrSerializer(mockLevelGroupSerializer.Object);
-            serializer.Serialize(vsr, writer);
-
-            _ = givenBaseAddresses.Should().BeEquivalentTo([100, 200, 300, 400, 500]);
         }
     }
 }
