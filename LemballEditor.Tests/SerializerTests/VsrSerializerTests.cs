@@ -6,7 +6,6 @@ using LemballEditor.Serializers.LevelDirectory;
 using Moq;
 using System.Text;
 
-
 namespace LemballEditor.Tests.SerializerTests
 {
     [TestClass]
@@ -27,19 +26,42 @@ namespace LemballEditor.Tests.SerializerTests
             vsrSerializer.Serialize(vsr, writer);
             return stream.ToArray();
         }
-        private byte[] GetValidData(uint funPointerAddress, uint funDirectoryAddress)
+
+        private byte[] CreateFakeAssetData(uint funPointerAddress = 744, uint funDirectoryAddress = 1000)
         {
             var demoFileAddress = funPointerAddress + 188;
 
             List<byte> data = [];
-            data.AddRange(Encoding.ASCII.GetBytes("CRID"));             // header
-            data.AddRange(new byte[funPointerAddress - data.Count]);    // padding
+            data.AddRange(Encoding.ASCII.GetBytes("CRID"));             // Header
+            data.AddRange(new byte[funPointerAddress - data.Count]);    // Padding
             data.AddRange(BitConverter.GetBytes(funDirectoryAddress));  // Fun directory pointer
-            data.AddRange(new byte[demoFileAddress - data.Count]);      // padding
+            data.AddRange(new byte[demoFileAddress - data.Count]);      // Padding
             data.AddRange(Encoding.ASCII.GetBytes("Demo_00"));          // Demo_00 string
-            data.AddRange(new byte[funDirectoryAddress]);               // Padding
+            data.AddRange(new byte[funDirectoryAddress - data.Count]);  // Rest of asset data
 
             return [.. data];
+        }
+
+        private byte[] CreateFakeLevelDirectoryData(byte fakeByteValue, uint size = 100)
+        {
+            return [
+                ..Encoding.ASCII.GetBytes("CRID"),
+                ..BitConverter.GetBytes(size + 4),
+                ..Enumerable.Repeat(fakeByteValue, (int)size),
+                ..Encoding.ASCII.GetBytes("?DNE")
+            ];
+        }
+
+        private byte[] CreateFakeVsrData(uint funPointerAddress = 744, uint assetDataSize = 1000)
+        {
+            return [
+                ..CreateFakeAssetData(funPointerAddress, assetDataSize),
+                ..CreateFakeLevelDirectoryData(1),
+                ..CreateFakeLevelDirectoryData(2),
+                ..CreateFakeLevelDirectoryData(3),
+                ..CreateFakeLevelDirectoryData(4),
+                ..CreateFakeLevelDirectoryData(5)
+            ];
         }
 
         [TestMethod]
@@ -73,7 +95,7 @@ namespace LemballEditor.Tests.SerializerTests
         public void Deserialize_ShouldSetTheAssetDataUpToTheFunDirectoryPointerToTheModel()
         {
             uint funDirectoryAddress = 1500;
-            var data = GetValidData(744, funDirectoryAddress);
+            var data = CreateFakeVsrData(744, funDirectoryAddress);
 
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
@@ -82,15 +104,118 @@ namespace LemballEditor.Tests.SerializerTests
             var serializer = ServiceFactory.CreateVsrSerializer();
             _ = serializer.Deserialize(reader, vsr);
 
-            _ = vsr.AssetData.Should().NotBeNull();
-            _ = vsr.AssetData.Length.Should().Be((int)funDirectoryAddress);
+            _ = vsr.AssetData.Should().BeEquivalentTo(data.Take((int)funDirectoryAddress));
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldSetTheDirectoryDataForEachLevelGroup()
+        {
+            byte[] funDirectoryData = CreateFakeLevelDirectoryData(1, 100);
+            byte[] trickyDirectoryData = CreateFakeLevelDirectoryData(2, 100);
+            byte[] taxingDirectoryData = CreateFakeLevelDirectoryData(3, 100);
+            byte[] mayhemDirectoryData = CreateFakeLevelDirectoryData(4, 100);
+            byte[] networkDirectoryData = CreateFakeLevelDirectoryData(5, 100);
+
+            byte[] assetData = [
+                ..CreateFakeAssetData(),
+                ..funDirectoryData,
+                ..trickyDirectoryData,
+                ..taxingDirectoryData,
+                ..mayhemDirectoryData,
+                ..networkDirectoryData
+            ];
+
+            using var stream = new MemoryStream(assetData);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            var serializer = ServiceFactory.CreateVsrSerializer();
+            _ = serializer.Deserialize(reader, vsr);
+
+            vsr.GetLevelDirectoryData(LevelGroupName.Fun).Should().BeEquivalentTo(funDirectoryData);
+            vsr.GetLevelDirectoryData(LevelGroupName.Tricky).Should().BeEquivalentTo(trickyDirectoryData);
+            vsr.GetLevelDirectoryData(LevelGroupName.Taxing).Should().BeEquivalentTo(taxingDirectoryData);
+            vsr.GetLevelDirectoryData(LevelGroupName.Mayhem).Should().BeEquivalentTo(mayhemDirectoryData);
+            vsr.GetLevelDirectoryData(LevelGroupName.Network).Should().BeEquivalentTo(networkDirectoryData);
+        }
+
+        [TestMethod]
+        [DataRow(LevelGroupName.Fun)]
+        [DataRow(LevelGroupName.Tricky)]
+        [DataRow(LevelGroupName.Taxing)]
+        [DataRow(LevelGroupName.Mayhem)]
+        [DataRow(LevelGroupName.Network)]
+        public void Deserialize_ShouldThrowAnInvalidDataException_WhenADirectoryDoesNotBeginWithCRIDHeader(LevelGroupName invalidLevelGroup)
+        {
+            byte[] validData = CreateFakeLevelDirectoryData(1, 100);
+            byte[] invalidData = Encoding.ASCII.GetBytes("Some invalid header");
+
+            byte[] assetData = [
+                ..CreateFakeAssetData(),
+                ..invalidLevelGroup == LevelGroupName.Fun ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Tricky ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Taxing ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Mayhem ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Network ? invalidData : validData,
+            ];
+
+            using var stream = new MemoryStream(assetData);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            var serializer = ServiceFactory.CreateVsrSerializer();
+            var act = () => serializer.Deserialize(reader, vsr);
+
+            var expectedMessage = "Invalid " + Enum.GetName(typeof(LevelGroupName), invalidLevelGroup) + " directory header";
+
+            act.Should().Throw<InvalidDataException>()
+                .WithMessage(expectedMessage);
+        }
+
+        [TestMethod]
+        [DataRow(LevelGroupName.Fun)]
+        [DataRow(LevelGroupName.Tricky)]
+        [DataRow(LevelGroupName.Taxing)]
+        [DataRow(LevelGroupName.Mayhem)]
+        [DataRow(LevelGroupName.Network)]
+        public void Deserialize_ShouldThrowAnInvalidDataException_WhenADirectoryDoesNotEndWithAValidFooter(LevelGroupName invalidLevelGroup)
+        {
+            byte[] validData = CreateFakeLevelDirectoryData(1, 100);
+
+            byte[] invalidData = [
+                ..Encoding.ASCII.GetBytes("CRID"),
+                ..BitConverter.GetBytes(100),
+                ..Enumerable.Repeat((byte)1, 100),
+                ..Encoding.ASCII.GetBytes("????")
+            ];
+
+            byte[] assetData = [
+                ..CreateFakeAssetData(),
+                ..invalidLevelGroup == LevelGroupName.Fun ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Tricky ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Taxing ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Mayhem ? invalidData : validData,
+                ..invalidLevelGroup == LevelGroupName.Network ? invalidData : validData,
+            ];
+
+            using var stream = new MemoryStream(assetData);
+            using var reader = new BinaryReader(stream);
+
+            var vsr = ServiceFactory.CreateVsr();
+            var serializer = ServiceFactory.CreateVsrSerializer();
+            var act = () => serializer.Deserialize(reader, vsr);
+
+            var expectedMessage = "Invalid " + Enum.GetName(typeof(LevelGroupName), invalidLevelGroup) + " directory footer";
+
+            act.Should().Throw<InvalidDataException>()
+                .WithMessage(expectedMessage);
         }
 
         [TestMethod]
         public void Deserialize_ShouldSetTheDirectoryPointersToTheModel()
         {
             uint funPointerAddress = 800;
-            var data = GetValidData(funPointerAddress, 1000);
+            var data = CreateFakeVsrData(funPointerAddress, 1000);
 
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
@@ -104,24 +229,6 @@ namespace LemballEditor.Tests.SerializerTests
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Taxing).Should().Be(funPointerAddress + (36 * 2));
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Mayhem).Should().Be(funPointerAddress + (36 * 3));
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Network).Should().Be(funPointerAddress + (36 * 4));
-        }
-
-        [TestMethod]
-        public void Deserialize_ShouldNotCallTheLevelGroupDeserializer_WhenLevelPackIsNotSet()
-        {
-            var data = GetValidData(744, 1000);
-
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
-
-            var vsr = ServiceFactory.CreateVsr();
-
-            var (serializer, levelGroupSerializerMock) = CreateVsrSerializer();
-            _ = serializer.Deserialize(reader, vsr);
-
-            levelGroupSerializerMock.Verify(
-                m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelDirectory>()),
-                Times.Never);
         }
 
         [TestMethod]

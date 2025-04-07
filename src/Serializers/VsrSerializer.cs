@@ -1,9 +1,8 @@
-﻿using LemballEditor.Models;
-using LemballEditor.Serializers.Level;
-using LemballEditor.Serializers.LevelDirectory;
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
+using LemballEditor.Models;
+using LemballEditor.Serializers.Level;
 
 namespace LemballEditor.Serializers
 {
@@ -12,6 +11,9 @@ namespace LemballEditor.Serializers
     /// </summary>
     public class VsrSerializer : ISerializer<Models.Vsr>
     {
+        private static readonly string DIRECTORY_HEADER = "CRID";
+        private static readonly string DIRECTORY_FOOTER = "?DNE";
+
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
@@ -74,11 +76,49 @@ namespace LemballEditor.Serializers
             _ = reader.BaseStream.Seek(funDirectoryPointer, SeekOrigin.Begin);
             var funDirectoryAddress = reader.ReadUInt32();
 
-            // Set asset data, excluding the level files at the end (from FUN onwards)
+            // Set asset data (everything up to but excluding the level directories)
             _ = reader.BaseStream.Seek(0, SeekOrigin.Begin);
             vsr.AssetData = reader.ReadBytes((int)funDirectoryAddress);
 
+            foreach (LevelGroupName levelGroup in Enum.GetValues(typeof(LevelGroupName)))
+            {
+                var directoryData = ReadLevelDirectory(reader, levelGroup);
+                vsr.SetLevelDirectoryData(levelGroup, directoryData);
+            }
+
             return vsr;
+        }
+
+        /// <summary>
+        /// Reads the level directory data
+        /// </summary>
+        /// <param name="reader">BinaryReader pointing to the start of the level directory data</param>
+        /// <param name="levelGroup">The name of the level group</param>
+        /// <returns>Directory data, including the CRID header and ?DNE footer</returns>
+        /// <exception cref="InvalidDataException"></exception>
+        private byte[] ReadLevelDirectory(BinaryReader reader, LevelGroupName levelGroup)
+        {
+            var startAddress = reader.BaseStream.Position;
+            var directoryHeader = Encoding.ASCII.GetString(reader.ReadBytes(DIRECTORY_HEADER.Length));
+
+            if (directoryHeader != DIRECTORY_HEADER)
+            {
+                throw new InvalidDataException($"Invalid {levelGroup} directory header");
+            }
+
+            var dataSize = reader.ReadInt32();
+
+            reader.BaseStream.Seek(dataSize - DIRECTORY_FOOTER.Length, SeekOrigin.Current);
+            var footer = Encoding.ASCII.GetString(reader.ReadBytes(DIRECTORY_FOOTER.Length));
+
+            if (footer != DIRECTORY_FOOTER)
+            {
+                throw new InvalidDataException($"Invalid {levelGroup} directory footer");
+            }
+
+            reader.BaseStream.Position = startAddress;
+            var levelDirectoryData = reader.ReadBytes(DIRECTORY_HEADER.Length + dataSize + DIRECTORY_FOOTER.Length);
+            return levelDirectoryData;
         }
 
         /// <summary>
