@@ -9,7 +9,7 @@ namespace LemballEditor.Serializers
     /// <summary>
     /// Deserializes a full VSR file
     /// </summary>
-    public class VsrSerializer : ISerializer<Models.Vsr>
+    public class VsrSerializer : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
         private static readonly string DIRECTORY_HEADER = "CRID";
         private static readonly string DIRECTORY_FOOTER = "?DNE";
@@ -54,7 +54,7 @@ namespace LemballEditor.Serializers
         /// <param name="reader">BinaryReader reading the VSR stream</param>
         /// <returns></returns>
         /// <exception cref="InvalidDataException">If the data isn't valid VSR data</exception>
-        public Models.Vsr Deserialize(BinaryReader reader, Models.Vsr vsr)
+        public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
             var header = Encoding.ASCII.GetString(reader.ReadBytes(4));
 
@@ -66,6 +66,7 @@ namespace LemballEditor.Serializers
             var funDirectoryPointer = GetFunDirectoryPointer(reader);
 
             // Set pointers
+            var (vsr, levelPack) = models;
             vsr.SetLevelDirectoryPointer(LevelGroupName.Fun, funDirectoryPointer);
             vsr.SetLevelDirectoryPointer(LevelGroupName.Tricky, funDirectoryPointer + 36);
             vsr.SetLevelDirectoryPointer(LevelGroupName.Taxing, funDirectoryPointer + (36 * 2));
@@ -86,7 +87,7 @@ namespace LemballEditor.Serializers
                 vsr.SetLevelDirectoryData(levelGroup, directoryData);
             }
 
-            return vsr;
+            return models;
         }
 
         /// <summary>
@@ -124,10 +125,11 @@ namespace LemballEditor.Serializers
         /// <summary>
         /// Serializes a Vsr instance into a stream to produce Lemmings Paintball compatible VSR data
         /// </summary>
-        /// <param name="vsr">The VSR instance</param>
+        /// <param name="vsr">The VSR model and LevelPack</param>
         /// <param name="writer">Writer for the stream</param>
-        public void Serialize(Models.Vsr vsr, BinaryWriter writer)
+        public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
+            var (vsr, levelPack) = models;
             var stream = writer.BaseStream;
             var basePosition = stream.Position;
 

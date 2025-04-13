@@ -18,12 +18,12 @@ namespace LemballEditor.Tests.SerializerTests
             return (serializer, levelGroupSerializerMock);
         }
 
-        private byte[] Serialize(Vsr vsr, VsrSerializer vsrSerializer)
+        private byte[] Serialize((Models.Vsr, Models.LevelPack?) models, VsrSerializer vsrSerializer)
         {
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            vsrSerializer.Serialize(vsr, writer);
+            vsrSerializer.Serialize(models, writer);
             return stream.ToArray();
         }
 
@@ -72,7 +72,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(stream);
 
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, ServiceFactory.CreateVsr());
+            var act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid VSR");
         }
@@ -86,7 +86,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(stream);
 
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, ServiceFactory.CreateVsr());
+            var act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Unable to locate FUN directory pointer in VSR data");
         }
@@ -102,7 +102,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             _ = vsr.AssetData.Should().BeEquivalentTo(data.Take((int)funDirectoryAddress));
         }
@@ -130,7 +130,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             vsr.GetLevelDirectoryData(LevelGroupName.Fun).Should().BeEquivalentTo(funDirectoryData);
             vsr.GetLevelDirectoryData(LevelGroupName.Tricky).Should().BeEquivalentTo(trickyDirectoryData);
@@ -164,7 +164,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, vsr);
+            var act = () => serializer.Deserialize(reader, (vsr, null));
 
             var expectedMessage = "Invalid " + Enum.GetName(typeof(LevelGroupName), invalidLevelGroup) + " directory header";
 
@@ -203,7 +203,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, vsr);
+            var act = () => serializer.Deserialize(reader, (vsr, null));
 
             var expectedMessage = "Invalid " + Enum.GetName(typeof(LevelGroupName), invalidLevelGroup) + " directory footer";
 
@@ -222,7 +222,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Fun).Should().Be(funPointerAddress);
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Tricky).Should().Be(funPointerAddress + 36);
@@ -255,7 +255,7 @@ namespace LemballEditor.Tests.SerializerTests
             vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 24);
 
             var (vsrSerializer, _) = CreateVsrSerializer();
-            var data = Serialize(vsr, vsrSerializer);
+            var data = Serialize((vsr, null), vsrSerializer);
 
             var dataBeforeFunPointer = data.Take(pointerStart);
             _ = dataBeforeFunPointer.Should().BeEquivalentTo(assetData.Take(pointerStart));
