@@ -90,8 +90,8 @@
     <Compile Include="src\Serializers\LevelDirectory\DataSize.cs" />
     <Compile Include="src\Serializers\LevelDirectory\FileNameList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelCount.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\LevelDirectorySerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelDirectory.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelDirectorySerializer.cs" />
     <Compile Include="src\Serializers\VsrSerializer.cs" />
     <Compile Include="src\ServiceFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />

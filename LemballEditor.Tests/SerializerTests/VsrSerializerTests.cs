@@ -1,21 +1,23 @@
-﻿using FluentAssertions;
+﻿using System.Text;
+using FluentAssertions;
 using LemballEditor.Models;
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.LevelDirectory;
 using Moq;
-using System.Text;
 
 namespace LemballEditor.Tests.SerializerTests
 {
     [TestClass]
     public class VsrSerializerTests
     {
-        private (VsrSerializer, Mock<ISerializer<LevelDirectory>>) CreateVsrSerializer()
+        private (VsrSerializer, Mock<ISerializer<LevelDirectory>>, Mock<Func<LevelDirectory>>) CreateVsrSerializer()
         {
-            var levelGroupSerializerMock = new Mock<ISerializer<LevelDirectory>>();
-            var serializer = new VsrSerializer(levelGroupSerializerMock.Object);
-            return (serializer, levelGroupSerializerMock);
+            Mock<ISerializer<LevelDirectory>> levelDirectorySerializerMock = new();
+            Mock<Func<LevelDirectory>> levelDirectoryFactoryMock = new();
+
+            VsrSerializer serializer = new(levelDirectorySerializerMock.Object, levelDirectoryFactoryMock.Object);
+            return (serializer, levelDirectorySerializerMock, levelDirectoryFactoryMock);
         }
 
         private byte[] Serialize((Models.Vsr, Models.LevelPack?) models, VsrSerializer vsrSerializer)
@@ -55,12 +57,12 @@ namespace LemballEditor.Tests.SerializerTests
         private byte[] CreateFakeVsrData(uint funPointerAddress = 744, uint assetDataSize = 1000)
         {
             return [
-                ..CreateFakeAssetData(funPointerAddress, assetDataSize),
-                ..CreateFakeLevelDirectoryData(1),
-                ..CreateFakeLevelDirectoryData(2),
-                ..CreateFakeLevelDirectoryData(3),
-                ..CreateFakeLevelDirectoryData(4),
-                ..CreateFakeLevelDirectoryData(5)
+                ..this.CreateFakeAssetData(funPointerAddress, assetDataSize),
+                ..this.CreateFakeLevelDirectoryData(1),
+                ..this.CreateFakeLevelDirectoryData(2),
+                ..this.CreateFakeLevelDirectoryData(3),
+                ..this.CreateFakeLevelDirectoryData(4),
+                ..this.CreateFakeLevelDirectoryData(5)
             ];
         }
 
@@ -72,7 +74,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(stream);
 
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
+            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid VSR");
         }
@@ -86,7 +88,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(stream);
 
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
+            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Unable to locate FUN directory pointer in VSR data");
         }
@@ -95,10 +97,10 @@ namespace LemballEditor.Tests.SerializerTests
         public void Deserialize_ShouldSetTheAssetDataUpToTheFunDirectoryPointerToTheModel()
         {
             uint funDirectoryAddress = 1500;
-            var data = CreateFakeVsrData(744, funDirectoryAddress);
+            var data = this.CreateFakeVsrData(744, funDirectoryAddress);
 
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
+            using MemoryStream stream = new(data);
+            using BinaryReader reader = new(stream);
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
@@ -108,117 +110,88 @@ namespace LemballEditor.Tests.SerializerTests
         }
 
         [TestMethod]
-        public void Deserialize_ShouldSetTheDirectoryDataForEachLevelGroup()
+        public void Deserialize_ShouldNotCallTheLevelDirectorySerializer_WhenLevelPackIsNull()
         {
-            byte[] funDirectoryData = CreateFakeLevelDirectoryData(1, 100);
-            byte[] trickyDirectoryData = CreateFakeLevelDirectoryData(2, 100);
-            byte[] taxingDirectoryData = CreateFakeLevelDirectoryData(3, 100);
-            byte[] mayhemDirectoryData = CreateFakeLevelDirectoryData(4, 100);
-            byte[] networkDirectoryData = CreateFakeLevelDirectoryData(5, 100);
-
-            byte[] assetData = [
-                ..CreateFakeAssetData(),
-                ..funDirectoryData,
-                ..trickyDirectoryData,
-                ..taxingDirectoryData,
-                ..mayhemDirectoryData,
-                ..networkDirectoryData
+            uint funDirectoryAddress = 1000;
+            var assetData = this.CreateFakeAssetData(744, funDirectoryAddress);
+            byte[] vsrData = [
+                ..assetData,
+                ..this.CreateFakeLevelDirectoryData(1),
+                ..this.CreateFakeLevelDirectoryData(2),
+                ..this.CreateFakeLevelDirectoryData(3),
+                ..this.CreateFakeLevelDirectoryData(4),
+                ..this.CreateFakeLevelDirectoryData(5)
             ];
 
-            using var stream = new MemoryStream(assetData);
-            using var reader = new BinaryReader(stream);
+            using MemoryStream stream = new(vsrData);
+            using BinaryReader reader = new(stream);
 
-            var vsr = ServiceFactory.CreateVsr();
-            var serializer = ServiceFactory.CreateVsrSerializer();
-            _ = serializer.Deserialize(reader, (vsr, null));
+            var (vsrSerialize, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateVsrSerializer();
 
-            vsr.GetLevelDirectoryData(LevelGroupName.Fun).Should().BeEquivalentTo(funDirectoryData);
-            vsr.GetLevelDirectoryData(LevelGroupName.Tricky).Should().BeEquivalentTo(trickyDirectoryData);
-            vsr.GetLevelDirectoryData(LevelGroupName.Taxing).Should().BeEquivalentTo(taxingDirectoryData);
-            vsr.GetLevelDirectoryData(LevelGroupName.Mayhem).Should().BeEquivalentTo(mayhemDirectoryData);
-            vsr.GetLevelDirectoryData(LevelGroupName.Network).Should().BeEquivalentTo(networkDirectoryData);
+            _ = vsrSerialize.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
+            mockLevelDirectorySerializer.Verify(m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelDirectory>()), Times.Never);
+            mockLevelDirectoryFactory.Verify(m => m(), Times.Never);
         }
 
         [TestMethod]
-        [DataRow(LevelGroupName.Fun)]
-        [DataRow(LevelGroupName.Tricky)]
-        [DataRow(LevelGroupName.Taxing)]
-        [DataRow(LevelGroupName.Mayhem)]
-        [DataRow(LevelGroupName.Network)]
-        public void Deserialize_ShouldThrowAnInvalidDataException_WhenADirectoryDoesNotBeginWithCRIDHeader(LevelGroupName invalidLevelGroup)
+        public void Deserialize_ShouldPassEachDirectoryToTheLevelDirectorySerializer_WhenALevelPackModelIsGiven()
         {
-            byte[] validData = CreateFakeLevelDirectoryData(1, 100);
-            byte[] invalidData = Encoding.ASCII.GetBytes("Some invalid header");
+            uint funDirectoryAddress = 1000;
+            uint directorySize = 100;
+            var assetData = this.CreateFakeAssetData(744, funDirectoryAddress);
 
-            byte[] assetData = [
-                ..CreateFakeAssetData(),
-                ..invalidLevelGroup == LevelGroupName.Fun ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Tricky ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Taxing ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Mayhem ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Network ? invalidData : validData,
+            byte[] vsrData = [
+                ..assetData,
+                ..this.CreateFakeLevelDirectoryData(1, directorySize),
+                ..this.CreateFakeLevelDirectoryData(2, directorySize),
+                ..this.CreateFakeLevelDirectoryData(3, directorySize),
+                ..this.CreateFakeLevelDirectoryData(4, directorySize),
+                ..this.CreateFakeLevelDirectoryData(5, directorySize),
             ];
 
-            using var stream = new MemoryStream(assetData);
-            using var reader = new BinaryReader(stream);
+            Queue<uint> expectedReaderAddresses = new(new uint[] { funDirectoryAddress, 1100, 1200, 1300, 1400 });
+            var directoryModels = Enumerable.Repeat(new LevelDirectory(), 5);
 
-            var vsr = ServiceFactory.CreateVsr();
-            var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, (vsr, null));
+            Queue<LevelDirectory> createdDirectoryModels = new(directoryModels);
+            Queue<LevelDirectory> expectedDirectoryModels = new(directoryModels);
 
-            var expectedMessage = "Invalid " + Enum.GetName(typeof(LevelGroupName), invalidLevelGroup) + " directory header";
+            using MemoryStream stream = new(vsrData);
+            using BinaryReader reader = new(stream);
 
-            act.Should().Throw<InvalidDataException>()
-                .WithMessage(expectedMessage);
-        }
+            (
+                var vsrSerialize,
+                var mockLevelDirectorySerializer,
+                var mockLevelDirectoryFactory
+            ) = this.CreateVsrSerializer();
 
-        [TestMethod]
-        [DataRow(LevelGroupName.Fun)]
-        [DataRow(LevelGroupName.Tricky)]
-        [DataRow(LevelGroupName.Taxing)]
-        [DataRow(LevelGroupName.Mayhem)]
-        [DataRow(LevelGroupName.Network)]
-        public void Deserialize_ShouldThrowAnInvalidDataException_WhenADirectoryDoesNotEndWithAValidFooter(LevelGroupName invalidLevelGroup)
-        {
-            byte[] validData = CreateFakeLevelDirectoryData(1, 100);
+            mockLevelDirectoryFactory.Setup(m => m()).Returns(createdDirectoryModels.Dequeue()).Verifiable();
 
-            byte[] invalidData = [
-                ..Encoding.ASCII.GetBytes("CRID"),
-                ..BitConverter.GetBytes(100),
-                ..Enumerable.Repeat((byte)1, 100),
-                ..Encoding.ASCII.GetBytes("????")
-            ];
+            mockLevelDirectorySerializer
+                .Setup(m => m.Deserialize(
+                    It.Is<BinaryReader>(r => r == reader && reader.BaseStream.Position == expectedReaderAddresses.Dequeue()),
+                    It.Is<LevelDirectory>(d => d == expectedDirectoryModels.Dequeue())
+                ))
+                .Callback((BinaryReader reader, LevelDirectory givenLevelDirectory) =>
+                {
+                    _ = reader.BaseStream.Seek(directorySize, SeekOrigin.Current);
+                })
+                .Returns((BinaryReader reader, LevelDirectory givenLevelDirectory) => givenLevelDirectory)
+                .Verifiable();
 
-            byte[] assetData = [
-                ..CreateFakeAssetData(),
-                ..invalidLevelGroup == LevelGroupName.Fun ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Tricky ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Taxing ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Mayhem ? invalidData : validData,
-                ..invalidLevelGroup == LevelGroupName.Network ? invalidData : validData,
-            ];
+            LevelPack givenLevelPack = new();
+            (var resultVsr, var resultLevelPack) = vsrSerialize.Deserialize(reader, (ServiceFactory.CreateVsr(), givenLevelPack));
 
-            using var stream = new MemoryStream(assetData);
-            using var reader = new BinaryReader(stream);
-
-            var vsr = ServiceFactory.CreateVsr();
-            var serializer = ServiceFactory.CreateVsrSerializer();
-            var act = () => serializer.Deserialize(reader, (vsr, null));
-
-            var expectedMessage = "Invalid " + Enum.GetName(typeof(LevelGroupName), invalidLevelGroup) + " directory footer";
-
-            act.Should().Throw<InvalidDataException>()
-                .WithMessage(expectedMessage);
+            mockLevelDirectorySerializer.Verify();
         }
 
         [TestMethod]
         public void Deserialize_ShouldSetTheDirectoryPointersToTheModel()
         {
             uint funPointerAddress = 800;
-            var data = CreateFakeVsrData(funPointerAddress, 1000);
+            var data = this.CreateFakeVsrData(funPointerAddress, 1000);
 
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
+            using MemoryStream stream = new(data);
+            using BinaryReader reader = new(stream);
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
@@ -241,7 +214,7 @@ namespace LemballEditor.Tests.SerializerTests
                 assetData[i] = (byte)(i % 256);
             }
 
-            var vsr = new Vsr
+            Vsr vsr = new()
             {
                 AssetData = [.. assetData],
             };
@@ -254,8 +227,8 @@ namespace LemballEditor.Tests.SerializerTests
             vsr.SetLevelDirectoryPointer(LevelGroupName.Mayhem, 20);
             vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 24);
 
-            var (vsrSerializer, _) = CreateVsrSerializer();
-            var data = Serialize((vsr, null), vsrSerializer);
+            (var vsrSerializer, var _, _) = this.CreateVsrSerializer();
+            var data = this.Serialize((vsr, null), vsrSerializer);
 
             var dataBeforeFunPointer = data.Take(pointerStart);
             _ = dataBeforeFunPointer.Should().BeEquivalentTo(assetData.Take(pointerStart));

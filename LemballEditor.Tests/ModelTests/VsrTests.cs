@@ -47,61 +47,6 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
-        public void ShouldStoreTheFunDirectoryData()
-        {
-            byte[] data = [1, 2, 3, 4];
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.SetLevelDirectoryData(LevelGroupName.Fun, data);
-
-            _ = vsr.GetLevelDirectoryData(LevelGroupName.Fun).Should().BeEquivalentTo(data);
-        }
-
-        [TestMethod]
-        public void ShouldStoreTheTrickyDirectoryData()
-        {
-            byte[] data = [1, 2, 3, 4];
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.SetLevelDirectoryData(LevelGroupName.Tricky, data);
-
-            _ = vsr.GetLevelDirectoryData(LevelGroupName.Tricky).Should().BeEquivalentTo(data);
-        }
-
-        [TestMethod]
-        public void ShouldStoreTheTaxingDirectoryData()
-        {
-            byte[] data = [1, 2, 3, 4];
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.SetLevelDirectoryData(LevelGroupName.Taxing, data);
-
-            _ = vsr.GetLevelDirectoryData(LevelGroupName.Taxing).Should().BeEquivalentTo(data);
-        }
-
-        [TestMethod]
-        public void ShouldStoreTheMayhemDirectoryData()
-        {
-            byte[] data = [1, 2, 3, 4];
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.SetLevelDirectoryData(LevelGroupName.Mayhem, data);
-
-            _ = vsr.GetLevelDirectoryData(LevelGroupName.Mayhem).Should().BeEquivalentTo(data);
-        }
-
-        [TestMethod]
-        public void ShouldStoreTheNetworkDirectoryData()
-        {
-            byte[] data = [1, 2, 3, 4];
-
-            var vsr = ServiceFactory.CreateVsr();
-            vsr.SetLevelDirectoryData(LevelGroupName.Network, data);
-
-            _ = vsr.GetLevelDirectoryData(LevelGroupName.Network).Should().BeEquivalentTo(data);
-        }
-
-        [TestMethod]
         public void ShouldReturnTheFunAddressBasedOnTheAssetDataSize()
         {
             var vsr = new Vsr

@@ -17,11 +17,16 @@ namespace LemballEditor.Serializers
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
-        private readonly ISerializer<LevelDirectory.LevelDirectory> levelGroupSerializer;
+        private readonly ISerializer<LevelDirectory.LevelDirectory> levelDirectorySerializer;
 
-        public VsrSerializer(ISerializer<LevelDirectory.LevelDirectory> levelGroupSerializer)
+        private readonly Func<LevelDirectory.LevelDirectory> levelDirectoryFactory;
+
+        public VsrSerializer(
+            ISerializer<LevelDirectory.LevelDirectory> levelDirectorySerializer,
+            Func<LevelDirectory.LevelDirectory> levelDirectoryFactory)
         {
-            this.levelGroupSerializer = levelGroupSerializer;
+            this.levelDirectorySerializer = levelDirectorySerializer;
+            this.levelDirectoryFactory = levelDirectoryFactory;
         }
 
         /// <summary>
@@ -40,12 +45,9 @@ namespace LemballEditor.Serializers
             // Search for 'Demo_00', which is the first file in all known VSR versions
             var demoStringAddress = vsrString.IndexOf("Demo_00");
 
-            if (demoStringAddress <= 0)
-            {
-                throw new InvalidDataException("Unable to locate FUN directory pointer in VSR data");
-            }
-
-            return (uint)(startAddress + demoStringAddress - 188);
+            return demoStringAddress <= 0
+                ? throw new InvalidDataException("Unable to locate FUN directory pointer in VSR data")
+                : (uint)(startAddress + demoStringAddress - 188);
         }
 
         /// <summary>
@@ -63,10 +65,10 @@ namespace LemballEditor.Serializers
                 throw new InvalidDataException("Invalid VSR");
             }
 
-            var funDirectoryPointer = GetFunDirectoryPointer(reader);
+            var funDirectoryPointer = this.GetFunDirectoryPointer(reader);
 
             // Set pointers
-            var (vsr, levelPack) = models;
+            (var vsr, var levelPack) = models;
             vsr.SetLevelDirectoryPointer(LevelGroupName.Fun, funDirectoryPointer);
             vsr.SetLevelDirectoryPointer(LevelGroupName.Tricky, funDirectoryPointer + 36);
             vsr.SetLevelDirectoryPointer(LevelGroupName.Taxing, funDirectoryPointer + (36 * 2));
@@ -81,45 +83,16 @@ namespace LemballEditor.Serializers
             _ = reader.BaseStream.Seek(0, SeekOrigin.Begin);
             vsr.AssetData = reader.ReadBytes((int)funDirectoryAddress);
 
-            foreach (LevelGroupName levelGroup in Enum.GetValues(typeof(LevelGroupName)))
+            if (levelPack != null)
             {
-                var directoryData = ReadLevelDirectory(reader, levelGroup);
-                vsr.SetLevelDirectoryData(levelGroup, directoryData);
+                foreach (LevelGroupName levelGroup in Enum.GetValues(typeof(LevelGroupName)))
+                {
+                    var levelDirectory = this.levelDirectoryFactory();
+                    _ = this.levelDirectorySerializer.Deserialize(reader, levelDirectory);
+                }
             }
 
             return models;
-        }
-
-        /// <summary>
-        /// Reads the level directory data
-        /// </summary>
-        /// <param name="reader">BinaryReader pointing to the start of the level directory data</param>
-        /// <param name="levelGroup">The name of the level group</param>
-        /// <returns>Directory data, including the CRID header and ?DNE footer</returns>
-        /// <exception cref="InvalidDataException"></exception>
-        private byte[] ReadLevelDirectory(BinaryReader reader, LevelGroupName levelGroup)
-        {
-            var startAddress = reader.BaseStream.Position;
-            var directoryHeader = Encoding.ASCII.GetString(reader.ReadBytes(DIRECTORY_HEADER.Length));
-
-            if (directoryHeader != DIRECTORY_HEADER)
-            {
-                throw new InvalidDataException($"Invalid {levelGroup} directory header");
-            }
-
-            var dataSize = reader.ReadInt32();
-
-            reader.BaseStream.Seek(dataSize - DIRECTORY_FOOTER.Length, SeekOrigin.Current);
-            var footer = Encoding.ASCII.GetString(reader.ReadBytes(DIRECTORY_FOOTER.Length));
-
-            if (footer != DIRECTORY_FOOTER)
-            {
-                throw new InvalidDataException($"Invalid {levelGroup} directory footer");
-            }
-
-            reader.BaseStream.Position = startAddress;
-            var levelDirectoryData = reader.ReadBytes(DIRECTORY_HEADER.Length + dataSize + DIRECTORY_FOOTER.Length);
-            return levelDirectoryData;
         }
 
         /// <summary>
@@ -129,9 +102,9 @@ namespace LemballEditor.Serializers
         /// <param name="writer">Writer for the stream</param>
         public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
-            var (vsr, levelPack) = models;
+            (var vsr, var _) = models;
             var stream = writer.BaseStream;
-            var basePosition = stream.Position;
+            _ = stream.Position;
 
             writer.Write(vsr.AssetData);
         }
