@@ -174,6 +174,7 @@ namespace LemballEditor.Tests.SerializerTests
                 .Callback((BinaryReader reader, LevelDirectory givenLevelDirectory) =>
                 {
                     _ = reader.BaseStream.Seek(directorySize, SeekOrigin.Current);
+                    givenLevelDirectory.LevelGroup = new LevelGroup();
                 })
                 .Returns((BinaryReader reader, LevelDirectory givenLevelDirectory) => givenLevelDirectory)
                 .Verifiable();
@@ -182,6 +183,57 @@ namespace LemballEditor.Tests.SerializerTests
             (var resultVsr, var resultLevelPack) = vsrSerialize.Deserialize(reader, (ServiceFactory.CreateVsr(), givenLevelPack));
 
             mockLevelDirectorySerializer.Verify();
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldAddTheLevelGroupsToTheLevelPack_WhenALevelPackModelIsGiven()
+        {
+            uint funDirectoryAddress = 1000;
+            uint directorySize = 100;
+            var assetData = this.CreateFakeAssetData(744, funDirectoryAddress);
+
+            byte[] vsrData = [
+                ..assetData,
+                ..this.CreateFakeLevelDirectoryData(1, directorySize),
+                ..this.CreateFakeLevelDirectoryData(2, directorySize),
+                ..this.CreateFakeLevelDirectoryData(3, directorySize),
+                ..this.CreateFakeLevelDirectoryData(4, directorySize),
+                ..this.CreateFakeLevelDirectoryData(5, directorySize),
+            ];
+
+            var directoryModels = Enumerable.Repeat(new LevelDirectory(), 5);
+            var levelGroups = Enumerable.Repeat(new LevelGroup(), 5);
+
+            Queue<LevelDirectory> createdDirectoryModels = new(directoryModels);
+            Queue<LevelGroup> expectedLevelGroups = new(levelGroups);
+
+            using MemoryStream stream = new(vsrData);
+            using BinaryReader reader = new(stream);
+
+            (
+                var vsrSerialize,
+                var mockLevelDirectorySerializer,
+                var mockLevelDirectoryFactory
+            ) = this.CreateVsrSerializer();
+
+            mockLevelDirectoryFactory.Setup(m => m()).Returns(createdDirectoryModels.Dequeue()).Verifiable();
+
+            _ = mockLevelDirectorySerializer
+                .Setup(m => m.Deserialize(It.IsAny<BinaryReader>(), It.IsAny<LevelDirectory>()))
+                .Callback((BinaryReader reader, LevelDirectory givenLevelDirectory) =>
+                {
+                    givenLevelDirectory.LevelGroup = expectedLevelGroups.Dequeue();
+                })
+                .Returns((BinaryReader reader, LevelDirectory givenLevelDirectory) => givenLevelDirectory);
+
+            LevelPack givenLevelPack = new();
+            (var resultVsr, var resultLevelPack) = vsrSerialize.Deserialize(reader, (ServiceFactory.CreateVsr(), givenLevelPack));
+
+            _ = givenLevelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(levelGroups.ElementAt(0));
+            _ = givenLevelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(levelGroups.ElementAt(1));
+            _ = givenLevelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(levelGroups.ElementAt(2));
+            _ = givenLevelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(levelGroups.ElementAt(3));
+            _ = givenLevelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(levelGroups.ElementAt(4));
         }
 
         [TestMethod]
