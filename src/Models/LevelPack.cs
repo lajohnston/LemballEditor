@@ -47,5 +47,19 @@ namespace LemballEditor.Models
         {
             levelGroups[groupName] = levelGroup ?? throw new ArgumentNullException();
         }
+
+        /// <summary>
+        /// Returns an enumerable to iterate through the level groups in order of difficulty
+        /// (Fun, Tricky, Taxing, Mayhem, Network)
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<LevelGroup> GetLevelGroups()
+        {
+            yield return this.GetLevelGroup(LevelGroupName.Fun);
+            yield return this.GetLevelGroup(LevelGroupName.Tricky);
+            yield return this.GetLevelGroup(LevelGroupName.Taxing);
+            yield return this.GetLevelGroup(LevelGroupName.Mayhem);
+            yield return this.GetLevelGroup(LevelGroupName.Network);
+        }
     }
 }

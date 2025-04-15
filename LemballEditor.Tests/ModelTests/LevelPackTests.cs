@@ -75,5 +75,27 @@ namespace LemballEditor.Tests.ModelTests
             var act = () => levelPack.SetLevelGroup(LevelGroupName.Fun, null);
             _ = act.Should().Throw<ArgumentNullException>();
         }
+
+        [TestMethod]
+        public void GetLevelGroups_ShouldReturnAnIteratorForEachLevelGroupInOrder()
+        {
+            var levelPack = new LevelPack();
+
+            var expectedGroupOrder = new Queue<LevelGroup>([
+                levelPack.GetLevelGroup(LevelGroupName.Fun),
+                levelPack.GetLevelGroup(LevelGroupName.Tricky),
+                levelPack.GetLevelGroup(LevelGroupName.Taxing),
+                levelPack.GetLevelGroup(LevelGroupName.Mayhem),
+                levelPack.GetLevelGroup(LevelGroupName.Network),
+            ]);
+
+            var iterator = levelPack.GetLevelGroups();
+            iterator.ToArray().Length.Should().Be(5);
+
+            foreach (var levelGroup in iterator)
+            {
+                levelGroup.Should().Be(expectedGroupOrder.Dequeue());
+            }
+        }
     }
 }
