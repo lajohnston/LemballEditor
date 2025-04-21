@@ -154,6 +154,13 @@ namespace LemballEditor.Tests.SerializerTests
 
             Queue<LevelDirectory> createdDirectoryModels = new(directoryModels);
             Queue<LevelDirectory> expectedDirectoryModels = new(directoryModels);
+            Queue<LevelGroupName> levelGroupOrder = new(new[] {
+                LevelGroupName.Fun,
+                LevelGroupName.Tricky,
+                LevelGroupName.Taxing,
+                LevelGroupName.Mayhem,
+                LevelGroupName.Network
+            });
 
             using MemoryStream stream = new(vsrData);
             using BinaryReader reader = new(stream);
@@ -174,7 +181,7 @@ namespace LemballEditor.Tests.SerializerTests
                 .Callback((BinaryReader reader, LevelDirectory givenLevelDirectory) =>
                 {
                     _ = reader.BaseStream.Seek(directorySize, SeekOrigin.Current);
-                    givenLevelDirectory.LevelGroup = new LevelGroup();
+                    givenLevelDirectory.LevelGroup = new LevelGroup(levelGroupOrder.Dequeue());
                 })
                 .Returns((BinaryReader reader, LevelDirectory givenLevelDirectory) => givenLevelDirectory)
                 .Verifiable();
@@ -202,7 +209,13 @@ namespace LemballEditor.Tests.SerializerTests
             ];
 
             var directoryModels = Enumerable.Repeat(new LevelDirectory(), 5);
-            var levelGroups = Enumerable.Repeat(new LevelGroup(), 5);
+            LevelGroup[] levelGroups = {
+                new(LevelGroupName.Fun),
+                new(LevelGroupName.Tricky),
+                new(LevelGroupName.Taxing),
+                new(LevelGroupName.Mayhem),
+                new(LevelGroupName.Network)
+            };
 
             Queue<LevelDirectory> createdDirectoryModels = new(directoryModels);
             Queue<LevelGroup> expectedLevelGroups = new(levelGroups);
@@ -280,7 +293,7 @@ namespace LemballEditor.Tests.SerializerTests
             vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 24);
 
             (var vsrSerializer, var _, _) = this.CreateVsrSerializer();
-            var data = this.Serialize((vsr, null), vsrSerializer);
+            var data = this.Serialize((vsr, new LevelPack()), vsrSerializer);
 
             var dataBeforeFunPointer = data.Take(pointerStart);
             _ = dataBeforeFunPointer.Should().BeEquivalentTo(assetData.Take(pointerStart));

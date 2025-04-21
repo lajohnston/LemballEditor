@@ -88,7 +88,7 @@ namespace LemballEditor.Serializers
                 foreach (LevelGroupName levelGroup in Enum.GetValues(typeof(LevelGroupName)))
                 {
                     var levelDirectory = this.levelDirectorySerializer.Deserialize(reader, this.levelDirectoryFactory());
-                    levelPack.SetLevelGroup(levelGroup, levelDirectory.LevelGroup);
+                    levelPack.SetLevelGroup(levelDirectory.LevelGroup);
                 }
             }
 

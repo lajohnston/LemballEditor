@@ -12,10 +12,15 @@ namespace LemballEditor.Models
     }
 
     /// <summary>
-    /// Maintains a sequence of levels (such as Fun, Tricky, Taxing, Mayhem or Network)
+    /// Maintains a sequence of levels
     /// </summary>
     public class LevelGroup
     {
+        /// <summary>
+        /// The name of the level group (Fun, Tricky, Taxing, Mayhem or Network)
+        /// </summary>
+        public readonly LevelGroupName LevelGroupName;
+
         /// <summary>
         /// The level sequence
         /// </summary>
@@ -24,9 +29,10 @@ namespace LemballEditor.Models
         /// <summary>
         /// Creates an empty level group
         /// </summary>
-        public LevelGroup()
+        public LevelGroup(LevelGroupName levelGroupName)
         {
-            levels = new List<ILevel>();
+            this.LevelGroupName = levelGroupName;
+            this.levels = new List<ILevel>();
         }
 
         /// <summary>
@@ -36,7 +42,7 @@ namespace LemballEditor.Models
         /// <returns>The level at that index, or null if there is none</returns>
         public ILevel GetLevel(int index)
         {
-            return index < 0 || index >= levels.Count ? null : levels[index];
+            return index < 0 || index >= this.levels.Count ? null : this.levels[index];
         }
 
         /// <summary>
@@ -45,7 +51,7 @@ namespace LemballEditor.Models
         /// <param name="level">The level to add</param>
         public void AddLevel(ILevel level)
         {
-            levels.Add(level);
+            this.levels.Add(level);
         }
     }
 }

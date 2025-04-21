@@ -18,53 +18,18 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
-        public void ShouldGetAndSetTheFunLevelGroup()
+        [DataRow(LevelGroupName.Fun)]
+        [DataRow(LevelGroupName.Tricky)]
+        [DataRow(LevelGroupName.Taxing)]
+        [DataRow(LevelGroupName.Mayhem)]
+        [DataRow(LevelGroupName.Network)]
+        public void ShouldGetAndSetEachLevelGroup(LevelGroupName levelGroupName)
         {
-            var levelGroup = new LevelGroup();
+            var levelGroup = new LevelGroup(levelGroupName);
             var levelPack = new LevelPack();
 
-            levelPack.SetLevelGroup(LevelGroupName.Fun, levelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(levelGroup);
-        }
-
-        [TestMethod]
-        public void ShouldGetAndSetTheTrickyLevelGroup()
-        {
-            var levelGroup = new LevelGroup();
-            var levelPack = new LevelPack();
-
-            levelPack.SetLevelGroup(LevelGroupName.Tricky, levelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Tricky).Should().Be(levelGroup);
-        }
-
-        [TestMethod]
-        public void ShouldGetAndSetTheTaxingLevelGroup()
-        {
-            var levelGroup = new LevelGroup();
-            var levelPack = new LevelPack();
-
-            levelPack.SetLevelGroup(LevelGroupName.Taxing, levelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Taxing).Should().Be(levelGroup);
-        }
-
-        [TestMethod]
-        public void ShouldGetAndSetTheMayhemLevelGroup()
-        {
-            var levelGroup = new LevelGroup();
-            var levelPack = new LevelPack();
-
-            levelPack.SetLevelGroup(LevelGroupName.Mayhem, levelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Mayhem).Should().Be(levelGroup);
-        }
-
-        [TestMethod]
-        public void ShouldGetAndSetTheNetworkLevelGroup()
-        {
-            var levelGroup = new LevelGroup();
-            var levelPack = new LevelPack();
-
-            levelPack.SetLevelGroup(LevelGroupName.Network, levelGroup);
-            _ = levelPack.GetLevelGroup(LevelGroupName.Network).Should().Be(levelGroup);
+            levelPack.SetLevelGroup(levelGroup);
+            _ = levelPack.GetLevelGroup(levelGroupName).Should().Be(levelGroup);
         }
 
         [TestMethod]
@@ -72,7 +37,7 @@ namespace LemballEditor.Tests.ModelTests
         {
             var levelPack = new LevelPack();
 
-            var act = () => levelPack.SetLevelGroup(LevelGroupName.Fun, null);
+            var act = () => levelPack.SetLevelGroup(null);
             _ = act.Should().Throw<ArgumentNullException>();
         }
 

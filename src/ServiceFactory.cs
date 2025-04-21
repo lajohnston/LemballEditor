@@ -69,7 +69,7 @@ namespace LemballEditor
         /// <summary>
         /// Creates a LevelGroup model
         /// </summary>
-        public static readonly Func<LevelGroup> CreateLevelGroup = () => new LevelGroup();
+        public static readonly Func<LevelGroupName, LevelGroup> CreateLevelGroup = (LevelGroupName groupName) => new LevelGroup(groupName);
 
         /// <summary>
         /// Creates a LevelDirectory model

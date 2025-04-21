@@ -9,14 +9,14 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldReturnNullIfTheLevelAtTheGivenIndexDoesNotExist()
         {
-            var group = new LevelGroup();
+            var group = new LevelGroup(LevelGroupName.Fun);
             _ = group.GetLevel(0).Should().BeNull();
         }
 
         [TestMethod]
         public void ShouldStoreLevelsInTheOrderGiven()
         {
-            var group = new LevelGroup();
+            var group = new LevelGroup(LevelGroupName.Fun);
             var level1 = ServiceFactory.CreateLevel(1, 1);
             var level2 = ServiceFactory.CreateLevel(1, 1);
             var level3 = ServiceFactory.CreateLevel(1, 1);

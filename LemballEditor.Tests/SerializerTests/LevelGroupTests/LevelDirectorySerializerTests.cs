@@ -15,7 +15,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
 
-            var levelGroupContext = new LevelDirectory() { LevelGroup = new LevelGroup() };
+            var levelGroupContext = new LevelDirectory() { LevelGroup = new LevelGroup(LevelGroupName.Fun) };
             var serializer = new LevelDirectorySerializer();
 
             var act = () => serializer.Deserialize(reader, levelGroupContext);
@@ -25,7 +25,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
         [TestMethod]
         public void ShouldSerializeAndDeserializeTheLevelDirectory()
         {
-            var originalLevelGroup = new LevelGroup();
+            var originalLevelGroup = new LevelGroup(LevelGroupName.Fun);
             var originContext = new LevelDirectory() { LevelGroup = originalLevelGroup };
 
             using var stream = new MemoryStream();
@@ -39,7 +39,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
             using var reader = new BinaryReader(stream);
             stream.Position = 0;
 
-            var deserializedLevelGroup = new LevelGroup();
+            var deserializedLevelGroup = new LevelGroup(LevelGroupName.Fun);
             var deserializedContext = new LevelDirectory() { LevelGroup = deserializedLevelGroup };
 
             var deserializeAct = () => serializer.Deserialize(reader, deserializedContext);

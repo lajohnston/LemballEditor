@@ -20,11 +20,11 @@ namespace LemballEditor.Models
         {
             levelGroups = new Dictionary<LevelGroupName, LevelGroup>
             {
-                { LevelGroupName.Fun, new LevelGroup() },
-                { LevelGroupName.Tricky, new LevelGroup() },
-                { LevelGroupName.Taxing, new LevelGroup() },
-                { LevelGroupName.Mayhem, new LevelGroup() },
-                { LevelGroupName.Network, new LevelGroup() }
+                { LevelGroupName.Fun, new LevelGroup(LevelGroupName.Fun) },
+                { LevelGroupName.Tricky, new LevelGroup(LevelGroupName.Tricky) },
+                { LevelGroupName.Taxing, new LevelGroup(LevelGroupName.Taxing) },
+                { LevelGroupName.Mayhem, new LevelGroup(LevelGroupName.Mayhem) },
+                { LevelGroupName.Network, new LevelGroup(LevelGroupName.Network) }
             };
         }
 
@@ -41,11 +41,15 @@ namespace LemballEditor.Models
         /// <summary>
         /// Sets the level group for the given group name
         /// </summary>
-        /// <param name="groupName">The name of the level group</param>
         /// <param name="levelGroup">The level group</returns>
-        public void SetLevelGroup(LevelGroupName groupName, LevelGroup levelGroup)
+        public void SetLevelGroup(LevelGroup levelGroup)
         {
-            levelGroups[groupName] = levelGroup ?? throw new ArgumentNullException();
+            if (levelGroup == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            levelGroups[levelGroup.LevelGroupName] = levelGroup;
         }
 
         /// <summary>
