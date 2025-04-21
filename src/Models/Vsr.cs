@@ -26,7 +26,8 @@ namespace LemballEditor.Models
                 { LevelGroupName.Taxing, 0 },
                 { LevelGroupName.Mayhem, 0 },
                 { LevelGroupName.Network, 0 }
-            };        }
+            };
+        }
 
         /// <summary>
         /// The address of the Fun level directory, or null if unknown

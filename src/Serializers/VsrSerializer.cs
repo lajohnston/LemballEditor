@@ -102,11 +102,27 @@ namespace LemballEditor.Serializers
         /// <param name="writer">Writer for the stream</param>
         public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
-            (var vsr, var _) = models;
-            var stream = writer.BaseStream;
-            _ = stream.Position;
+            var (vsr, levelPack) = models;
+
+            if (levelPack == null)
+            {
+                throw new ArgumentNullException("LevelPack cannot be null");
+            }
 
             writer.Write(vsr.AssetData);
+
+            foreach (var levelGroup in levelPack.GetLevelGroups())
+            {
+                var levelDirectory = this.levelDirectoryFactory();
+                levelDirectory.LevelGroup = levelGroup;
+
+                var directoryAddress = writer.BaseStream.Position;
+                _ = writer.Seek((int)vsr.GetLevelDirectoryPointer(levelGroup.LevelGroupName), SeekOrigin.Begin);
+                writer.Write((uint)directoryAddress);
+
+                _ = writer.Seek((int)directoryAddress, SeekOrigin.Begin);
+                this.levelDirectorySerializer.Serialize(levelDirectory, writer);
+            }
         }
     }
 }

@@ -16,6 +16,8 @@ namespace LemballEditor.Tests.SerializerTests
             Mock<ISerializer<LevelDirectory>> levelDirectorySerializerMock = new();
             Mock<Func<LevelDirectory>> levelDirectoryFactoryMock = new();
 
+            levelDirectoryFactoryMock.SetReturnsDefault(new LevelDirectory());
+
             VsrSerializer serializer = new(levelDirectorySerializerMock.Object, levelDirectoryFactoryMock.Object);
             return (serializer, levelDirectorySerializerMock, levelDirectoryFactoryMock);
         }
@@ -300,6 +302,78 @@ namespace LemballEditor.Tests.SerializerTests
 
             var dataAfterPointers = data.Skip(pointerStart + 20);
             _ = dataAfterPointers.Should().BeEquivalentTo(assetData.Skip(pointerStart + 20));
+        }
+
+        [TestMethod]
+        [DataRow(LevelGroupName.Fun)]
+        [DataRow(LevelGroupName.Tricky)]
+        [DataRow(LevelGroupName.Taxing)]
+        [DataRow(LevelGroupName.Mayhem)]
+        [DataRow(LevelGroupName.Network)]
+        public void Serialize_ShouldSerializeTheLevelGroupsUsingTheLevelDirectorySerializer(LevelGroupName levelGroup)
+        {
+            (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
+
+            Vsr vsr = new()
+            {
+                AssetData = Enumerable.Repeat((byte)1, 1000).ToArray()
+            };
+
+            var levelPack = new LevelPack();
+            using var writer = BinaryWriter.Null;
+
+            mockLevelDirectorySerializer
+                .Setup(m => m.Serialize(
+                    It.Is<LevelDirectory>(ld => ld.LevelGroup == levelPack.GetLevelGroup(levelGroup)),
+                    It.Is<BinaryWriter>(w => w == writer)
+                ))
+                .Verifiable();
+
+            vsrSerializer.Serialize((vsr, levelPack), writer);
+
+            mockLevelDirectorySerializer.Verify();
+        }
+
+        [TestMethod]
+        [DataRow(LevelGroupName.Fun, 1000)]
+        [DataRow(LevelGroupName.Tricky, 1100)]
+        [DataRow(LevelGroupName.Taxing, 1200)]
+        [DataRow(LevelGroupName.Mayhem, 1300)]
+        [DataRow(LevelGroupName.Network, 1400)]
+        public void Serialize_ShouldSetTheDirectoryAddressesForEachLevelGroup(LevelGroupName levelGroupName, int expectedAddress)
+        {
+            var (vsrSerializer, mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
+
+            Vsr vsr = new()
+            {
+                AssetData = Enumerable.Repeat((byte)1, 1000).ToArray(),
+            };
+
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Fun, 700);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Tricky, 710);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Taxing, 720);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Mayhem, 730);
+            vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 740);
+
+            var levelPack = new LevelPack();
+            using var writer = new BinaryWriter(new MemoryStream());
+
+            mockLevelDirectorySerializer
+                .Setup(m => m.Serialize(
+                    It.IsAny<LevelDirectory>(),
+                    It.IsAny<BinaryWriter>()
+                ))
+                .Callback((LevelDirectory givenLevelDirectory, BinaryWriter writer) =>
+                {
+                    writer.Write(new byte[100]);
+                });
+
+            vsrSerializer.Serialize((vsr, levelPack), writer);
+
+            using var reader = new BinaryReader(writer.BaseStream);
+
+            reader.BaseStream.Position = vsr.GetLevelDirectoryPointer(levelGroupName);
+            reader.ReadUInt32().Should().Be((uint)expectedAddress);
         }
     }
 }
