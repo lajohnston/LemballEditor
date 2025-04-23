@@ -8,7 +8,7 @@ namespace LemballEditor.Serializers.LevelDirectory
     /// </summary>
     public class AddressToFileDescriptors : ISerializer<LevelDirectory>
     {
-        private static readonly uint HEADER_SIZE = 16;
+        private static readonly uint HEADER_SIZE = 20;
         private static readonly uint FILE_NAME_SIZE = 12;
 
         private uint CalculateValue(LevelDirectory directory)
