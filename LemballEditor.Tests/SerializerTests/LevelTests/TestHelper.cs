@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
-using LemballEditor.Serializers.Level;
+using LemballEditor.Serializers;
 
 namespace LemballEditor.Tests.SerializerTests.LevelTests
 {

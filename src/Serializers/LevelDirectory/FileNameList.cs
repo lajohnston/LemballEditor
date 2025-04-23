@@ -1,5 +1,4 @@
-﻿using LemballEditor.Serializers.Level;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 
 namespace LemballEditor.Serializers.LevelDirectory

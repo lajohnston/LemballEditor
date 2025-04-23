@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace LemballEditor.Serializers.Level
+namespace LemballEditor.Serializers
 {
     public interface ISerializer<TResult>
     {

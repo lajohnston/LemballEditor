@@ -2,7 +2,6 @@
 using System.IO;
 using System.Text;
 using LemballEditor.Models;
-using LemballEditor.Serializers.Level;
 
 namespace LemballEditor.Serializers
 {

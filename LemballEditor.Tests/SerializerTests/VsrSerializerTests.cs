@@ -2,7 +2,6 @@
 using FluentAssertions;
 using LemballEditor.Models;
 using LemballEditor.Serializers;
-using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.LevelDirectory;
 using Moq;
 
