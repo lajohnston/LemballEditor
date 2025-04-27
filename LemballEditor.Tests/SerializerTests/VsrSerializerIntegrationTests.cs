@@ -6,12 +6,12 @@ namespace LemballEditor.Tests.SerializerTests
     [TestClass]
     public class VsrSerializerIntegrationTests
     {
-        public static string GetVsrFixturePath([CallerFilePath] string? callerFilePath = null)
+        public static string GetFixturePath([CallerFilePath] string? callerFilePath = null)
         {
             // Get the directory of the current source file
             var projectDir = Directory.GetParent(Path.GetDirectoryName(callerFilePath)).ToString();
 
-            return Path.Combine(projectDir, "Fixtures", "PBAIMOG.VSR");
+            return Path.Combine(projectDir, "Fixtures");
         }
 
         [TestMethod]
@@ -19,7 +19,8 @@ namespace LemballEditor.Tests.SerializerTests
         {
             Assert.Inconclusive("This test is not yet implemented");
 
-            var vsrPath = GetVsrFixturePath();
+            var fixturePath = GetFixturePath();
+            var vsrPath = Path.Combine(fixturePath, "PBAIMOG.VSR");
 
             if (!File.Exists(vsrPath))
             {
@@ -36,10 +37,13 @@ namespace LemballEditor.Tests.SerializerTests
 
             serializer.Serialize((deserializedVsr, new Models.LevelPack()), writer);
 
+            var debugOutput = File.OpenWrite(Path.Combine(fixturePath, "debug.vsr"));
+            writer.BaseStream.CopyTo(debugOutput);
+
+            _ = writer.BaseStream.Length.Should().Be(sourceVsrStream.Length, "The serialized VSR should have the same length as the original VSR");
+
             sourceVsrStream.Position = 0;
             writer.BaseStream.Position = 0;
-
-            _ = writeStream.Length.Should().Be(sourceVsrStream.Length, "The serialized VSR should have the same length as the original VSR");
 
             for (var i = 0; i < sourceVsrStream.Length; i++)
             {
