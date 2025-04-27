@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 
-namespace LemballEditor.Serializers.Level
+namespace LemballEditor.Serializers
 {
     /// <summary>
     /// Serializes/Deserializes a stream of constant bytes to and from a stream

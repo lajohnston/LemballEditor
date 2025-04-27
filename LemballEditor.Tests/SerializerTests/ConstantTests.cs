@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
-using LemballEditor.Serializers.Level;
+using LemballEditor.Serializers;
 using System.Text;
 
-namespace LemballEditor.Tests.SerializerTests.LevelTests
+namespace LemballEditor.Tests.SerializerTests
 {
     [TestClass]
     public sealed class ConstantTests
@@ -21,7 +21,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests
         }
 
         [TestMethod]
-        public void Serialize_ShouldWriteTheHeaderBytesToTheStream()
+        public void Serialize_ShouldWriteTheConstantDataBytesToTheStream()
         {
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);

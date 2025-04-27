@@ -98,7 +98,7 @@
     <Compile Include="src\Models\LevelPack.cs" />
     <Compile Include="src\Models\Map.cs" />
     <Compile Include="src\Models\Tile.cs" />
-    <Compile Include="src\Serializers\Level\Constant.cs" />
+    <Compile Include="src\Serializers\Constant.cs" />
     <Compile Include="src\Serializers\ISerializer.cs" />
     <Compile Include="src\Serializers\Level\Map\MapSerializer.cs" />
     <Compile Include="src\Serializers\Level\Map\Size.cs" />
