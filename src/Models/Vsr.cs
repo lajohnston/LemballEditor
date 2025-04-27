@@ -17,9 +17,23 @@ namespace LemballEditor.Models
         /// </summary>
         private readonly Dictionary<LevelGroupName, uint> levelDirectoryPointers;
 
+        /// <summary>
+        /// The fixed number of levels each level group should contain
+        /// </summary>
+        private readonly Dictionary<LevelGroupName, byte> fixedLevelCounts;
+
         public Vsr()
         {
             levelDirectoryPointers = new Dictionary<LevelGroupName, uint>
+            {
+                { LevelGroupName.Fun, 0 },
+                { LevelGroupName.Tricky, 0 },
+                { LevelGroupName.Taxing, 0 },
+                { LevelGroupName.Mayhem, 0 },
+                { LevelGroupName.Network, 0 }
+            };
+
+            fixedLevelCounts = new Dictionary<LevelGroupName, byte>
             {
                 { LevelGroupName.Fun, 0 },
                 { LevelGroupName.Tricky, 0 },
@@ -63,6 +77,22 @@ namespace LemballEditor.Models
         public uint GetLevelDirectoryPointer(LevelGroupName levelGroupName)
         {
             return levelDirectoryPointers[levelGroupName];
+        }
+
+        /// <summary>
+        /// Retrieve the fixed number of levels for the given level group
+        /// </summary>
+        public byte GetFixedLevelCount(LevelGroupName levelGroupName)
+        {
+            return fixedLevelCounts[levelGroupName];
+        }
+
+        /// <summary>
+        /// Sets the fixed number of levels for the given level group
+        /// </summary>
+        public void SetFixedLevelCount(LevelGroupName levelGroupName, byte levelCount)
+        {
+            fixedLevelCounts[levelGroupName] = levelCount;
         }
     }
 }

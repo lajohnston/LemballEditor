@@ -64,5 +64,22 @@ namespace LemballEditor.Tests.ModelTests
 
             _ = vsr.FunAddress.Should().Be(null);
         }
+
+        [TestMethod]
+        public void ShouldGetAndSetTheFixedLevelCountForEachLevelGroup()
+        {
+            var vsr = new Vsr();
+            vsr.SetFixedLevelCount(LevelGroupName.Fun, 1);
+            vsr.SetFixedLevelCount(LevelGroupName.Tricky, 2);
+            vsr.SetFixedLevelCount(LevelGroupName.Taxing, 3);
+            vsr.SetFixedLevelCount(LevelGroupName.Mayhem, 4);
+            vsr.SetFixedLevelCount(LevelGroupName.Network, 5);
+
+            vsr.GetFixedLevelCount(LevelGroupName.Fun).Should().Be(1);
+            vsr.GetFixedLevelCount(LevelGroupName.Tricky).Should().Be(2);
+            vsr.GetFixedLevelCount(LevelGroupName.Taxing).Should().Be(3);
+            vsr.GetFixedLevelCount(LevelGroupName.Mayhem).Should().Be(4);
+            vsr.GetFixedLevelCount(LevelGroupName.Network).Should().Be(5);
+        }
     }
 }
