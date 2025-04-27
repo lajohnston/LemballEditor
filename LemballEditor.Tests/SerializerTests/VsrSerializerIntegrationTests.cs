@@ -30,21 +30,21 @@ namespace LemballEditor.Tests.SerializerTests
             using var sourceReader = new BinaryReader(sourceVsrStream);
 
             var serializer = ServiceFactory.CreateVsrSerializer();
-            var deserializedVsr = serializer.Deserialize(sourceReader, (new Models.Vsr(), null));
+            var (deserializedVsr, _) = serializer.Deserialize(sourceReader, (new Models.Vsr(), null));
 
-            using var writeStream = new MemoryStream();
-            using var writer = new BinaryWriter(writeStream);
-            serializer.Serialize(deserializedVsr, writer);
+            using var writer = new BinaryWriter(new MemoryStream());
+
+            serializer.Serialize((deserializedVsr, new Models.LevelPack()), writer);
 
             sourceVsrStream.Position = 0;
-            writeStream.Position = 0;
+            writer.BaseStream.Position = 0;
 
             _ = writeStream.Length.Should().Be(sourceVsrStream.Length, "The serialized VSR should have the same length as the original VSR");
 
             for (var i = 0; i < sourceVsrStream.Length; i++)
             {
                 var expectedValue = sourceVsrStream.ReadByte();
-                var actualValue = writeStream.ReadByte();
+                var actualValue = writer.BaseStream.ReadByte();
 
                 _ = actualValue.Should().Be(expectedValue, $"Expected byte address {i} to be {expectedValue}, not {actualValue}");
             }
