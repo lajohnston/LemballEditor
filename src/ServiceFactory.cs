@@ -4,6 +4,7 @@ using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
 using LemballEditor.Serializers.LevelDirectory;
 using System;
+using System.Data;
 using System.Text;
 
 namespace LemballEditor
@@ -43,9 +44,20 @@ namespace LemballEditor
         public static readonly Func<MapSerializer> CreateMapSerializer = () => new MapSerializer(CreateMap, CreateTile);
 
         /// <summary>
-        /// Creates a LevelSerializer
+        /// Creates a serializer to serialize and deserialize a level binary
         /// </summary>
-        public static readonly Func<LevelSerializer> CreateLevelSerializer = () => new LevelSerializer(CreateMapSerializer());
+        public static readonly Func<Sequence<ILevel>> CreateLevelSerializer = () => new Sequence<ILevel>(
+            new ISerializer<ILevel>[] {
+                new Constant<ILevel>(new byte[] { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 }), // Header constant; '  IA' followed by 18, 0, 0, 0
+                new UnknownA(),
+                new Theme(),
+                new TimeLimit(),
+                new UnusedNumberOfLemmings(),
+                new FlagsRequiredIndicator(),
+                new UnknownB(),
+                CreateMapSerializer()
+            }
+        );
 
         /// <summary>
         /// Creates a VSRSerializer
