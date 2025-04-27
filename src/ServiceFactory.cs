@@ -4,6 +4,7 @@ using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
 using LemballEditor.Serializers.LevelDirectory;
 using System;
+using System.Text;
 
 namespace LemballEditor
 {
@@ -49,12 +50,21 @@ namespace LemballEditor
         /// <summary>
         /// Creates a VSRSerializer
         /// </summary>
-        public static readonly Func<VsrSerializer> CreateVsrSerializer = () => new VsrSerializer(CreateLevelGroupSerializer(), CreateLevelDirectory);
+        public static readonly Func<VsrSerializer> CreateVsrSerializer = () => new VsrSerializer(CreateLevelDirectorySerializer(), CreateLevelDirectory);
 
         /// <summary>
-        /// Creates a LevelGroupSerializer
+        /// Creates a serializer to serialize and deserialize a level directory within a VSR file
         /// </summary>
-        public static readonly Func<LevelDirectorySerializer> CreateLevelGroupSerializer = () => new LevelDirectorySerializer();
+        public static readonly Func<Sequence<LevelDirectory>> CreateLevelDirectorySerializer = () => new Sequence<LevelDirectory>(
+            new ISerializer<LevelDirectory>[] {
+                new Constant<LevelDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
+                new DataSize(),
+                new LevelCount(),
+                new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3)),
+                new AddressToFileDescriptors(),
+                new FileNameList(),
+            }
+        );
 
         /// <summary>
         /// Creates a VSR model
