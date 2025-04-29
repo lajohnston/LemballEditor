@@ -10,9 +10,6 @@ namespace LemballEditor.Serializers
     /// </summary>
     public class VsrSerializer : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
-        private static readonly string DIRECTORY_HEADER = "CRID";
-        private static readonly string DIRECTORY_FOOTER = "?DNE";
-
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
@@ -47,6 +44,30 @@ namespace LemballEditor.Serializers
             return demoStringAddress <= 0
                 ? throw new InvalidDataException("Unable to locate FUN directory pointer in VSR data")
                 : (uint)(startAddress + demoStringAddress - 188);
+        }
+
+        /// <summary>
+        /// Stores the current (fixed) level sizes for each level group in the VSR instance
+        /// </summary>
+        /// <exception cref="InvalidDataException">If valid data could not be parsed</exception>
+        private void DeserializeFixedLevelSizes(BinaryReader reader, Models.Vsr vsr)
+        {
+            foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
+            {
+                var directoryPointer = vsr.GetLevelDirectoryPointer(levelGroupName);
+                reader.BaseStream.Seek(directoryPointer, SeekOrigin.Begin);
+                var directoryAddress = reader.ReadUInt32();
+
+                reader.BaseStream.Seek(directoryAddress + 8, SeekOrigin.Begin);
+                var levelCount = reader.ReadUInt32();
+
+                if (levelCount > 29)
+                {
+                    throw new InvalidDataException("Level directory contains more than 29 levels");
+                }
+
+                vsr.SetFixedLevelCount(levelGroupName, (byte)levelCount);
+            }
         }
 
         /// <summary>
@@ -90,6 +111,8 @@ namespace LemballEditor.Serializers
                     levelPack.SetLevelGroup(levelDirectory.LevelGroup);
                 }
             }
+
+            this.DeserializeFixedLevelSizes(reader, vsr);
 
             return models;
         }
