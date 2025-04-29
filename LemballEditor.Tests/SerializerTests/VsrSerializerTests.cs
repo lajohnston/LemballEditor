@@ -21,45 +21,23 @@ namespace LemballEditor.Tests.SerializerTests
             return (serializer, levelDirectorySerializerMock, levelDirectoryFactoryMock);
         }
 
-        private byte[] Serialize((Models.Vsr, Models.LevelPack?) models, VsrSerializer vsrSerializer)
+        /// <summary>
+        /// Helper function to create valid VSR binary data
+        /// </summary>
+        /// <param name="levelDirectoryData">An array of level directory data (can created each using CreateFakeLevelDirectoryData)</param>
+        /// <param name="funPointerAddress">The position of the Fun directory pointer</param>
+        /// <param name="assetDataSize">The size of the asset data (all data excluding the level directories</param>
+        /// <returns></returns>
+        private byte[] CreateFakeVsrData(byte[][]? levelDirectoryData = null, uint funPointerAddress = 744, uint assetDataSize = 1000)
         {
-            using var stream = new MemoryStream();
-            using var writer = new BinaryWriter(stream);
-
-            vsrSerializer.Serialize(models, writer);
-            return stream.ToArray();
-        }
-
-        private byte[] CreateFakeAssetData(uint funPointerAddress = 744, uint funDirectoryAddress = 1000, uint eachLevelDirectorySize = 100)
-        {
-            var demoFileAddress = funPointerAddress + 188;
-
-            List<byte> data = [];
-            data.AddRange(Encoding.ASCII.GetBytes("CRID"));             // Header
-            data.AddRange(new byte[funPointerAddress - data.Count]);    // Padding
-
-            // Pointers to level directories
-            for (var i = 0; i <= 5; i++)
-            {
-                data.AddRange(BitConverter.GetBytes(funDirectoryAddress + (eachLevelDirectorySize * i)));
-
-                if (i < 4)
-                {
-                    data.AddRange(new byte[32]); // Padding to next pointer
-                }
-            }
-
-            data.AddRange(new byte[demoFileAddress - data.Count]);      // Padding
-            data.AddRange(Encoding.ASCII.GetBytes("Demo_00"));          // Demo_00 string
-            data.AddRange(new byte[funDirectoryAddress - data.Count]);  // Rest of asset data
-
-            return [.. data];
-        }
-
-        private byte[] CreateFakeVsrData(byte[][] levelDirectoryData)
-        {
-            var funPointerAddress = 744;
-            uint assetDataSize = 1200;
+            levelDirectoryData ??=
+                [
+                    this.CreateFakeLevelDirectoryData(32, 25),
+                    this.CreateFakeLevelDirectoryData(32, 25),
+                    this.CreateFakeLevelDirectoryData(32, 25),
+                    this.CreateFakeLevelDirectoryData(32, 25),
+                    this.CreateFakeLevelDirectoryData(32, 25)
+                ];
 
             List<byte> data = [];
             data.AddRange(Encoding.ASCII.GetBytes("CRID"));             // Header
@@ -91,28 +69,16 @@ namespace LemballEditor.Tests.SerializerTests
             return [.. data];
         }
 
-        private byte[] CreateFakeLevelDirectoryData(byte fakeByteValue, uint size = 100, uint levelCount = 25)
+        private byte[] CreateFakeLevelDirectoryData(uint size = 100, uint levelCount = 25)
         {
+            var footerBytesOfLastLevel = Encoding.ASCII.GetBytes("?DNE");
+
             return [
                 ..Encoding.ASCII.GetBytes("CRID"),
                 ..BitConverter.GetBytes(size - 4),
                 ..BitConverter.GetBytes(levelCount),
-                ..Enumerable.Repeat(fakeByteValue, (int)size - 16),
-
-                // Last 4 bytes of the last level
-                ..Encoding.ASCII.GetBytes("?DNE")
-            ];
-        }
-
-        private byte[] CreateFakeVsrData(uint funPointerAddress = 744, uint assetDataSize = 1000)
-        {
-            return [
-                ..this.CreateFakeAssetData(funPointerAddress, assetDataSize),
-                ..this.CreateFakeLevelDirectoryData(1),
-                ..this.CreateFakeLevelDirectoryData(2),
-                ..this.CreateFakeLevelDirectoryData(3),
-                ..this.CreateFakeLevelDirectoryData(4),
-                ..this.CreateFakeLevelDirectoryData(5)
+                ..Enumerable.Repeat((byte)5, (int)size - 16),
+                ..footerBytesOfLastLevel
             ];
         }
 
@@ -120,12 +86,11 @@ namespace LemballEditor.Tests.SerializerTests
         public void Deserialize_ShouldThrowAnException_WhenTheStreamDoesNotBeginWithCridHeader()
         {
             byte[] data = [1, 2, 3];
-            using var stream = new MemoryStream(data);
-            using var reader = new BinaryReader(stream);
 
+            using var reader = new BinaryReader(new MemoryStream(data));
             var serializer = ServiceFactory.CreateVsrSerializer();
-            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
+            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid VSR");
         }
 
@@ -134,12 +99,10 @@ namespace LemballEditor.Tests.SerializerTests
         {
             List<byte> data = [.. Encoding.ASCII.GetBytes("CRID"), .. new byte[200]];
 
-            using var stream = new MemoryStream([.. data]);
-            using var reader = new BinaryReader(stream);
-
+            using var reader = new BinaryReader(new MemoryStream([.. data]));
             var serializer = ServiceFactory.CreateVsrSerializer();
-            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
+            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Unable to locate FUN directory pointer in VSR data");
         }
 
@@ -147,34 +110,24 @@ namespace LemballEditor.Tests.SerializerTests
         public void Deserialize_ShouldSetTheAssetDataUpToTheFunDirectoryPointerToTheModel()
         {
             uint funDirectoryAddress = 1500;
-            var data = this.CreateFakeVsrData(744, funDirectoryAddress);
 
-            using MemoryStream stream = new(data);
-            using BinaryReader reader = new(stream);
+            var vsrData = this.CreateFakeVsrData(null, 744, funDirectoryAddress);
+
+            using var reader = new BinaryReader(new MemoryStream(vsrData));
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
             _ = serializer.Deserialize(reader, (vsr, null));
 
-            _ = vsr.AssetData.Should().BeEquivalentTo(data.Take((int)funDirectoryAddress));
+            _ = vsr.AssetData.Should().BeEquivalentTo(vsrData.Take((int)funDirectoryAddress));
         }
 
         [TestMethod]
         public void Deserialize_ShouldNotCallTheLevelDirectorySerializer_WhenLevelPackIsNull()
         {
-            uint funDirectoryAddress = 1000;
-            var assetData = this.CreateFakeAssetData(744, funDirectoryAddress);
-            byte[] vsrData = [
-                ..assetData,
-                ..this.CreateFakeLevelDirectoryData(1),
-                ..this.CreateFakeLevelDirectoryData(2),
-                ..this.CreateFakeLevelDirectoryData(3),
-                ..this.CreateFakeLevelDirectoryData(4),
-                ..this.CreateFakeLevelDirectoryData(5)
-            ];
+            var vsrData = this.CreateFakeVsrData();
 
-            using MemoryStream stream = new(vsrData);
-            using BinaryReader reader = new(stream);
+            using var reader = new BinaryReader(new MemoryStream(vsrData));
 
             var (vsrSerialize, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateVsrSerializer();
 
@@ -188,16 +141,14 @@ namespace LemballEditor.Tests.SerializerTests
         {
             uint funDirectoryAddress = 1000;
             uint directorySize = 100;
-            var assetData = this.CreateFakeAssetData(744, funDirectoryAddress);
 
-            byte[] vsrData = [
-                ..assetData,
-                ..this.CreateFakeLevelDirectoryData(1, directorySize),
-                ..this.CreateFakeLevelDirectoryData(2, directorySize),
-                ..this.CreateFakeLevelDirectoryData(3, directorySize),
-                ..this.CreateFakeLevelDirectoryData(4, directorySize),
-                ..this.CreateFakeLevelDirectoryData(5, directorySize),
-            ];
+            var vsrData = this.CreateFakeVsrData([
+                this.CreateFakeLevelDirectoryData(directorySize, 1),
+                this.CreateFakeLevelDirectoryData(directorySize, 2),
+                this.CreateFakeLevelDirectoryData(directorySize, 3),
+                this.CreateFakeLevelDirectoryData(directorySize, 4),
+                this.CreateFakeLevelDirectoryData(directorySize, 5)
+            ]);
 
             Queue<uint> expectedReaderAddresses = new(new uint[] { funDirectoryAddress, 1100, 1200, 1300, 1400 });
             var directoryModels = Enumerable.Repeat(new LevelDirectory(), 5);
@@ -212,14 +163,9 @@ namespace LemballEditor.Tests.SerializerTests
                 LevelGroupName.Network
             });
 
-            using MemoryStream stream = new(vsrData);
-            using BinaryReader reader = new(stream);
+            using var reader = new BinaryReader(new MemoryStream(vsrData));
 
-            (
-                var vsrSerialize,
-                var mockLevelDirectorySerializer,
-                var mockLevelDirectoryFactory
-            ) = this.CreateVsrSerializer();
+            var(vsrSerialize, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateVsrSerializer();
 
             mockLevelDirectoryFactory.Setup(m => m()).Returns(createdDirectoryModels.Dequeue()).Verifiable();
 
@@ -245,18 +191,7 @@ namespace LemballEditor.Tests.SerializerTests
         [TestMethod]
         public void Deserialize_ShouldAddTheLevelGroupsToTheLevelPack_WhenALevelPackModelIsGiven()
         {
-            uint funDirectoryAddress = 1000;
-            uint directorySize = 100;
-            var assetData = this.CreateFakeAssetData(744, funDirectoryAddress);
-
-            byte[] vsrData = [
-                ..assetData,
-                ..this.CreateFakeLevelDirectoryData(1, directorySize),
-                ..this.CreateFakeLevelDirectoryData(2, directorySize),
-                ..this.CreateFakeLevelDirectoryData(3, directorySize),
-                ..this.CreateFakeLevelDirectoryData(4, directorySize),
-                ..this.CreateFakeLevelDirectoryData(5, directorySize),
-            ];
+            var vsrData = this.CreateFakeVsrData();
 
             var directoryModels = Enumerable.Repeat(new LevelDirectory(), 5);
             LevelGroup[] levelGroups = {
@@ -270,8 +205,7 @@ namespace LemballEditor.Tests.SerializerTests
             Queue<LevelDirectory> createdDirectoryModels = new(directoryModels);
             Queue<LevelGroup> expectedLevelGroups = new(levelGroups);
 
-            using MemoryStream stream = new(vsrData);
-            using BinaryReader reader = new(stream);
+            using var reader = new BinaryReader(new MemoryStream(vsrData));
 
             (
                 var vsrSerialize,
@@ -303,10 +237,16 @@ namespace LemballEditor.Tests.SerializerTests
         public void Deserialize_ShouldSetTheDirectoryPointersToTheModel()
         {
             uint funPointerAddress = 800;
-            var data = this.CreateFakeVsrData(funPointerAddress, 1000);
 
-            using MemoryStream stream = new(data);
-            using BinaryReader reader = new(stream);
+            var vsrData = this.CreateFakeVsrData([
+                this.CreateFakeLevelDirectoryData(32, 1),
+                this.CreateFakeLevelDirectoryData(32, 2),
+                this.CreateFakeLevelDirectoryData(32, 3),
+                this.CreateFakeLevelDirectoryData(32, 4),
+                this.CreateFakeLevelDirectoryData(32, 5)
+            ], funPointerAddress);
+
+            using BinaryReader reader = new(new MemoryStream(vsrData));
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = ServiceFactory.CreateVsrSerializer();
@@ -323,11 +263,11 @@ namespace LemballEditor.Tests.SerializerTests
         public void Deserialize_ShouldSetTheFixedLevelCountsForEachLevelGroup()
         {
             var vsrData = this.CreateFakeVsrData([
-                this.CreateFakeLevelDirectoryData(1, 32, 1),
-                this.CreateFakeLevelDirectoryData(2, 32, 2),
-                this.CreateFakeLevelDirectoryData(3, 32, 3),
-                this.CreateFakeLevelDirectoryData(4, 32, 4),
-                this.CreateFakeLevelDirectoryData(5, 32, 5)
+                this.CreateFakeLevelDirectoryData(32, 1),
+                this.CreateFakeLevelDirectoryData(32, 2),
+                this.CreateFakeLevelDirectoryData(32, 3),
+                this.CreateFakeLevelDirectoryData(32, 4),
+                this.CreateFakeLevelDirectoryData(32, 5)
             ]);
 
             using BinaryReader reader = new(new MemoryStream(vsrData));
@@ -354,7 +294,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             for (var i = 0; i < 5; i++)
             {
-                levelDirectoryData[i] = this.CreateFakeLevelDirectoryData(0, 100, i == invalidGroupIndex ? (uint)30 : 29);
+                levelDirectoryData[i] = this.CreateFakeLevelDirectoryData(100, i == invalidGroupIndex ? (uint)30 : 29);
             }
 
             var vsrData = this.CreateFakeVsrData(levelDirectoryData);
@@ -363,23 +303,16 @@ namespace LemballEditor.Tests.SerializerTests
             var serializer = ServiceFactory.CreateVsrSerializer();
             var act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
 
-            act.Should().Throw<InvalidDataException>()
+            _ = act.Should().Throw<InvalidDataException>()
                 .WithMessage("Level directory contains more than 29 levels");
         }
 
         [TestMethod]
         public void Serialize_ShouldWriteTheAssetDataToTheStream()
         {
-            var assetData = new byte[100];
-
-            for (var i = 0; i < assetData.Length; i++)
+            var vsr = new Vsr
             {
-                assetData[i] = (byte)(i % 256);
-            }
-
-            Vsr vsr = new()
-            {
-                AssetData = [.. assetData],
+                AssetData = Enumerable.Repeat((byte)1, 1000).ToArray()
             };
 
             var pointerStart = 8;
@@ -391,13 +324,18 @@ namespace LemballEditor.Tests.SerializerTests
             vsr.SetLevelDirectoryPointer(LevelGroupName.Network, 24);
 
             (var vsrSerializer, var _, _) = this.CreateVsrSerializer();
-            var data = this.Serialize((vsr, new LevelPack()), vsrSerializer);
 
-            var dataBeforeFunPointer = data.Take(pointerStart);
-            _ = dataBeforeFunPointer.Should().BeEquivalentTo(assetData.Take(pointerStart));
+            using var stream = new MemoryStream();
+            using var writer = new BinaryWriter(stream);
+            vsrSerializer.Serialize((vsr, new LevelPack()), writer);
 
-            var dataAfterPointers = data.Skip(pointerStart + 20);
-            _ = dataAfterPointers.Should().BeEquivalentTo(assetData.Skip(pointerStart + 20));
+            var resultData = stream.ToArray();
+
+            var dataBeforeFunPointer = resultData.Take(pointerStart);
+            _ = dataBeforeFunPointer.Should().BeEquivalentTo(vsr.AssetData.Take(pointerStart));
+
+            var dataAfterPointers = resultData.Skip(pointerStart + 20);
+            _ = dataAfterPointers.Should().BeEquivalentTo(vsr.AssetData.Skip(pointerStart + 20));
         }
 
         [TestMethod]
