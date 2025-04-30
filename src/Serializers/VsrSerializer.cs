@@ -137,6 +137,7 @@ namespace LemballEditor.Serializers
             {
                 var levelDirectory = this.levelDirectoryFactory();
                 levelDirectory.LevelGroup = levelGroup;
+                levelDirectory.FixedLevelCount = vsr.GetFixedLevelCount(levelGroup.LevelGroupName);
 
                 var directoryAddress = writer.BaseStream.Position;
                 _ = writer.Seek((int)vsr.GetLevelDirectoryPointer(levelGroup.LevelGroupName), SeekOrigin.Begin);

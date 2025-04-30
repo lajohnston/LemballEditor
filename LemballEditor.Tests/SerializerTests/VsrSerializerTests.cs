@@ -369,6 +369,36 @@ namespace LemballEditor.Tests.SerializerTests
         }
 
         [TestMethod]
+        public void Serialize_ShouldSetTheFixedLevelSizeForEachLevelDirectory()
+        {
+            (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
+
+            Vsr vsr = new()
+            {
+                AssetData = Enumerable.Repeat((byte)1, 1000).ToArray()
+            };
+
+            vsr.SetFixedLevelCount(LevelGroupName.Fun, 1);
+            vsr.SetFixedLevelCount(LevelGroupName.Tricky, 2);
+            vsr.SetFixedLevelCount(LevelGroupName.Taxing, 3);
+            vsr.SetFixedLevelCount(LevelGroupName.Mayhem, 4);
+            vsr.SetFixedLevelCount(LevelGroupName.Network, 5);
+
+            using var writer = BinaryWriter.Null;
+
+            mockLevelDirectorySerializer
+                .Setup(m => m.Serialize(
+                    It.Is<LevelDirectory>(ld => ld.FixedLevelCount == vsr.GetFixedLevelCount(ld.LevelGroup.LevelGroupName)),
+                    It.Is<BinaryWriter>(w => w == writer)
+                ))
+                .Verifiable();
+
+            vsrSerializer.Serialize((vsr, new LevelPack()), writer);
+
+            mockLevelDirectorySerializer.Verify();
+        }
+
+        [TestMethod]
         [DataRow(LevelGroupName.Fun, 1000)]
         [DataRow(LevelGroupName.Tricky, 1100)]
         [DataRow(LevelGroupName.Taxing, 1200)]

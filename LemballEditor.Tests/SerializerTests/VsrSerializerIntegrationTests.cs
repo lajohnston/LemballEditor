@@ -37,6 +37,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             serializer.Serialize((deserializedVsr, new Models.LevelPack()), writer);
 
+            writer.BaseStream.Position = 0;
             var debugOutput = File.OpenWrite(Path.Combine(fixturePath, "debug.vsr"));
             writer.BaseStream.CopyTo(debugOutput);
 
