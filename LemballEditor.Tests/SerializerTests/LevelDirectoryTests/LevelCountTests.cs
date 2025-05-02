@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using LemballEditor.Serializers.LevelDirectory;
 
-namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
+namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
 {
     [TestClass]
     public class LevelCountTests

@@ -2,7 +2,7 @@
 using LemballEditor.Serializers.LevelDirectory;
 using System.Text;
 
-namespace LemballEditor.Tests.SerializerTests.LevelGroupTests
+namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
 {
     [TestClass]
     public class FileNameListTests
