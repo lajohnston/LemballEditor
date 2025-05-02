@@ -5,7 +5,7 @@ namespace LemballEditor.Serializers.LevelDirectory
     /// <summary>
     /// The address of the file descriptors in the directory, bypassing the file names.
     /// </summary>
-    public class AddressToFileDescriptors : ISerializer<LevelDirectory>
+    public class AddressToFileInfoList : ISerializer<LevelDirectory>
     {
         private static readonly uint HEADER_SIZE = 20;
         private static readonly uint FILE_NAME_SIZE = 12;

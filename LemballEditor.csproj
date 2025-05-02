@@ -87,7 +87,7 @@
     <Compile Include="src\Models\Level.cs" />
     <Compile Include="src\Models\Vsr.cs" />
     <Compile Include="src\Serializers\Sequence.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\AddressToFileDescriptors.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\DataSize.cs" />
     <Compile Include="src\Serializers\LevelDirectory\FileNameList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelCount.cs" />

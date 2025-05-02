@@ -73,7 +73,7 @@ namespace LemballEditor
                 new DataSize(),
                 new LevelCount(),
                 new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3)),
-                new AddressToFileDescriptors(),
+                new AddressToFileInfoList(),
                 new FileNameList(),
             }
         );

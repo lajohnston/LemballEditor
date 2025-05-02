@@ -4,12 +4,12 @@ using LemballEditor.Serializers.LevelDirectory;
 namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
 {
     [TestClass]
-    public class AddressToFileDescriptorsTests
+    public class AddressToFileInfoListTests
     {
         [TestMethod]
         public void Deserialize_ShouldThrowAnInvalidDataExceptionIfTheValueIsNotValid()
         {
-            var serializer = new AddressToFileDescriptors();
+            var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory()
             {
                 DirectoryAddress = 20000,
@@ -32,7 +32,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Deserialize_ShouldReadPastThePointer_WhenTheValidIsValid()
         {
-            var serializer = new AddressToFileDescriptors();
+            var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory()
             {
                 DirectoryAddress = 20000,
@@ -52,7 +52,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Deserialize_ShouldReturnTheDirectory_WhenTheValueIsValid()
         {
-            var serializer = new AddressToFileDescriptors();
+            var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory()
             {
                 DirectoryAddress = 50000,
@@ -71,7 +71,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Serialize_ShouldWriteTheAddressBasedOnTheLevelCountAndBaseAddress()
         {
-            var serializer = new AddressToFileDescriptors();
+            var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory
             {
                 DirectoryAddress = 1000,
