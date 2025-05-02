@@ -69,17 +69,31 @@ namespace LemballEditor.Tests.SerializerTests
             return [.. data];
         }
 
-        private byte[] CreateFakeLevelDirectoryData(uint size = 100, uint levelCount = 25)
+        private byte[] CreateFakeLevelDirectoryData(uint size = 100, uint levelCount = 5, uint firstFileId = 0)
         {
-            var footerBytesOfLastLevel = Encoding.ASCII.GetBytes("?DNE");
+            var data = new List<byte>();
+            data.AddRange(Encoding.ASCII.GetBytes("CRID"));
+            data.AddRange(BitConverter.GetBytes(size - 4));
+            data.AddRange(BitConverter.GetBytes(levelCount));
+            data.AddRange(new byte[8]);
 
-            return [
-                ..Encoding.ASCII.GetBytes("CRID"),
-                ..BitConverter.GetBytes(size - 4),
-                ..BitConverter.GetBytes(levelCount),
-                ..Enumerable.Repeat((byte)5, (int)size - 16),
-                ..footerBytesOfLastLevel
-            ];
+            // Fake file names
+            data.AddRange(new byte[levelCount * 12]);
+
+            // First file descriptor (containing id)
+            data.AddRange(new byte[4]);
+            data.AddRange(BitConverter.GetBytes(firstFileId));
+            data.AddRange(new byte[28]);
+
+            // Remaining file descriptors
+            data.AddRange(new byte[(levelCount - 1) * 36]);
+
+            // Fake empty level data
+            var footerBytesOfLastLevel = Encoding.ASCII.GetBytes("?DNE");
+            data.AddRange(Enumerable.Repeat((byte)5, (int)size - 16));  // pad to min size
+            data.AddRange(footerBytesOfLastLevel);
+
+            return [.. data];
         }
 
         [TestMethod]
@@ -165,7 +179,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             using var reader = new BinaryReader(new MemoryStream(vsrData));
 
-            var(vsrSerialize, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateVsrSerializer();
+            var (vsrSerialize, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateVsrSerializer();
 
             mockLevelDirectoryFactory.Setup(m => m()).Returns(createdDirectoryModels.Dequeue()).Verifiable();
 
@@ -305,6 +319,28 @@ namespace LemballEditor.Tests.SerializerTests
 
             _ = act.Should().Throw<InvalidDataException>()
                 .WithMessage("Level directory contains more than 29 levels");
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldStoreTheFileIdOfTheFirstLevelInTheFunDirectory()
+        {
+            uint fileId = 581;
+
+            var vsrData = this.CreateFakeVsrData([
+                this.CreateFakeLevelDirectoryData(32, 1, fileId),
+                this.CreateFakeLevelDirectoryData(32, 2),
+                this.CreateFakeLevelDirectoryData(32, 3),
+                this.CreateFakeLevelDirectoryData(32, 4),
+                this.CreateFakeLevelDirectoryData(32, 5)
+            ]);
+
+            using var reader = new BinaryReader(new MemoryStream(vsrData));
+            var vsr = ServiceFactory.CreateVsr();
+
+            (var vsrSerializer, _, _) = this.CreateVsrSerializer();
+            _ = vsrSerializer.Deserialize(reader, (vsr, null));
+
+            _ = vsr.FirstLevelFileId.Should().Be(fileId);
         }
 
         [TestMethod]

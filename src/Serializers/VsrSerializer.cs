@@ -47,6 +47,18 @@ namespace LemballEditor.Serializers
         }
 
         /// <summary>
+        /// Points the reader to the given level directory. The level pointers should have already been set
+        /// to the VSR model
+        /// </summary>
+        private void SeekLevelDirectory(BinaryReader reader, Models.Vsr vsr, LevelGroupName levelGroupName)
+        {
+            var directoryPointer = vsr.GetLevelDirectoryPointer(levelGroupName);
+            _ = reader.BaseStream.Seek(directoryPointer, SeekOrigin.Begin);
+            var directoryAddress = reader.ReadUInt32();
+            _ = reader.BaseStream.Seek(directoryAddress, SeekOrigin.Begin);
+        }
+
+        /// <summary>
         /// Stores the current (fixed) level sizes for each level group in the VSR instance
         /// </summary>
         /// <exception cref="InvalidDataException">If valid data could not be parsed</exception>
@@ -54,11 +66,9 @@ namespace LemballEditor.Serializers
         {
             foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
             {
-                var directoryPointer = vsr.GetLevelDirectoryPointer(levelGroupName);
-                reader.BaseStream.Seek(directoryPointer, SeekOrigin.Begin);
-                var directoryAddress = reader.ReadUInt32();
+                this.SeekLevelDirectory(reader, vsr, levelGroupName);
+                _ = reader.BaseStream.Seek(8, SeekOrigin.Current);
 
-                reader.BaseStream.Seek(directoryAddress + 8, SeekOrigin.Begin);
                 var levelCount = reader.ReadUInt32();
 
                 if (levelCount > 29)
@@ -71,10 +81,22 @@ namespace LemballEditor.Serializers
         }
 
         /// <summary>
+        /// Returns the file id of the first level of the Fun directory
+        /// </summary>
+        private uint GetFirstLevelFileId(BinaryReader reader, Models.Vsr vsr)
+        {
+            var funLevelCount = vsr.GetFixedLevelCount(LevelGroupName.Fun);
+            this.SeekLevelDirectory(reader, vsr, LevelGroupName.Fun);
+
+            _ = reader.BaseStream.Seek(20 + (funLevelCount * 12) + 4, SeekOrigin.Current);
+
+            return reader.ReadUInt32();
+        }
+
+        /// <summary>
         /// Deserialize a stream containing a full VSR file into a Vsr instance
         /// </summary>
         /// <param name="reader">BinaryReader reading the VSR stream</param>
-        /// <returns></returns>
         /// <exception cref="InvalidDataException">If the data isn't valid VSR data</exception>
         public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
@@ -113,6 +135,7 @@ namespace LemballEditor.Serializers
             }
 
             this.DeserializeFixedLevelSizes(reader, vsr);
+            vsr.FirstLevelFileId = this.GetFirstLevelFileId(reader, vsr);
 
             return models;
         }

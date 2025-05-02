@@ -81,5 +81,13 @@ namespace LemballEditor.Tests.ModelTests
             vsr.GetFixedLevelCount(LevelGroupName.Mayhem).Should().Be(4);
             vsr.GetFixedLevelCount(LevelGroupName.Network).Should().Be(5);
         }
+
+        [TestMethod]
+        public void ShouldGetAndSetTheIdOfTheFirstLevel()
+        {
+            var vsr = new Vsr();
+            vsr.FirstLevelFileId = 1234;
+            _ = vsr.FirstLevelFileId.Should().Be(1234);
+        }
     }
 }

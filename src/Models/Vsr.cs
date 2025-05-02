@@ -22,6 +22,11 @@ namespace LemballEditor.Models
         /// </summary>
         private readonly Dictionary<LevelGroupName, byte> fixedLevelCounts;
 
+        /// <summary>
+        /// The file ID of the first level in the FUN level group
+        /// </summary>
+        public uint FirstLevelFileId { get; set; } = 0;
+
         public Vsr()
         {
             levelDirectoryPointers = new Dictionary<LevelGroupName, uint>
