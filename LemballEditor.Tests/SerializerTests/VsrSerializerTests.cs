@@ -435,6 +435,45 @@ namespace LemballEditor.Tests.SerializerTests
         }
 
         [TestMethod]
+        [DataRow(LevelGroupName.Fun, 100, 100)]
+        [DataRow(LevelGroupName.Tricky, 100, 200)]
+        [DataRow(LevelGroupName.Taxing, 100, 300)]
+        [DataRow(LevelGroupName.Mayhem, 100, 400)]
+        [DataRow(LevelGroupName.Network, 100, 500)]
+        public void Serialize_ShouldSetTheFirstFileIdForEachLevelDirectory(
+            LevelGroupName levelGroupName,
+            int firstFunFileId,
+            int expectedFirstFileId
+        )
+        {
+            (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
+
+            Vsr vsr = new()
+            {
+                AssetData = Enumerable.Repeat((byte)1, 1000).ToArray(),
+                FirstLevelFileId = (uint)firstFunFileId
+            };
+
+            mockLevelDirectorySerializer
+                .Setup(m => m.Serialize(
+                    It.Is<LevelDirectory>(ld => ld.LevelGroup.LevelGroupName == levelGroupName && ld.FirstFileId == expectedFirstFileId), 
+                    It.IsAny<BinaryWriter>()
+                ))
+                .Verifiable();
+
+            vsr.SetFixedLevelCount(LevelGroupName.Fun, 100);
+            vsr.SetFixedLevelCount(LevelGroupName.Tricky, 100);
+            vsr.SetFixedLevelCount(LevelGroupName.Taxing, 100);
+            vsr.SetFixedLevelCount(LevelGroupName.Mayhem, 100);
+            vsr.SetFixedLevelCount(LevelGroupName.Network, 100);
+
+            using var writer = BinaryWriter.Null;
+            vsrSerializer.Serialize((vsr, new LevelPack()), writer);
+
+            mockLevelDirectorySerializer.Verify();
+        }
+
+        [TestMethod]
         [DataRow(LevelGroupName.Fun, 1000)]
         [DataRow(LevelGroupName.Tricky, 1100)]
         [DataRow(LevelGroupName.Taxing, 1200)]

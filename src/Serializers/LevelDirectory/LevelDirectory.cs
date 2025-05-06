@@ -15,6 +15,11 @@ namespace LemballEditor.Serializers.LevelDirectory
         public byte FixedLevelCount { get; set; }
 
         /// <summary>
+        /// The ID of the first level in the directory
+        /// </summary>
+        public uint FirstFileId {  get; set; }
+
+        /// <summary>
         /// The absolute address of the LevelDirectory within the VSR file
         /// </summary>
         public uint DirectoryAddress { get; set; }

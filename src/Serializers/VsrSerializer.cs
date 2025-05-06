@@ -156,11 +156,14 @@ namespace LemballEditor.Serializers
 
             writer.Write(vsr.AssetData);
 
+            uint nextFileId = vsr.FirstLevelFileId;
+
             foreach (var levelGroup in levelPack.GetLevelGroups())
             {
                 var levelDirectory = this.levelDirectoryFactory();
-                levelDirectory.LevelGroup = levelGroup;
+                levelDirectory.FirstFileId = nextFileId;
                 levelDirectory.FixedLevelCount = vsr.GetFixedLevelCount(levelGroup.LevelGroupName);
+                levelDirectory.LevelGroup = levelGroup;
 
                 var directoryAddress = writer.BaseStream.Position;
                 _ = writer.Seek((int)vsr.GetLevelDirectoryPointer(levelGroup.LevelGroupName), SeekOrigin.Begin);
@@ -168,6 +171,8 @@ namespace LemballEditor.Serializers
 
                 _ = writer.Seek((int)directoryAddress, SeekOrigin.Begin);
                 this.levelDirectorySerializer.Serialize(levelDirectory, writer);
+
+                nextFileId += levelDirectory.FixedLevelCount;
             }
         }
     }
