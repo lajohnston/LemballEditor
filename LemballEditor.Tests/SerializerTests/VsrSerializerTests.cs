@@ -474,6 +474,45 @@ namespace LemballEditor.Tests.SerializerTests
         }
 
         [TestMethod]
+        [DataRow(LevelGroupName.Fun, 1000, 100, 1000)]
+        [DataRow(LevelGroupName.Tricky, 1000, 100, 1100)]
+        [DataRow(LevelGroupName.Taxing, 1000, 100, 1200)]
+        [DataRow(LevelGroupName.Mayhem, 1000, 100, 1300)]
+        [DataRow(LevelGroupName.Network, 1000, 100, 1400)]
+        public void Serialize_ShouldSetTheAddressForEachLevelDirectory(LevelGroupName levelGroupName, int assetsSize, int eachDirectorySize, int expectedAddress)
+        {
+            (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
+
+            Vsr vsr = new()
+            {
+                AssetData = Enumerable.Repeat((byte)1, assetsSize).ToArray()
+            };
+
+            using var writer = new BinaryWriter(new MemoryStream());
+
+            mockLevelDirectorySerializer
+                .Setup(m => m.Serialize(
+                    It.IsAny<LevelDirectory>(),
+                    It.IsAny<BinaryWriter>()
+                ))
+                .Callback((LevelDirectory givenLevelDirectory, BinaryWriter writer) =>
+                {
+                    writer.Write(new byte[eachDirectorySize]);
+                });
+
+            mockLevelDirectorySerializer
+                .Setup(m => m.Serialize(
+                    It.Is<LevelDirectory>(ld => ld.LevelGroup.LevelGroupName == levelGroupName && ld.Address == expectedAddress),
+                    It.IsAny<BinaryWriter>()
+                ))
+                .Verifiable();
+
+            vsrSerializer.Serialize((vsr, new LevelPack()), writer);
+
+            mockLevelDirectorySerializer.Verify();
+        }
+
+        [TestMethod]
         [DataRow(LevelGroupName.Fun, 1000)]
         [DataRow(LevelGroupName.Tricky, 1100)]
         [DataRow(LevelGroupName.Taxing, 1200)]

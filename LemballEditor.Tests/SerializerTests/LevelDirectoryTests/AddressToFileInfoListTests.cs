@@ -12,11 +12,11 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory()
             {
-                DirectoryAddress = 20000,
+                Address = 20000,
                 FixedLevelCount = 5
             };
 
-            var expected = directory.DirectoryAddress + 20 + (uint)(directory.FixedLevelCount * 12);
+            var expected = directory.Address + 20 + (uint)(directory.FixedLevelCount * 12);
             var invalidValue = expected + 1;
 
             var data = BitConverter.GetBytes(invalidValue);
@@ -35,11 +35,11 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory()
             {
-                DirectoryAddress = 20000,
+                Address = 20000,
                 FixedLevelCount = 5
             };
 
-            var address = directory.DirectoryAddress + 20 + (uint)(directory.FixedLevelCount * 12);
+            var address = directory.Address + 20 + (uint)(directory.FixedLevelCount * 12);
             var data = BitConverter.GetBytes(address);
 
             using var stream = new MemoryStream(data);
@@ -55,11 +55,11 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory()
             {
-                DirectoryAddress = 50000,
+                Address = 50000,
                 FixedLevelCount = 4
             };
 
-            var address = directory.DirectoryAddress + 20 + (uint)(directory.FixedLevelCount * 12);
+            var address = directory.Address + 20 + (uint)(directory.FixedLevelCount * 12);
             var data = BitConverter.GetBytes(address);
 
             using var stream = new MemoryStream(data);
@@ -74,7 +74,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             var serializer = new AddressToFileInfoList();
             var directory = new LevelDirectory
             {
-                DirectoryAddress = 1000,
+                Address = 1000,
                 FixedLevelCount = 10
             };
 
@@ -82,7 +82,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var writer = new BinaryWriter(stream);
 
             serializer.Serialize(directory, writer);
-            _ = BitConverter.ToUInt32(stream.ToArray(), 0).Should().Be(directory.DirectoryAddress + 20 + (uint)(directory.FixedLevelCount * 12));
+            _ = BitConverter.ToUInt32(stream.ToArray(), 0).Should().Be(directory.Address + 20 + (uint)(directory.FixedLevelCount * 12));
         }
     }
 }

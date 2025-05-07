@@ -24,8 +24,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         public void ItShouldStoreTheDirectoryAddress()
         {
             var levelDirectory = new LevelDirectory();
-            levelDirectory.DirectoryAddress = 2000;
-            levelDirectory.DirectoryAddress.Should().Be(2000);
+            levelDirectory.Address = 2000;
+            levelDirectory.Address.Should().Be(2000);
         }
 
         public void ItShouldStoreTheLevelGroup()

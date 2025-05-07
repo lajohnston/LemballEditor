@@ -12,7 +12,7 @@ namespace LemballEditor.Serializers.LevelDirectory
 
         private uint CalculateValue(LevelDirectory directory)
         {
-            return directory.DirectoryAddress + HEADER_SIZE + (directory.FixedLevelCount * FILE_NAME_SIZE);
+            return directory.Address + HEADER_SIZE + (directory.FixedLevelCount * FILE_NAME_SIZE);
         }
 
         public LevelDirectory Deserialize(BinaryReader reader, LevelDirectory levelDirectory)

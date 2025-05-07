@@ -161,15 +161,15 @@ namespace LemballEditor.Serializers
             foreach (var levelGroup in levelPack.GetLevelGroups())
             {
                 var levelDirectory = this.levelDirectoryFactory();
+                levelDirectory.Address = (uint)writer.BaseStream.Position;
                 levelDirectory.FirstFileId = nextFileId;
                 levelDirectory.FixedLevelCount = vsr.GetFixedLevelCount(levelGroup.LevelGroupName);
                 levelDirectory.LevelGroup = levelGroup;
 
-                var directoryAddress = writer.BaseStream.Position;
                 _ = writer.Seek((int)vsr.GetLevelDirectoryPointer(levelGroup.LevelGroupName), SeekOrigin.Begin);
-                writer.Write((uint)directoryAddress);
+                writer.Write(levelDirectory.Address);
 
-                _ = writer.Seek((int)directoryAddress, SeekOrigin.Begin);
+                _ = writer.Seek((int)levelDirectory.Address, SeekOrigin.Begin);
                 this.levelDirectorySerializer.Serialize(levelDirectory, writer);
 
                 nextFileId += levelDirectory.FixedLevelCount;
