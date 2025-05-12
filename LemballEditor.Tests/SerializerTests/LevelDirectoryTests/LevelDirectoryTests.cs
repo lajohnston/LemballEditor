@@ -7,6 +7,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
     [TestClass]
     public class LevelDirectoryTests
     {
+        [TestMethod]
         public void ItShouldStoreTheFixedLevelCount()
         {
             var levelDirectory = new LevelDirectory();
@@ -14,13 +15,15 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             levelDirectory.FixedLevelCount.Should().Be(5);
         }
 
+        [TestMethod]
         public void ItShouldStoreTheFirstFileId()
         {
             var levelDirectory = new LevelDirectory();
             levelDirectory.FirstFileId = 100;
-            levelDirectory.FixedLevelCount.Should().Be(100);
+            levelDirectory.FirstFileId.Should().Be(100);
         }
 
+        [TestMethod]
         public void ItShouldStoreTheDirectoryAddress()
         {
             var levelDirectory = new LevelDirectory();
@@ -28,12 +31,46 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             levelDirectory.Address.Should().Be(2000);
         }
 
+        [TestMethod]
         public void ItShouldStoreTheLevelGroup()
         {
             var levelDirectory = new LevelDirectory();
             var levelGroup = new LevelGroup(LevelGroupName.Fun);
             levelDirectory.LevelGroup = levelGroup;
             levelDirectory.LevelGroup.Should().Be(levelGroup);
+        }
+
+        [TestMethod]
+        public void AddSerializedLevel_ShouldThrowAnExceptionIfTheLevelsExceedTheFixedAmount()
+        {
+            var levelDirectory = new LevelDirectory();
+            levelDirectory.FixedLevelCount = 1;
+
+            levelDirectory.AddSerializedLevel(new byte[10]);
+
+            var act = () => levelDirectory.AddSerializedLevel(new byte[10]);
+            act.Should().Throw<InvalidOperationException>()
+                .WithMessage("Level directory fixed size exceeded");
+        }
+
+        [TestMethod]
+        public void GetSerializedLevels_ShouldReturnTheAddedLevelsInOrder()
+        {
+            var levelDirectory = new LevelDirectory();
+            levelDirectory.FixedLevelCount = 3;
+
+            var levels = new byte[][] {
+                new byte[10],
+                new byte[20],
+                new byte[30],
+            };
+
+            foreach (var level in levels)
+            {
+                levelDirectory.AddSerializedLevel(level);
+            }
+
+            levelDirectory.GetSerializedLevels().ToArray().Should().BeEquivalentTo(levels);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿using LemballEditor.Models;
+﻿using System;
+using System.Collections.Generic;
+using LemballEditor.Models;
 
 namespace LemballEditor.Serializers.LevelDirectory
 {
@@ -28,5 +30,38 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// The LevelGroup which will hold the levels
         /// </summary>
         public LevelGroup LevelGroup { get; set; }
+
+        /// <summary>
+        /// A collection of serialized levels
+        /// </summary>
+        private List<byte[]> serializedLevels;
+
+        public LevelDirectory()
+        {
+            serializedLevels = new List<byte[]>();
+        }
+
+        /// <summary>
+        /// Adds a serialized level at the end of the directory
+        /// </summary>
+        /// <param name="level">Serialized level data</param>
+        /// <exception cref="InvalidOperationException">If the level directory fixed capacity is exceeded</exception>
+        public void AddSerializedLevel(byte[] level)
+        {
+            if (serializedLevels.Count == this.FixedLevelCount)
+            {
+                throw new InvalidOperationException("Level directory fixed size exceeded");
+            }
+
+            serializedLevels.Add(level);
+        }
+
+        /// <summary>
+        /// Returns an iterator for the serialized levels in the directory
+        /// </summary>
+        public IEnumerable<byte[]> GetSerializedLevels()
+        {
+            return serializedLevels.AsReadOnly();
+        }
     }
 }
