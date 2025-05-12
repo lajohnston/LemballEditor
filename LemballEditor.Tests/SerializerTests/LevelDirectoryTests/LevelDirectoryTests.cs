@@ -72,5 +72,39 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
 
             levelDirectory.GetSerializedLevels().ToArray().Should().BeEquivalentTo(levels);
         }
+
+        [TestMethod]
+        public void GetSerializedLevels_ShouldReturnBlankLevelsToFillTheFixedSize()
+        {
+            var levelDirectory = new LevelDirectory();
+            levelDirectory.FixedLevelCount = 3;
+
+            var level = new byte[10];
+            levelDirectory.AddSerializedLevel(level);
+
+            var resultLevels = levelDirectory.GetSerializedLevels().ToArray();
+            resultLevels.Length.Should().Be(3);
+
+            resultLevels[0].Should().BeEquivalentTo(level);
+            resultLevels[1].Should().BeEquivalentTo(resultLevels[2]);
+        }
+
+        [TestMethod]
+        [DataRow(new int[] { }, 0, 0)]
+        [DataRow(new int[] { 100 }, 1, 100)]
+        [DataRow(new int[] { }, 5, 396 * 5)]
+        [DataRow(new int[] { 100, 200 }, 5, 300 + (396 * 3))]
+        public void GetDataSizeInBytes_ShouldReturnTheSizeOfAllTheLevelsIncludingBlankLevelsInBytes(int[] levelSizes, int fixedNumberOfLevels, int expectedSize)
+        {
+            var levelDirectory = new LevelDirectory();
+            levelDirectory.FixedLevelCount = (byte)fixedNumberOfLevels;
+
+            foreach (uint levelSize in levelSizes)
+            {
+                levelDirectory.AddSerializedLevel(new byte[levelSize]);
+            }
+
+            levelDirectory.GetDataSizeInBytes().Should().Be((uint)expectedSize);
+        }
     }
 }

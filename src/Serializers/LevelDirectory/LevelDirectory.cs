@@ -10,6 +10,11 @@ namespace LemballEditor.Serializers.LevelDirectory
     public class LevelDirectory
     {
         /// <summary>
+        /// Blank level data used to fill up the directory to the hardcoded number of levels
+        /// </summary>
+        private readonly static byte[] BLANK_LEVEL = Convert.FromBase64String("ICBJQRIAAAAJAAAAWAIBAAEAAABGU0RHEgAAAAEAAQAJAgAAAAAAAEJPTUcMAAAAAAAAAFlNTkUKAAAAAAAAAEdQSFMKAAAAAAAAAEVET04KAAAAAAAAAExMQUIKAAAAAAAAAEVOSU0KAAAAAAAAAExMT0MKAAAAAAAAAE1JTkEKAAAAAAAAAFRGSUwKAAAAAAAAAFJPT0QKAAAAAAAAAEtDT1IKAAAAAAAAAEROQUgKAAAAAAAAAFJTQUwKAAAAAAAAAE5PT0IiAAAADwBapVqlWqVapVqlWqVapVqlWqVapVqlWqUAAEVNQU4oAAAAKEJsYW5rKQC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7tNQVJUCgAAAAAAAAAgRUNJCgAAAAAAAABFVk9NCgAAAAAAAABOVUdQCgAAAAAAAAAxU0xQDAAAAAAACQJHQUxGDAAAAAEAAgBURkVEDAAAAAYCAABLTkxTCgAAAAAAAABTVk5JCgAAAAAAAABXVEVOCgAAAAAAAAA/RE5F");
+
+        /// <summary>
         /// The absolute address of the LevelDirectory within the VSR file
         /// </summary>
         public uint Address { get; set; }
@@ -61,7 +66,33 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// </summary>
         public IEnumerable<byte[]> GetSerializedLevels()
         {
-            return serializedLevels.AsReadOnly();
+            foreach (var level in serializedLevels)
+            {
+                yield return level;
+            }
+
+            if (serializedLevels.Count < this.FixedLevelCount)
+            {
+                for (int i = serializedLevels.Count; i < this.FixedLevelCount; i++)
+                {
+                    yield return BLANK_LEVEL;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Returns the size of the serialized level data in bytes
+        /// </summary>
+        public uint GetDataSizeInBytes()
+        {
+            uint size = 0;
+
+            foreach (var level in this.GetSerializedLevels())
+            {
+                size += (uint)level.Length;
+            }
+
+            return size;
         }
     }
 }
