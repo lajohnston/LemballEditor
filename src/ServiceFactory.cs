@@ -46,7 +46,7 @@ namespace LemballEditor
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level binary
         /// </summary>
-        public static readonly Func<Sequence<ILevel>> CreateLevelSerializer = () => new Sequence<ILevel>(
+        public static readonly Func<ISerializer<ILevel>> CreateLevelSerializer = () => new Sequence<ILevel>(
             new ISerializer<ILevel>[] {
                 new Constant<ILevel>(new byte[] { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 }), // Header constant; '  IA' followed by 18, 0, 0, 0
                 new UnknownA(),
@@ -67,7 +67,7 @@ namespace LemballEditor
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level directory within a VSR file
         /// </summary>
-        public static readonly Func<Sequence<LevelDirectory>> CreateLevelDirectorySerializer = () => new Sequence<LevelDirectory>(
+        public static readonly Func<ISerializer<LevelDirectory>> CreateLevelDirectorySerializer = () => new Sequence<LevelDirectory>(
             new ISerializer<LevelDirectory>[] {
                 new Constant<LevelDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DataSize(),
@@ -76,6 +76,7 @@ namespace LemballEditor
                 new AddressToFileInfoList(),
                 new FileNameList(),
                 new FileInfoList(),
+                new LevelList(CreateLevelSerializer(), () => CreateLevel(1, 1)),
             }
         );
 
