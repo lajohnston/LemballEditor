@@ -95,6 +95,7 @@
     <Compile Include="src\Serializers\LevelDirectory\LevelCount.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelDirectory.cs" />
     <Compile Include="src\Serializers\VsrSerializerV1.cs" />
+    <Compile Include="src\Serializers\Vsr\DirectoryPointerList.cs" />
     <Compile Include="src\ServiceFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />
     <Compile Include="src\Models\LevelPack.cs" />

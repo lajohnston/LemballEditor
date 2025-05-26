@@ -104,7 +104,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(new MemoryStream(data));
             var serializer = ServiceFactory.CreateVsrSerializer();
 
-            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
+            Func<(Models.Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid VSR");
         }
 
@@ -116,7 +116,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var reader = new BinaryReader(new MemoryStream([.. data]));
             var serializer = ServiceFactory.CreateVsrSerializer();
 
-            Func<(Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
+            Func<(Models.Vsr, LevelPack)> act = () => serializer.Deserialize(reader, (ServiceFactory.CreateVsr(), null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Unable to locate FUN directory pointer in VSR data");
         }
 
@@ -346,7 +346,7 @@ namespace LemballEditor.Tests.SerializerTests
         [TestMethod]
         public void Serialize_ShouldWriteTheAssetDataToTheStream()
         {
-            var vsr = new Vsr
+            var vsr = new Models.Vsr
             {
                 AssetData = Enumerable.Repeat((byte)1, 1000).ToArray()
             };
@@ -384,7 +384,7 @@ namespace LemballEditor.Tests.SerializerTests
         {
             (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
 
-            Vsr vsr = new()
+            Models.Vsr vsr = new()
             {
                 AssetData = Enumerable.Repeat((byte)1, 1000).ToArray()
             };
@@ -409,7 +409,7 @@ namespace LemballEditor.Tests.SerializerTests
         {
             (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
 
-            Vsr vsr = new()
+            Models.Vsr vsr = new()
             {
                 AssetData = Enumerable.Repeat((byte)1, 1000).ToArray()
             };
@@ -448,7 +448,7 @@ namespace LemballEditor.Tests.SerializerTests
         {
             (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
 
-            Vsr vsr = new()
+            Models.Vsr vsr = new()
             {
                 AssetData = Enumerable.Repeat((byte)1, 1000).ToArray(),
                 FirstLevelFileId = (uint)firstFunFileId
@@ -483,7 +483,7 @@ namespace LemballEditor.Tests.SerializerTests
         {
             (var vsrSerializer, var mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
 
-            Vsr vsr = new()
+            Models.Vsr vsr = new()
             {
                 AssetData = Enumerable.Repeat((byte)1, assetsSize).ToArray()
             };
@@ -522,7 +522,7 @@ namespace LemballEditor.Tests.SerializerTests
         {
             var (vsrSerializer, mockLevelDirectorySerializer, _) = this.CreateVsrSerializer();
 
-            Vsr vsr = new()
+            Models.Vsr vsr = new()
             {
                 AssetData = Enumerable.Repeat((byte)1, 1000).ToArray(),
             };
