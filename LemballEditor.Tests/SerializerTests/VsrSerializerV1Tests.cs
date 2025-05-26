@@ -8,16 +8,16 @@ using Moq;
 namespace LemballEditor.Tests.SerializerTests
 {
     [TestClass]
-    public class VsrSerializerTests
+    public class VsrSerializerV1Tests
     {
-        private (VsrSerializer, Mock<ISerializer<LevelDirectory>>, Mock<Func<LevelDirectory>>) CreateVsrSerializer()
+        private (VsrSerializerV1, Mock<ISerializer<LevelDirectory>>, Mock<Func<LevelDirectory>>) CreateVsrSerializer()
         {
             Mock<ISerializer<LevelDirectory>> levelDirectorySerializerMock = new();
             Mock<Func<LevelDirectory>> levelDirectoryFactoryMock = new();
 
             levelDirectoryFactoryMock.SetReturnsDefault(new LevelDirectory());
 
-            VsrSerializer serializer = new(levelDirectorySerializerMock.Object, levelDirectoryFactoryMock.Object);
+            VsrSerializerV1 serializer = new(levelDirectorySerializerMock.Object, levelDirectoryFactoryMock.Object);
             return (serializer, levelDirectorySerializerMock, levelDirectoryFactoryMock);
         }
 

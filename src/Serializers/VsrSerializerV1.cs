@@ -8,7 +8,7 @@ namespace LemballEditor.Serializers
     /// <summary>
     /// Deserializes a full VSR file
     /// </summary>
-    public class VsrSerializer : ISerializer<(Models.Vsr, Models.LevelPack)>
+    public class VsrSerializerV1 : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
@@ -17,7 +17,7 @@ namespace LemballEditor.Serializers
 
         private readonly Func<LevelDirectory.LevelDirectory> levelDirectoryFactory;
 
-        public VsrSerializer(
+        public VsrSerializerV1(
             ISerializer<LevelDirectory.LevelDirectory> levelDirectorySerializer,
             Func<LevelDirectory.LevelDirectory> levelDirectoryFactory)
         {

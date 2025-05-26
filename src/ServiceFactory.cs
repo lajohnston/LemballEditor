@@ -62,7 +62,7 @@ namespace LemballEditor
         /// <summary>
         /// Creates a VSRSerializer
         /// </summary>
-        public static readonly Func<VsrSerializer> CreateVsrSerializer = () => new VsrSerializer(CreateLevelDirectorySerializer(), CreateLevelDirectory);
+        public static readonly Func<VsrSerializerV1> CreateVsrSerializer = () => new VsrSerializerV1(CreateLevelDirectorySerializer(), CreateLevelDirectory);
 
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level directory within a VSR file
