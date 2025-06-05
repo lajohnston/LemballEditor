@@ -42,6 +42,7 @@ namespace LemballEditor.Serializers.Vsr
                 {
                     var levelDirectory = this.levelDirectoryFactory(levelGroup);
                     levelDirectory.Address = (uint)reader.BaseStream.Position;
+                    levelDirectory.FixedLevelCount = vsr.GetFixedLevelCount(levelGroup);
 
                     var resultLevelDirectory = this.levelDirectorySerializer.Deserialize(reader, levelDirectory);
                     levelPack.SetLevelGroup(resultLevelDirectory.LevelGroup);

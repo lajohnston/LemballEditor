@@ -31,9 +31,11 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             return (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory);
         }
 
-        private (Models.Vsr, Models.LevelPack) CreateModels()
+        private (Models.Vsr, Models.LevelPack) CreateModels(int funAddress = 100)
         {
             var (vsr, levelPack) = (new Models.Vsr(), new Models.LevelPack());
+
+            vsr.AssetData = new byte[funAddress];
 
             foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
             {
@@ -61,7 +63,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         public void Deserialize_ShouldReturnTheGivenModels_WhenALevelPackIsGiven()
         {
             var (serializer, _, _) = this.CreateSerializer();
-            var models = (new Models.Vsr(), new Models.LevelPack());
+            var models = CreateModels();
 
             var reader = new BinaryReader(new MemoryStream());
 
@@ -75,7 +77,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         public void Deserialize_ShouldPassTheReaderAndEachLevelDirectoryToTheLevelDirectoryDeserializer_WhenALevelPackIsGiven()
         {
             var (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateSerializer();
-            var models = (new Models.Vsr(), new Models.LevelPack());
+            var models = CreateModels();
 
             var reader = new BinaryReader(new MemoryStream());
 
@@ -126,6 +128,41 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         }
 
         [TestMethod]
+        public void Deserialize_ShouldSetTheFixedLevelCountOfEachLevelDirectory_WhenALevelPackIsGiven()
+        {
+            var (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateSerializer();
+
+            var models = CreateModels();
+            var (vsr, _) = models;
+
+            vsr.SetFixedLevelCount(LevelGroupName.Fun, 25);
+            vsr.SetFixedLevelCount(LevelGroupName.Tricky, 26);
+            vsr.SetFixedLevelCount(LevelGroupName.Taxing, 27);
+            vsr.SetFixedLevelCount(LevelGroupName.Mayhem, 28);
+            vsr.SetFixedLevelCount(LevelGroupName.Network, 29);
+
+            var reader = new BinaryReader(new MemoryStream());
+
+            var resultFixedLevelCounts = new Dictionary<LevelGroupName, byte>();
+
+            _ = mockLevelDirectorySerializer.Setup(m => m.Deserialize(
+                It.IsAny<BinaryReader>(),
+                It.IsAny<LevelDirectory>())
+            ).Callback<BinaryReader, LevelDirectory>((r, ld) =>
+            {
+                resultFixedLevelCounts[ld.LevelGroup.LevelGroupName] = ld.FixedLevelCount;
+            }).Returns((BinaryReader reader, LevelDirectory ld) => ld);
+
+            _ = serializer.Deserialize(reader, models);
+
+            _ = resultFixedLevelCounts[LevelGroupName.Fun].Should().Be(25);
+            _ = resultFixedLevelCounts[LevelGroupName.Tricky].Should().Be(26);
+            _ = resultFixedLevelCounts[LevelGroupName.Taxing].Should().Be(27);
+            _ = resultFixedLevelCounts[LevelGroupName.Mayhem].Should().Be(28);
+            _ = resultFixedLevelCounts[LevelGroupName.Network].Should().Be(29);
+        }
+
+        [TestMethod]
         public void Deserialize_ShouldSetEachDeserializedLevelGroupToTheLevelPack_WhenALevelPackIsGiven()
         {
             var levelGroups = Enum.GetValues(typeof(LevelGroupName))
@@ -150,7 +187,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             });
 
             var reader = new BinaryReader(new MemoryStream());
-            var models = (new Models.Vsr(), new Models.LevelPack());
+            var models = CreateModels();
             var (vsr, levelPack) = serializer.Deserialize(reader, models);
 
             _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(levelGroups[0]);
