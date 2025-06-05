@@ -69,18 +69,17 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
                 .Returns(createdLevels.Dequeue())
                 .Verifiable();
 
-            mockLevelSerializer.Setup(m =>
-                m.Deserialize(
-                    It.IsAny<BinaryReader>(),
-                    It.Is<ILevel>(level => level == expectedLevels.Dequeue())
-                )
-            ).Verifiable();
-
             using var reader = new BinaryReader(new MemoryStream());
             _ = serializer.Deserialize(reader, levelDirectory);
 
             mockLevelFactory.Verify();
-            mockLevelSerializer.Verify();
+
+            mockLevelSerializer.Verify(m =>
+                m.Deserialize(
+                    It.IsAny<BinaryReader>(),
+                    It.Is<ILevel>(level => level == expectedLevels.Dequeue())
+                )
+            );
         }
 
         [TestMethod]

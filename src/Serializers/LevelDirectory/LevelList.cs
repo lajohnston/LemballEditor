@@ -24,12 +24,11 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// </summary>
         public LevelDirectory Deserialize(BinaryReader reader, LevelDirectory model)
         {
-            foreach (var level in model.GetSerializedLevels())
+            for (var i = 0; i < model.FixedLevelCount; i++)
             {
                 reader.BaseStream.Position += 8;
 
-                var levelModel = this.levelFactory();
-                _ = this.levelSerializer.Deserialize(reader, levelModel);
+                var levelModel = this.levelSerializer.Deserialize(reader, this.levelFactory());
                 model.LevelGroup.AddLevel(levelModel);
             }
 
