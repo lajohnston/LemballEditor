@@ -31,11 +31,11 @@ namespace LemballEditor.Tests.SerializerTests
             using var sourceReader = new BinaryReader(sourceVsrStream);
 
             var serializer = ServiceFactory.CreateVsrLevelPackSerializer();
-            var (deserializedVsr, _) = serializer.Deserialize(sourceReader, (new Models.Vsr(), null));
+            var (deserializedVsr, deserializedLevelPack) = serializer.Deserialize(sourceReader, (new Models.Vsr(), new Models.LevelPack()));
 
             using var writer = new BinaryWriter(new MemoryStream());
 
-            serializer.Serialize((deserializedVsr, new Models.LevelPack()), writer);
+            serializer.Serialize((deserializedVsr, deserializedLevelPack), writer);
 
             writer.BaseStream.Position = 0;
             var debugOutput = File.OpenWrite(Path.Combine(fixturePath, "debug.vsr"));
