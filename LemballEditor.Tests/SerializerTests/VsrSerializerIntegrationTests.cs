@@ -30,7 +30,7 @@ namespace LemballEditor.Tests.SerializerTests
             using var sourceVsrStream = File.OpenRead(vsrPath);
             using var sourceReader = new BinaryReader(sourceVsrStream);
 
-            var serializer = ServiceFactory.CreateVsrSerializer();
+            var serializer = ServiceFactory.CreateVsrLevelPackSerializer();
             var (deserializedVsr, _) = serializer.Deserialize(sourceReader, (new Models.Vsr(), null));
 
             using var writer = new BinaryWriter(new MemoryStream());

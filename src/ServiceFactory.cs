@@ -3,6 +3,7 @@ using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
 using LemballEditor.Serializers.LevelDirectory;
+using LemballEditor.Serializers.Vsr;
 using System;
 using System.Data;
 using System.Text;
@@ -60,9 +61,17 @@ namespace LemballEditor
         );
 
         /// <summary>
-        /// Creates a VSRSerializer
+        /// Creates a serializer to serialize and deserialize a VSR file and its levels
         /// </summary>
-        public static readonly Func<VsrSerializerV1> CreateVsrSerializer = () => new VsrSerializerV1(CreateLevelDirectorySerializer(), CreateLevelDirectory);
+        public static readonly Func<ISerializer<(Models.Vsr, Models.LevelPack)>> CreateVsrLevelPackSerializer = () => new Sequence<(Models.Vsr, Models.LevelPack)>(
+            new ISerializer<(Models.Vsr, Models.LevelPack)>[] {
+                new DirectoryPointerList(),
+                new AssetBinary(),
+                new FirstLevelFileId(),
+                new FixedLevelCount(),
+                new Serializers.Vsr.LevelPack(CreateLevelDirectorySerializer(), CreateLevelDirectory)
+            }
+        );
 
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level directory within a VSR file
@@ -88,7 +97,7 @@ namespace LemballEditor
         /// <summary>
         /// Creates a LevelPack model
         /// </summary>
-        public static readonly Func<LevelPack> CreateLevelPack = () => new LevelPack();
+        public static readonly Func<Models.LevelPack> CreateLevelPack = () => new Models.LevelPack();
 
         /// <summary>
         /// Creates a LevelGroup model
@@ -96,8 +105,18 @@ namespace LemballEditor
         public static readonly Func<LevelGroupName, LevelGroup> CreateLevelGroup = (LevelGroupName groupName) => new LevelGroup(groupName);
 
         /// <summary>
-        /// Creates a LevelDirectory model
+        /// Creates a LevelDirectory model containing an optional level group for the given type
         /// </summary>
-        public static readonly Func<LevelDirectory> CreateLevelDirectory = () => new LevelDirectory();
+        public static readonly Func<LevelGroupName?, LevelDirectory> CreateLevelDirectory = (LevelGroupName? levelGroupName) =>
+        {
+            var directory = new LevelDirectory();
+
+            if (levelGroupName.HasValue)
+            {
+                directory.LevelGroup = new LevelGroup(levelGroupName.Value);
+            }
+
+            return directory;
+        };
     }
 }
