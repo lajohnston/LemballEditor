@@ -32,14 +32,19 @@ namespace LemballEditor.Serializers.Vsr
         /// </summary>
         public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
-            var (_, levelPack) = models;
+            var (vsr, levelPack) = models;
 
             if (levelPack != null)
             {
+                reader.BaseStream.Position = (int)vsr.FunAddress;
+
                 foreach (LevelGroupName levelGroup in Enum.GetValues(typeof(LevelGroupName)))
                 {
-                    var levelDirectory = this.levelDirectorySerializer.Deserialize(reader, this.levelDirectoryFactory(levelGroup));
-                    levelPack.SetLevelGroup(levelDirectory.LevelGroup);
+                    var levelDirectory = this.levelDirectoryFactory(levelGroup);
+                    levelDirectory.Address = (uint)reader.BaseStream.Position;
+
+                    var resultLevelDirectory = this.levelDirectorySerializer.Deserialize(reader, levelDirectory);
+                    levelPack.SetLevelGroup(resultLevelDirectory.LevelGroup);
                 }
             }
 

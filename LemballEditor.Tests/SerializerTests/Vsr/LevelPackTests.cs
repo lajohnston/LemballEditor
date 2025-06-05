@@ -2,7 +2,6 @@
 using LemballEditor.Models;
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.LevelDirectory;
-using LemballEditor.Serializers.Vsr;
 using Moq;
 
 namespace LemballEditor.Tests.SerializerTests.Vsr
@@ -90,6 +89,40 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
                     It.Is<LevelDirectory>(ld => ld.LevelGroup.LevelGroupName == levelGroupName)
                 ), Times.Once);
             }
+        }
+
+        [TestMethod]
+        public void Deserialize_ShouldSetTheCurrentAddressToEachLevelDirectory_WhenALevelPackIsGiven()
+        {
+            var (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateSerializer();
+
+            var funAddress = (uint)100;
+            var vsr = new Models.Vsr
+            {
+                AssetData = new byte[funAddress]
+            };
+
+            var reader = new BinaryReader(new MemoryStream(new byte[1000]));
+            reader.BaseStream.Position = funAddress;
+
+            var resultAddresses = new Dictionary<LevelGroupName, uint>();
+
+            _ = mockLevelDirectorySerializer.Setup(m => m.Deserialize(
+                It.IsAny<BinaryReader>(),
+                It.IsAny<LevelDirectory>())
+            ).Callback<BinaryReader, LevelDirectory>((r, ld) =>
+            {
+                resultAddresses[ld.LevelGroup.LevelGroupName] = ld.Address;
+                reader.BaseStream.Position += 100;
+            }).Returns((BinaryReader reader, LevelDirectory ld) => ld);
+
+            _ = serializer.Deserialize(reader, (vsr, new Models.LevelPack()));
+
+            _ = resultAddresses[LevelGroupName.Fun].Should().Be(100);
+            _ = resultAddresses[LevelGroupName.Tricky].Should().Be(200);
+            _ = resultAddresses[LevelGroupName.Taxing].Should().Be(300);
+            _ = resultAddresses[LevelGroupName.Mayhem].Should().Be(400);
+            _ = resultAddresses[LevelGroupName.Network].Should().Be(500);
         }
 
         [TestMethod]
