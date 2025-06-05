@@ -21,24 +21,26 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         [TestMethod]
         public void Deserialize_ShouldThrowAnException_WhenTheStreamDoesNotBeginWithCridHeader()
         {
+            var vsr = ServiceFactory.CreateVsr();
             byte[] data = [1, 2, 3];
 
             using var reader = new BinaryReader(new MemoryStream(data));
             var serializer = new DirectoryPointerList();
 
-            Func<Models.Vsr> act = () => serializer.Deserialize(reader, ServiceFactory.CreateVsr());
+           var act = () => serializer.Deserialize(reader, (vsr, null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid VSR asset data");
         }
 
         [TestMethod]
         public void Deserialize_ShouldThrowAnException_WhenTheFunDirectoryCannotBeLocated()
         {
+            var vsr = ServiceFactory.CreateVsr();
             List<byte> data = [.. Encoding.ASCII.GetBytes("CRID"), .. new byte[200]];
 
             using var reader = new BinaryReader(new MemoryStream([.. data]));
             var serializer = new DirectoryPointerList();
 
-            Func<Models.Vsr> act = () => serializer.Deserialize(reader, ServiceFactory.CreateVsr());
+            var act = () => serializer.Deserialize(reader, (vsr, null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Unable to locate FUN directory pointer in VSR data");
         }
 
@@ -53,7 +55,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             var vsr = ServiceFactory.CreateVsr();
             var serializer = new DirectoryPointerList();
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Fun).Should().Be((uint)funPointerAddress);
             _ = vsr.GetLevelDirectoryPointer(LevelGroupName.Tricky).Should().Be((uint)funPointerAddress + 36);
@@ -73,14 +75,13 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             var vsr = ServiceFactory.CreateVsr();
             var serializer = new DirectoryPointerList();
 
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
             stream.Position.Should().Be(0);
         }
 
         [TestMethod]
         public void Serialize_ShouldNotActuallyWriteAnything()
         {
-            var vsr = ServiceFactory.CreateVsr();
             var serializer = new DirectoryPointerList();
 
             var originalData = CreateValidData();
@@ -88,7 +89,8 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var stream = new MemoryStream(originalData);
             using var writer = new BinaryWriter(stream);
 
-            serializer.Serialize(vsr, writer);
+            var vsr = ServiceFactory.CreateVsr();
+            serializer.Serialize((vsr, null), writer);
 
             stream.ToArray().Should().BeEquivalentTo(originalData);
         }

@@ -7,7 +7,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
     public class FirstLevelFileIdTests
     {
         [TestMethod]
-        public void Deserialize_ShouldReturnTheModel()
+        public void Deserialize_ShouldReturnTheModels()
         {
             var vsr = ServiceFactory.CreateVsr();
             vsr.AssetData = new byte[100];
@@ -16,8 +16,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             var serializer = new FirstLevelFileId();
 
-            var result = serializer.Deserialize(reader, vsr);
-            _ = result.Should().Be(vsr);
+            var result = serializer.Deserialize(reader, (vsr, null));
+            _ = result.Item1.Should().Be(vsr);
+            _ = result.Item2.Should().BeNull();
         }
 
         [TestMethod]
@@ -39,7 +40,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var reader = new BinaryReader(new MemoryStream(directoryData.ToArray()));
 
             var serializer = new FirstLevelFileId();
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             _ = vsr.FirstLevelFileId.Should().Be((uint)firstFileId);
         }
@@ -54,7 +55,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             var serializer = new FirstLevelFileId();
 
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
             _ = reader.BaseStream.Position.Should().Be(0);
         }
 
@@ -69,7 +70,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var stream = new MemoryStream(originalData);
             using var writer = new BinaryWriter(stream);
 
-            serializer.Serialize(vsr, writer);
+            serializer.Serialize((vsr, null), writer);
 
             _ = stream.ToArray().Should().BeEquivalentTo(originalData);
         }

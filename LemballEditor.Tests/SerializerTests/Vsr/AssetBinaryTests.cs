@@ -22,7 +22,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var reader = new BinaryReader(new MemoryStream(vsrData.ToArray()));
 
             var serializer = new AssetBinary();
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             _ = vsr.AssetData.Should().BeEquivalentTo(vsrData.Take(funDirectoryAddress));
             _ = reader.BaseStream.Position.Should().Be(funDirectoryAddress);
@@ -39,7 +39,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            serializer.Serialize(vsr, writer);
+            serializer.Serialize((vsr, null), writer);
 
             _ = stream.ToArray().Should().BeEquivalentTo(vsr.AssetData);
         }

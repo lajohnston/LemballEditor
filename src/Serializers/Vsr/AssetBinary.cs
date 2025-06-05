@@ -2,13 +2,14 @@
 
 namespace LemballEditor.Serializers.Vsr
 {
-    public class AssetBinary : ISerializer<Models.Vsr>
+    public class AssetBinary : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
         /// <summary>
         /// Reads the asset data up to the FUN directory pointer and sets it to the model
         /// </summary>
-        public Models.Vsr Deserialize(BinaryReader reader, Models.Vsr vsr)
+        public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
+            var (vsr, _) = models;
             var startAddress = reader.BaseStream.Position;
 
             var funDirectoryPointer = vsr.GetLevelDirectoryPointer(Models.LevelGroupName.Fun);
@@ -20,14 +21,15 @@ namespace LemballEditor.Serializers.Vsr
 
             vsr.AssetData = assetData;
 
-            return vsr;
+            return models;
         }
 
         /// <summary>
         /// Writes the asset data to the stream
         /// </summary>
-        public void Serialize(Models.Vsr vsr, BinaryWriter writer)
+        public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
+            var (vsr, _) = models;
             writer.Write(vsr.AssetData);
         }
     }

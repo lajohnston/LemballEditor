@@ -2,13 +2,15 @@
 
 namespace LemballEditor.Serializers.Vsr
 {
-    public class FirstLevelFileId : ISerializer<Models.Vsr>
+    public class FirstLevelFileId : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
         /// <summary>
         /// Reads the first level file ID (FUN Level 0) from the VSR data and sets it in the model.
         /// </summary>
-        public Models.Vsr Deserialize(BinaryReader reader, Models.Vsr vsr)
+        public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
+            var (vsr, _) = models;
+
             // Skip the file names and other data
             reader.BaseStream.Position = (int)vsr.FunAddress + 8;
             var levelCount = reader.ReadUInt32();
@@ -19,10 +21,10 @@ namespace LemballEditor.Serializers.Vsr
 
             reader.BaseStream.Position = 0;
 
-            return vsr;
+            return models;
         }
 
-        public void Serialize(Models.Vsr vsr, BinaryWriter writer)
+        public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
             // Do nothing
         }

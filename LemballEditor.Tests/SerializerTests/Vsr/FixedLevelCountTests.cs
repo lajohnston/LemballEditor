@@ -26,7 +26,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         }
 
         [TestMethod]
-        public void Deserialize_ShouldReturnTheModel()
+        public void Deserialize_ShouldReturnTheModels()
         {
             var vsr = ServiceFactory.CreateVsr();
             vsr.AssetData = new byte[100];
@@ -36,8 +36,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var reader = new BinaryReader(new MemoryStream(data));
 
             var serializer = new FixedLevelCount();
-            var result = serializer.Deserialize(reader, vsr);
-            _ = result.Should().Be(vsr);
+            var result = serializer.Deserialize(reader, (vsr, null));
+            _ = result.Item1.Should().Be(vsr);
+            _ = result.Item2.Should().BeNull();
         }
 
         [TestMethod]
@@ -53,12 +54,12 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var reader = new BinaryReader(new MemoryStream(data.ToArray()));
             var serializer = new FixedLevelCount();
 
-            var result = serializer.Deserialize(reader, vsr);
-            _ = result.GetFixedLevelCount(Models.LevelGroupName.Fun).Should().Be((byte)levelCounts[0]);
-            _ = result.GetFixedLevelCount(Models.LevelGroupName.Tricky).Should().Be((byte)levelCounts[1]);
-            _ = result.GetFixedLevelCount(Models.LevelGroupName.Taxing).Should().Be((byte)levelCounts[2]);
-            _ = result.GetFixedLevelCount(Models.LevelGroupName.Mayhem).Should().Be((byte)levelCounts[3]);
-            _ = result.GetFixedLevelCount(Models.LevelGroupName.Network).Should().Be((byte)levelCounts[4]);
+            var (resultVsr, _) = serializer.Deserialize(reader, (vsr, null));
+            _ = resultVsr.GetFixedLevelCount(Models.LevelGroupName.Fun).Should().Be((byte)levelCounts[0]);
+            _ = resultVsr.GetFixedLevelCount(Models.LevelGroupName.Tricky).Should().Be((byte)levelCounts[1]);
+            _ = resultVsr.GetFixedLevelCount(Models.LevelGroupName.Taxing).Should().Be((byte)levelCounts[2]);
+            _ = resultVsr.GetFixedLevelCount(Models.LevelGroupName.Mayhem).Should().Be((byte)levelCounts[3]);
+            _ = resultVsr.GetFixedLevelCount(Models.LevelGroupName.Network).Should().Be((byte)levelCounts[4]);
         }
 
         [TestMethod]
@@ -74,7 +75,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             var serializer = new FixedLevelCount();
 
             var originalPosition = reader.BaseStream.Position;
-            _ = serializer.Deserialize(reader, vsr);
+            _ = serializer.Deserialize(reader, (vsr, null));
 
             reader.BaseStream.Position.Should().Be(originalPosition);
         }
@@ -106,7 +107,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             var serializer = new FixedLevelCount();
 
-            Action act = () => serializer.Deserialize(reader, vsr);
+            Action act = () => serializer.Deserialize(reader, (vsr, null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"Invalid header 'XXXX' for level group '{invalidLevelGroup}'");
         }
 
@@ -138,7 +139,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             var serializer = new FixedLevelCount();
 
-            Action act = () => serializer.Deserialize(reader, vsr);
+            Action act = () => serializer.Deserialize(reader, (vsr, null));
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"Invalid level count '30' for level group '{invalidLevelGroup}'. Maximum allowed is 29.");
         }
 
@@ -153,7 +154,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             using var stream = new MemoryStream(originalData);
             using var writer = new BinaryWriter(stream);
 
-            serializer.Serialize(vsr, writer);
+            serializer.Serialize((vsr, null), writer);
 
             _ = stream.ToArray().Should().BeEquivalentTo(originalData);
         }

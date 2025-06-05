@@ -9,12 +9,13 @@ namespace LemballEditor.Serializers.Vsr
     /// <summary>
     /// Deserialises the fixed level count for each level group in the VSR file.
     /// </summary>
-    public class FixedLevelCount : ISerializer<Models.Vsr>
+    public class FixedLevelCount : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
-        public Models.Vsr Deserialize(BinaryReader reader, Models.Vsr model)
+        public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
+            var (vsr, _) = models;
             var originalPosition = reader.BaseStream.Position;
-            reader.BaseStream.Position = (int)model.FunAddress;
+            reader.BaseStream.Position = (int)vsr.FunAddress;
 
             foreach (var levelGroup in Enum.GetValues(typeof(LevelGroupName)).Cast<LevelGroupName>())
             {
@@ -33,17 +34,17 @@ namespace LemballEditor.Serializers.Vsr
                     throw new InvalidDataException($"Invalid level count '{levelCount}' for level group '{levelGroup}'. Maximum allowed is 29.");
                 }
 
-                model.SetFixedLevelCount(levelGroup, (byte)levelCount);
+                vsr.SetFixedLevelCount(levelGroup, (byte)levelCount);
 
                 reader.BaseStream.Position += dataSize - 4; // skip to the next directory
             }
 
             reader.BaseStream.Position = originalPosition; 
 
-            return model;
+            return models;
         }
 
-        public void Serialize(Models.Vsr model, BinaryWriter writer)
+        public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
             // Do nothing
         }

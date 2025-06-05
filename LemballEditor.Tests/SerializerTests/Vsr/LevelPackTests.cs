@@ -8,9 +8,9 @@ using Moq;
 namespace LemballEditor.Tests.SerializerTests.Vsr
 {
     [TestClass]
-    public class VsrLevelPackTests
+    public class LevelPackTests
     {
-        private (VsrLevelPack, Mock<ISerializer<LevelDirectory>>, Mock<Func<LevelGroupName?, LevelDirectory>>) CreateSerializer()
+        private (Serializers.Vsr.LevelPack, Mock<ISerializer<LevelDirectory>>, Mock<Func<LevelGroupName?, LevelDirectory>>) CreateSerializer()
         {
             Mock<ISerializer<LevelDirectory>> mockLevelDirectorySerializer = new();
             Mock<Func<LevelGroupName?, LevelDirectory>> mockLevelDirectoryFactory = new();
@@ -27,14 +27,14 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             _ = mockLevelDirectoryFactory.Setup(m => m(null)).Returns(() => ServiceFactory.CreateLevelDirectory(null));
 
-            VsrLevelPack serializer = new(mockLevelDirectorySerializer.Object, mockLevelDirectoryFactory.Object);
+            Serializers.Vsr.LevelPack serializer = new(mockLevelDirectorySerializer.Object, mockLevelDirectoryFactory.Object);
 
             return (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory);
         }
 
-        private (Models.Vsr, LevelPack) CreateModels()
+        private (Models.Vsr, Models.LevelPack) CreateModels()
         {
-            var (vsr, levelPack) = (new Models.Vsr(), new LevelPack());
+            var (vsr, levelPack) = (new Models.Vsr(), new Models.LevelPack());
 
             foreach (LevelGroupName levelGroupName in Enum.GetValues(typeof(LevelGroupName)))
             {
@@ -48,7 +48,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         public void Deserialize_ShouldReturnTheVsr_WhenNoLevelPackIsGiven()
         {
             var (serializer, _, _) = this.CreateSerializer();
-            var models = (new Models.Vsr(), (LevelPack)null);
+            var models = (new Models.Vsr(), (Models.LevelPack)null);
 
             var reader = new BinaryReader(new MemoryStream());
 
@@ -62,7 +62,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         public void Deserialize_ShouldReturnTheGivenModels_WhenALevelPackIsGiven()
         {
             var (serializer, _, _) = this.CreateSerializer();
-            var models = (new Models.Vsr(), new LevelPack());
+            var models = (new Models.Vsr(), new Models.LevelPack());
 
             var reader = new BinaryReader(new MemoryStream());
 
@@ -76,7 +76,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         public void Deserialize_ShouldPassTheReaderAndEachLevelDirectoryToTheLevelDirectoryDeserializer_WhenALevelPackIsGiven()
         {
             var (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateSerializer();
-            var models = (new Models.Vsr(), new LevelPack());
+            var models = (new Models.Vsr(), new Models.LevelPack());
 
             var reader = new BinaryReader(new MemoryStream());
 
@@ -117,7 +117,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             });
 
             var reader = new BinaryReader(new MemoryStream());
-            var models = (new Models.Vsr(), new LevelPack());
+            var models = (new Models.Vsr(), new Models.LevelPack());
             var (vsr, levelPack) = serializer.Deserialize(reader, models);
 
             _ = levelPack.GetLevelGroup(LevelGroupName.Fun).Should().Be(levelGroups[0]);

@@ -4,14 +4,15 @@ using LemballEditor.Models;
 
 namespace LemballEditor.Serializers.Vsr
 {
-    public class DirectoryPointerList : ISerializer<Models.Vsr>
+    public class DirectoryPointerList : ISerializer<(Models.Vsr, Models.LevelPack)>
     {
         /// <summary>
         /// Extracts the level directory pointers from the VSR data and sets them to the model
         /// </summary>
         /// <exception cref="InvalidDataException">If the directory pointers could not be extracted</exception>
-        public Models.Vsr Deserialize(BinaryReader reader, Models.Vsr vsr)
+        public (Models.Vsr, Models.LevelPack) Deserialize(BinaryReader reader, (Models.Vsr, Models.LevelPack) models)
         {
+            var (vsr, _) = models;
             var originalPosition = reader.BaseStream.Position;
             var header = Encoding.ASCII.GetString(reader.ReadBytes(4));
 
@@ -30,10 +31,10 @@ namespace LemballEditor.Serializers.Vsr
 
             _ = reader.BaseStream.Position = originalPosition;
 
-            return vsr;
+            return models;
         }
 
-        public void Serialize(Models.Vsr vsr, BinaryWriter writer)
+        public void Serialize((Models.Vsr, Models.LevelPack) models, BinaryWriter writer)
         {
             // do nothing
         }
