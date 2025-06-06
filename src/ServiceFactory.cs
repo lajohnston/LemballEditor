@@ -49,7 +49,7 @@ namespace LemballEditor
         /// </summary>
         public static readonly Func<ISerializer<ILevel>> CreateLevelSerializer = () => new Sequence<ILevel>(
             new ISerializer<ILevel>[] {
-                new Constant<ILevel>(new byte[] { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 }), // Header constant; '  IA' followed by 18, 0, 0, 0
+                new Constant<ILevel>(new byte[] { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 }, "level header"), // Header constant; '  IA' followed by 18, 0, 0, 0
                 new UnknownA(),
                 new Theme(),
                 new TimeLimit(),
@@ -81,7 +81,7 @@ namespace LemballEditor
                 new Constant<LevelDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DataSize(),
                 new LevelCount(),
-                new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3)),
+                new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3), "level directory '3' constant"),
                 new AddressToFileInfoList(),
                 new FileNameList(),
                 new FileInfoList(),

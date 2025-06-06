@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using System.Text;
+using FluentAssertions;
 using LemballEditor.Serializers;
-using System.Text;
 
 namespace LemballEditor.Tests.SerializerTests
 {
@@ -8,16 +8,35 @@ namespace LemballEditor.Tests.SerializerTests
     public sealed class ConstantTests
     {
         [TestMethod]
-        public void Deserialize_ShouldThrowAnInvalidDataException_WhenTheReadDataDoesNotMatchTheConstantData()
+        [DataRow("Foo", 0, "Unexpected Foo at position 0")]
+        [DataRow("Foo", 10, "Unexpected Foo at position 10")]
+        [DataRow("Bar", 200, "Unexpected Bar at position 200")]
+        public void Deserialize_ShouldThrowAnInvalidDataException_WhenTheReadDataDoesNotMatchTheConstantData(
+            string dataDescripion,
+            int invalidAddress,
+            string expectedMessage
+        )
         {
-            var validData = Encoding.UTF8.GetBytes("VALID HEADER");
-            var invalidData = Encoding.UTF8.GetBytes("INVALID HEADER");
+            var validData = Encoding.UTF8.GetBytes("VALID DATA");
 
-            using var stream = new MemoryStream(invalidData);
+            var invalidData = new List<byte>();
+
+            // Padding before invalid data
+            if (invalidAddress > 0)
+            {
+                invalidData.AddRange(new byte[invalidAddress]);
+            }
+
+            invalidData.AddRange(Encoding.UTF8.GetBytes("INVALID DATA"));
+
+            using var stream = new MemoryStream(invalidData.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var act = () => new Constant<bool>(validData).Deserialize(reader, true);
-            _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid value");
+            reader.BaseStream.Position = invalidAddress;
+
+            var fakeModel = "fakeModel";
+            var act = () => new Constant<string>(validData, dataDescripion).Deserialize(reader, fakeModel);
+            _ = act.Should().Throw<InvalidDataException>().WithMessage(expectedMessage);
         }
 
         [TestMethod]
@@ -28,7 +47,7 @@ namespace LemballEditor.Tests.SerializerTests
 
             var validHeader = Encoding.UTF8.GetBytes("VALID HEADER");
 
-            new Constant<bool>(validHeader).Serialize(true, writer);
+            new Constant<bool>(validHeader, "data").Serialize(true, writer);
 
             _ = stream.ToArray().Should().BeEquivalentTo(validHeader);
         }

@@ -19,7 +19,7 @@ namespace LemballEditor.Serializers.Level.Map
         {
             propertySerializers = new List<ISerializer<IMap>>()
             {
-                new Constant<IMap>(Encoding.ASCII.GetBytes("FSDG")),
+                new Constant<IMap>(Encoding.ASCII.GetBytes("FSDG"), "map header"),
                 new Size(mapFactory),
                 new TileMap(tileFactory)
             };

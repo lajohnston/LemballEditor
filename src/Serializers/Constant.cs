@@ -14,19 +14,19 @@ namespace LemballEditor.Serializers
         private readonly byte[] data;
 
         /// <summary>
-        /// The exception message if the deserialized data doesn't match the constant
+        /// A description of the data for use in error messaging
         /// </summary>
-        private readonly string errorMessage;
+        private readonly string dataDescription;
 
         /// <summary>
         /// Creates an instance of the Constant serializer
         /// </summary>
         /// <param name="data">The constant data to assert and write</param>
-        /// <param name="errorMessage">The exception message if the deserialized data doesn't match the constant</param>
-        public Constant(byte[] data, string errorMessage = "Invalid value")
+        /// <param name="dataDescription">A brief description of the data</param>
+        public Constant(byte[] data, string dataDescription)
         {
             this.data = data;
-            this.errorMessage = errorMessage;
+            this.dataDescription = dataDescription;
         }
 
         /// <summary>
@@ -36,11 +36,12 @@ namespace LemballEditor.Serializers
         /// <exception cref="InvalidDataException">If the bytes don't match</exception>
         public TResult Deserialize(BinaryReader reader, TResult result)
         {
-            var headerBytes = reader.ReadBytes(data.Length);
+            var headerBytes = reader.ReadBytes(this.data.Length);
 
-            if (!headerBytes.SequenceEqual(data))
+            if (!headerBytes.SequenceEqual(this.data))
             {
-                throw new InvalidDataException(errorMessage);
+                var invalidPosition = reader.BaseStream.Position - this.data.Length;
+                throw new InvalidDataException($"Unexpected {this.dataDescription} at position {invalidPosition}");
             }
 
             return result;
@@ -52,7 +53,7 @@ namespace LemballEditor.Serializers
         /// <param name="writer">The writer for writing to the stream</param>
         public void Serialize(TResult result, BinaryWriter writer)
         {
-            writer.Write(data);
+            writer.Write(this.data);
         }
     }
 }
