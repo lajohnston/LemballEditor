@@ -42,7 +42,16 @@ namespace LemballEditor
         /// <summary>
         /// Creates a MapSerializer
         /// </summary>
-        public static readonly Func<MapSerializer> CreateMapSerializer = () => new MapSerializer(CreateMap, CreateTile);
+        public static readonly Func<ISerializer<IMap>> CreateMapSerializer = () =>
+        {
+            return new Sequence<IMap>(
+                new ISerializer<IMap>[] {
+                    new Constant<IMap>(Encoding.ASCII.GetBytes("FSDG"), "map header"),
+                    new Size(CreateMap),
+                    new TileMap(CreateTile)
+                }
+            );
+        };
 
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level binary
@@ -56,7 +65,7 @@ namespace LemballEditor
                 new UnusedNumberOfLemmings(),
                 new FlagsRequiredIndicator(),
                 new UnknownB(),
-                CreateMapSerializer()
+                new LevelMap(CreateMapSerializer())
             }
         );
 

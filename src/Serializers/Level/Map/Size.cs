@@ -6,6 +6,7 @@ namespace LemballEditor.Serializers.Level.Map
 {
     public class Size : ISerializer<IMap>
     {
+        internal static readonly int HEADER_SIZE = 12;
         private static readonly int TILE_SIZE_BYTES = 6;
 
         private readonly Func<ushort, ushort, IMap> mapFactory;
@@ -27,7 +28,7 @@ namespace LemballEditor.Serializers.Level.Map
             var xSize = reader.ReadUInt16();
             var ySize = reader.ReadUInt16();
 
-            var expectedSize = (uint)((xSize * ySize * TILE_SIZE_BYTES) + MapSerializer.HEADER_SIZE);
+            var expectedSize = (uint)((xSize * ySize * TILE_SIZE_BYTES) + HEADER_SIZE);
             if (tileDataSize != expectedSize)
             {
                 throw new InvalidDataException($"Invalid map data size: {tileDataSize} given for a {xSize}x{ySize} map");
@@ -40,7 +41,7 @@ namespace LemballEditor.Serializers.Level.Map
 
         public void Serialize(IMap map, BinaryWriter writer)
         {
-            writer.Write((uint)((map.TileCount * TILE_SIZE_BYTES) + MapSerializer.HEADER_SIZE));
+            writer.Write((uint)((map.TileCount * TILE_SIZE_BYTES) + HEADER_SIZE));
             writer.Write(map.XTiles);
             writer.Write(map.YTiles);
         }

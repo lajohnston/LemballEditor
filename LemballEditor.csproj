@@ -88,6 +88,7 @@
     <Compile Include="src\Models\Vsr.cs" />
     <Compile Include="src\Serializers\LevelDirectory\FileInfoList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelList.cs" />
+    <Compile Include="src\Serializers\Level\LevelMap.cs" />
     <Compile Include="src\Serializers\Sequence.cs" />
     <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\DataSize.cs" />
@@ -106,7 +107,6 @@
     <Compile Include="src\Models\Tile.cs" />
     <Compile Include="src\Serializers\Constant.cs" />
     <Compile Include="src\Serializers\ISerializer.cs" />
-    <Compile Include="src\Serializers\Level\Map\MapSerializer.cs" />
     <Compile Include="src\Serializers\Level\Map\Size.cs" />
     <Compile Include="src\Serializers\Level\Map\TileMap.cs" />
     <Compile Include="src\Serializers\Level\Theme.cs" />
