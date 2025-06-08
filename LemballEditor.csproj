@@ -88,6 +88,7 @@
     <Compile Include="src\Models\Vsr.cs" />
     <Compile Include="src\Serializers\LevelDirectory\FileInfoList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelList.cs" />
+    <Compile Include="src\Serializers\DataBlock.cs" />
     <Compile Include="src\Serializers\Level\LevelMap.cs" />
     <Compile Include="src\Serializers\Sequence.cs" />
     <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoList.cs" />
