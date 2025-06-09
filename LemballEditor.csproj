@@ -90,6 +90,7 @@
     <Compile Include="src\Serializers\LevelDirectory\LevelList.cs" />
     <Compile Include="src\Serializers\DataBlock.cs" />
     <Compile Include="src\Serializers\Level\LevelMap.cs" />
+    <Compile Include="src\Serializers\Level\Objects\BomgBlock.cs" />
     <Compile Include="src\Serializers\Sequence.cs" />
     <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoList.cs" />
     <Compile Include="src\Serializers\LevelDirectory\DataSize.cs" />
@@ -361,7 +362,9 @@
   <ItemGroup>
     <Content Include="assets\selectedTile.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="src\Models\GameObjects\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

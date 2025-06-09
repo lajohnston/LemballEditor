@@ -2,6 +2,7 @@
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
+using LemballEditor.Serializers.Level.Objects;
 using LemballEditor.Serializers.LevelDirectory;
 using LemballEditor.Serializers.Vsr;
 using System;
@@ -127,5 +128,10 @@ namespace LemballEditor
 
             return directory;
         };
+
+        /// <summary>
+        /// Creates a serializer for the BOMG data block
+        /// </summary>
+        public static readonly Func<ISerializer<ILevel>> CreateBomgBlockSerializer = () => new DataBlock<ILevel>("BOMG", new BomgBlock());
     }
 }
