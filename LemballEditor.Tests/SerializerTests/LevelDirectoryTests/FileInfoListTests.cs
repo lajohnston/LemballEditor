@@ -13,14 +13,14 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(12, 12 * 36)]
         public void Deserialize_ShouldSkipOverTheFileInfoDataAndReturnTheModel(int numberOfFiles, int expectedResultPosition)
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 FixedLevelCount = (byte)numberOfFiles
             };
 
             using var reader = new BinaryReader(new MemoryStream(new byte[100]));
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             var result = serializer.Deserialize(reader, levelDirectory);
 
             _ = reader.BaseStream.Position.Should().Be(expectedResultPosition);
@@ -32,7 +32,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(1200)]
         public void Serialize_ShouldWriteTheFileNameAddressForEachLevel(int directoryAddress)
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 Address = (uint)directoryAddress,
                 FixedLevelCount = 3
@@ -41,7 +41,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             serializer.Serialize(levelDirectory, writer);
 
             using var reader = new BinaryReader(stream);
@@ -61,7 +61,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow((uint)600)]
         public void Serialize_ShouldWriteTheIncrementingFileIdForEachLevel(uint firstFileId)
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 FixedLevelCount = 3,
                 FirstFileId = firstFileId
@@ -70,7 +70,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             serializer.Serialize(levelDirectory, writer);
 
             using var reader = new BinaryReader(stream);
@@ -88,7 +88,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Serialize_ShouldWriteTheBinStringForEachLevel()
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 FixedLevelCount = 3
             };
@@ -96,7 +96,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             serializer.Serialize(levelDirectory, writer);
 
             using var reader = new BinaryReader(stream);
@@ -118,7 +118,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         {
             var directoryHeaderSize = 20 + (12 * levelSizes.Length) + (36 * levelSizes.Length);
 
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 Address = (uint)(firstLevelAddress - directoryHeaderSize),
                 FixedLevelCount = (byte)levelSizes.Length
@@ -133,7 +133,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             serializer.Serialize(levelDirectory, writer);
 
             using var reader = new BinaryReader(stream);
@@ -151,7 +151,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(new uint[] { 1000, 1020 })]
         public void Serialize_ShouldWriteTheFileSizesForEachLevel(uint[] levelSizes)
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 FixedLevelCount = (byte)levelSizes.Length
             };
@@ -165,7 +165,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             serializer.Serialize(levelDirectory, writer);
 
             using var reader = new BinaryReader(stream);
@@ -181,7 +181,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Serialize_ShouldPadEachFileDataTo36Bytes()
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 FixedLevelCount = 3
             };
@@ -193,7 +193,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var serializer = new FileInfoList();
+            var serializer = new FileInfoListSerializer();
             serializer.Serialize(levelDirectory, writer);
 
             using var reader = new BinaryReader(stream);

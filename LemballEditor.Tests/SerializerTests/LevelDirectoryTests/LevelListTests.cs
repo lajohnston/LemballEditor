@@ -10,7 +10,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
     [TestClass]
     public class LevelListTests
     {
-        private (LevelList, Mock<ISerializer<ILevel>>, Mock<Func<ILevel>>, ILevel[]) CreateSerializer(LevelDirectory model)
+        private (LevelListSerializer, Mock<ISerializer<ILevel>>, Mock<Func<ILevel>>, ILevel[]) CreateSerializer(LevelDirectorySerializer model)
         {
             var mockLevelSerializer = new Mock<ISerializer<ILevel>>();
 
@@ -26,14 +26,14 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             var mockLevelFactory = new Mock<Func<ILevel>>();
             _ = mockLevelFactory.Setup(m => m()).Returns(createdLevels.Dequeue);
 
-            var serializer = new LevelList(mockLevelSerializer.Object, mockLevelFactory.Object);
+            var serializer = new LevelListSerializer(mockLevelSerializer.Object, mockLevelFactory.Object);
 
             return (serializer, mockLevelSerializer, mockLevelFactory, levels);
         }
 
-        private LevelDirectory CreateLevelDirectory(int numberOfLevels)
+        private LevelDirectorySerializer CreateLevelDirectory(int numberOfLevels)
         {
-            var levelDirectory = new LevelDirectory
+            var levelDirectory = new LevelDirectorySerializer
             {
                 FixedLevelCount = (byte)numberOfLevels,
                 LevelGroup = new LevelGroup(LevelGroupName.Fun)
@@ -45,7 +45,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Deserialize_ShouldReturnTheGivenLevelDirectory()
         {
-            var levelDirectory = new LevelDirectory();
+            var levelDirectory = new LevelDirectorySerializer();
             var (serializer, _, _, _) = this.CreateSerializer(levelDirectory);
 
             using var reader = new BinaryReader(new MemoryStream());

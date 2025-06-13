@@ -15,9 +15,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
 
-            var model = new LevelDirectory();
+            var model = new LevelDirectorySerializer();
 
-            var serializer = new LevelCount();
+            var serializer = new LevelCountSerializer();
             _ = serializer.Deserialize(reader, model);
 
             _ = model.FixedLevelCount.Should().Be((byte)numberOfFiles);
@@ -33,9 +33,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data);
             using var reader = new BinaryReader(stream);
 
-            var model = new LevelDirectory();
+            var model = new LevelDirectorySerializer();
 
-            var serializer = new LevelCount();
+            var serializer = new LevelCountSerializer();
             var act = () => serializer.Deserialize(reader, model);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage($"Number of levels in level group higher than 29 maximum: {numberOfFiles}");
@@ -47,9 +47,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(new byte[10]);
             using var reader = new BinaryReader(stream);
 
-            var model = new LevelDirectory();
+            var model = new LevelDirectorySerializer();
 
-            var serializer = new LevelCount();
+            var serializer = new LevelCountSerializer();
             _ = serializer.Deserialize(reader, model).Should().Be(model);
         }
 
@@ -59,9 +59,9 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream();
             using var writer = new BinaryWriter(stream);
 
-            var model = new LevelDirectory() { FixedLevelCount = 12 };
+            var model = new LevelDirectorySerializer() { FixedLevelCount = 12 };
 
-            var serializer = new LevelCount();
+            var serializer = new LevelCountSerializer();
             serializer.Serialize(model, writer);
 
             _ = stream.ToArray().Should().BeEquivalentTo(BitConverter.GetBytes((uint)model.FixedLevelCount));

@@ -9,8 +9,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Deserialize_ShouldThrowAnInvalidDataExceptionIfTheValueIsNotValid()
         {
-            var serializer = new AddressToFileInfoList();
-            var directory = new LevelDirectory()
+            var serializer = new AddressToFileInfoListSerializer();
+            var directory = new LevelDirectorySerializer()
             {
                 Address = 20000,
                 FixedLevelCount = 5
@@ -32,8 +32,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Deserialize_ShouldReadPastThePointer_WhenTheValidIsValid()
         {
-            var serializer = new AddressToFileInfoList();
-            var directory = new LevelDirectory()
+            var serializer = new AddressToFileInfoListSerializer();
+            var directory = new LevelDirectorySerializer()
             {
                 Address = 20000,
                 FixedLevelCount = 5
@@ -52,8 +52,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Deserialize_ShouldReturnTheDirectory_WhenTheValueIsValid()
         {
-            var serializer = new AddressToFileInfoList();
-            var directory = new LevelDirectory()
+            var serializer = new AddressToFileInfoListSerializer();
+            var directory = new LevelDirectorySerializer()
             {
                 Address = 50000,
                 FixedLevelCount = 4
@@ -71,8 +71,8 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Serialize_ShouldWriteTheAddressBasedOnTheLevelCountAndBaseAddress()
         {
-            var serializer = new AddressToFileInfoList();
-            var directory = new LevelDirectory
+            var serializer = new AddressToFileInfoListSerializer();
+            var directory = new LevelDirectorySerializer
             {
                 Address = 1000,
                 FixedLevelCount = 10

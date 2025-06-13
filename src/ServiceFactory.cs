@@ -45,11 +45,11 @@ namespace LemballEditor
         /// </summary>
         public static readonly Func<ISerializer<IMap>> CreateMapSerializer = () =>
         {
-            return new Sequence<IMap>(
+            return new SequenceSerializer<IMap>(
                 new ISerializer<IMap>[] {
-                    new Constant<IMap>(Encoding.ASCII.GetBytes("FSDG"), "map header"),
-                    new Size(CreateMap),
-                    new TileMap(CreateTile)
+                    new ConstantSerializer<IMap>(Encoding.ASCII.GetBytes("FSDG"), "map header"),
+                    new SizeSerializer(CreateMap),
+                    new TileMapSerializer(CreateTile)
                 }
             );
         };
@@ -57,45 +57,45 @@ namespace LemballEditor
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level binary
         /// </summary>
-        public static readonly Func<ISerializer<ILevel>> CreateLevelSerializer = () => new Sequence<ILevel>(
+        public static readonly Func<ISerializer<ILevel>> CreateLevelSerializer = () => new SequenceSerializer<ILevel>(
             new ISerializer<ILevel>[] {
-                new Constant<ILevel>(new byte[] { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 }, "level header"), // Header constant; '  IA' followed by 18, 0, 0, 0
-                new UnknownA(),
-                new Theme(),
-                new TimeLimit(),
-                new UnusedNumberOfLemmings(),
-                new FlagsRequiredIndicator(),
-                new UnknownB(),
-                new LevelMap(CreateMapSerializer())
+                new ConstantSerializer<ILevel>(new byte[] { 0x20, 0x20, 0x49, 0x41, 0x12, 0x0, 0x0, 0x0 }, "level header"), // Header constant; '  IA' followed by 18, 0, 0, 0
+                new UnknownASerializer(),
+                new ThemeSerializer(),
+                new TimeLimitSerializer(),
+                new UnusedNumberOfLemmingsSerializer(),
+                new FlagsRequiredIndicatorSerializer(),
+                new UnknownBSerializer(),
+                new LevelMapSerializer(CreateMapSerializer())
             }
         );
 
         /// <summary>
         /// Creates a serializer to serialize and deserialize a VSR file and its levels
         /// </summary>
-        public static readonly Func<ISerializer<(Models.Vsr, Models.LevelPack)>> CreateVsrLevelPackSerializer = () => new Sequence<(Models.Vsr, Models.LevelPack)>(
+        public static readonly Func<ISerializer<(Models.Vsr, Models.LevelPack)>> CreateVsrLevelPackSerializer = () => new SequenceSerializer<(Models.Vsr, Models.LevelPack)>(
             new ISerializer<(Models.Vsr, Models.LevelPack)>[] {
-                new DirectoryPointerList(),
-                new AssetBinary(),
-                new FirstLevelFileId(),
-                new FixedLevelCount(),
-                new Serializers.Vsr.LevelPack(CreateLevelDirectorySerializer(), CreateLevelDirectory)
+                new DirectoryPointerListSerializer(),
+                new AssetBinarySerializer(),
+                new FirstLevelFileIdSerializer(),
+                new FixedLevelCountSerializer(),
+                new Serializers.Vsr.LevelPackSerializer(CreateLevelDirectorySerializer(), CreateLevelDirectory)
             }
         );
 
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level directory within a VSR file
         /// </summary>
-        public static readonly Func<ISerializer<LevelDirectory>> CreateLevelDirectorySerializer = () => new Sequence<LevelDirectory>(
-            new ISerializer<LevelDirectory>[] {
-                new Constant<LevelDirectory>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
-                new DataSize(),
-                new LevelCount(),
-                new Constant<LevelDirectory>(BitConverter.GetBytes((uint) 3), "level directory '3' constant"),
-                new AddressToFileInfoList(),
-                new FileNameList(),
-                new FileInfoList(),
-                new LevelList(CreateLevelSerializer(), () => CreateLevel(1, 1)),
+        public static readonly Func<ISerializer<LevelDirectorySerializer>> CreateLevelDirectorySerializer = () => new SequenceSerializer<LevelDirectorySerializer>(
+            new ISerializer<LevelDirectorySerializer>[] {
+                new ConstantSerializer<LevelDirectorySerializer>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
+                new DataSizeSerializer(),
+                new LevelCountSerializer(),
+                new ConstantSerializer<LevelDirectorySerializer>(BitConverter.GetBytes((uint) 3), "level directory '3' constant"),
+                new AddressToFileInfoListSerializer(),
+                new FileNameListSerializer(),
+                new FileInfoListSerializer(),
+                new LevelListSerializer(CreateLevelSerializer(), () => CreateLevel(1, 1)),
             }
         );
 
@@ -117,9 +117,9 @@ namespace LemballEditor
         /// <summary>
         /// Creates a LevelDirectory model containing an optional level group for the given type
         /// </summary>
-        public static readonly Func<LevelGroupName?, LevelDirectory> CreateLevelDirectory = (LevelGroupName? levelGroupName) =>
+        public static readonly Func<LevelGroupName?, LevelDirectorySerializer> CreateLevelDirectory = (LevelGroupName? levelGroupName) =>
         {
-            var directory = new LevelDirectory();
+            var directory = new LevelDirectorySerializer();
 
             if (levelGroupName.HasValue)
             {
@@ -132,6 +132,6 @@ namespace LemballEditor
         /// <summary>
         /// Creates a serializer for the BOMG data block
         /// </summary>
-        public static readonly Func<ISerializer<ILevel>> CreateBomgBlockSerializer = () => new DataBlock<ILevel>("BOMG", new BomgBlock());
+        public static readonly Func<ISerializer<ILevel>> CreateBomgBlockSerializer = () => new DataBlockSerializer<ILevel>("BOMG", new BomgBlockSerializer());
     }
 }

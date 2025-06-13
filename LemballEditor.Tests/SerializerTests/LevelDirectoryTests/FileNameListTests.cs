@@ -23,12 +23,12 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelDirectory
+            var group = new LevelDirectorySerializer
             {
                 FixedLevelCount = numberOfLevels
             };
 
-            var serializer = new FileNameList();
+            var serializer = new FileNameListSerializer();
             var act = () => serializer.Deserialize(reader, group);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid file name");
@@ -49,12 +49,12 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelDirectory
+            var group = new LevelDirectorySerializer
             {
                 FixedLevelCount = numberOfLevels
             };
 
-            var serializer = new FileNameList();
+            var serializer = new FileNameListSerializer();
             var act = () => serializer.Deserialize(reader, group);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid data found after file name");
@@ -72,12 +72,12 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelDirectory
+            var group = new LevelDirectorySerializer
             {
                 FixedLevelCount = numberOfLevels
             };
 
-            var serializer = new FileNameList();
+            var serializer = new FileNameListSerializer();
             var act = () => serializer.Deserialize(reader, group);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid file name");
@@ -98,12 +98,12 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelDirectory
+            var group = new LevelDirectorySerializer
             {
                 FixedLevelCount = numberOfLevels
             };
 
-            var serializer = new FileNameList();
+            var serializer = new FileNameListSerializer();
             var act = () => serializer.Deserialize(reader, group);
 
             _ = act.Should().Throw<InvalidDataException>().WithMessage("Invalid file name");
@@ -124,12 +124,12 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var stream = new MemoryStream(data.ToArray());
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelDirectory
+            var group = new LevelDirectorySerializer
             {
                 FixedLevelCount = numberOfLevels
             };
 
-            var serializer = new FileNameList();
+            var serializer = new FileNameListSerializer();
             _ = serializer.Deserialize(reader, group).Should().Be(group);
 
             _ = stream.Position.Should().Be(numberOfLevels * 12);
@@ -144,7 +144,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             using var writer = new BinaryWriter(stream);
             using var reader = new BinaryReader(stream);
 
-            var group = new LevelDirectory
+            var group = new LevelDirectorySerializer
             {
                 FixedLevelCount = numberOfLevels
             };
@@ -173,7 +173,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
             expected.AddRange(Encoding.ASCII.GetBytes("Level_10"));
             expected.AddRange(new byte[4]);
 
-            var serializer = new FileNameList();
+            var serializer = new FileNameListSerializer();
             serializer.Serialize(group, writer);
 
             _ = stream.ToArray().Should().BeEquivalentTo(expected.ToArray());

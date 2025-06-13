@@ -86,37 +86,40 @@
     <Compile Include="src\Models\ITile.cs" />
     <Compile Include="src\Models\Level.cs" />
     <Compile Include="src\Models\Vsr.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\FileInfoList.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\LevelList.cs" />
-    <Compile Include="src\Serializers\DataBlock.cs" />
-    <Compile Include="src\Serializers\Level\LevelMap.cs" />
-    <Compile Include="src\Serializers\Level\Objects\BomgBlock.cs" />
-    <Compile Include="src\Serializers\Sequence.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoList.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\DataSize.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\FileNameList.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\LevelCount.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\LevelDirectory.cs" />
-    <Compile Include="src\Serializers\Vsr\AssetBinary.cs" />
-    <Compile Include="src\Serializers\Vsr\DirectoryPointerList.cs" />
-    <Compile Include="src\Serializers\Vsr\FirstLevelFileId.cs" />
-    <Compile Include="src\Serializers\Vsr\FixedLevelCount.cs" />
-    <Compile Include="src\Serializers\Vsr\LevelPack.cs" />
+    <Compile Include="src\Serializers\EventAggregator.cs" />
+    <Compile Include="src\Serializers\IEventAggregator.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\FileInfoListSerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelListSerializer.cs" />
+    <Compile Include="src\Serializers\DataBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\LevelMapSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\BomgBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\SwitchSerializer.cs" />
+    <Compile Include="src\Serializers\SequenceSerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoListSerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\DataSizeSerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\FileNameListSerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelCountSerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\LevelDirectorySerializer.cs" />
+    <Compile Include="src\Serializers\Vsr\AssetBinarySerializer.cs" />
+    <Compile Include="src\Serializers\Vsr\DirectoryPointerListSerializer.cs" />
+    <Compile Include="src\Serializers\Vsr\FirstLevelFileIdSerializer.cs" />
+    <Compile Include="src\Serializers\Vsr\FixedLevelCountSerializer.cs" />
+    <Compile Include="src\Serializers\Vsr\LevelPackSerializer.cs" />
     <Compile Include="src\ServiceFactory.cs" />
     <Compile Include="src\Models\LevelGroup.cs" />
     <Compile Include="src\Models\LevelPack.cs" />
     <Compile Include="src\Models\Map.cs" />
     <Compile Include="src\Models\Tile.cs" />
-    <Compile Include="src\Serializers\Constant.cs" />
+    <Compile Include="src\Serializers\ConstantSerializer.cs" />
     <Compile Include="src\Serializers\ISerializer.cs" />
-    <Compile Include="src\Serializers\Level\Map\Size.cs" />
-    <Compile Include="src\Serializers\Level\Map\TileMap.cs" />
-    <Compile Include="src\Serializers\Level\Theme.cs" />
-    <Compile Include="src\Serializers\Level\TimeLimit.cs" />
-    <Compile Include="src\Serializers\Level\FlagsRequiredIndicator.cs" />
-    <Compile Include="src\Serializers\Level\UnknownB.cs" />
-    <Compile Include="src\Serializers\Level\UnusedNumberOfLemmings.cs" />
-    <Compile Include="src\Serializers\Level\UnknownA.cs" />
+    <Compile Include="src\Serializers\Level\Map\SizeSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Map\TileMapSerializer.cs" />
+    <Compile Include="src\Serializers\Level\ThemeSerializer.cs" />
+    <Compile Include="src\Serializers\Level\TimeLimitSerializer.cs" />
+    <Compile Include="src\Serializers\Level\FlagsRequiredIndicatorSerializer.cs" />
+    <Compile Include="src\Serializers\Level\UnknownBSerializer.cs" />
+    <Compile Include="src\Serializers\Level\UnusedNumberOfLemmingsSerializer.cs" />
+    <Compile Include="src\Serializers\Level\UnknownASerializer.cs" />
     <Compile Include="src\Views\LevelBrowser\LevelBrowser.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -362,9 +365,7 @@
   <ItemGroup>
     <Content Include="assets\selectedTile.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="src\Models\GameObjects\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
