@@ -93,7 +93,6 @@
     <Compile Include="src\Serializers\DataBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\LevelMapSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\BomgBlockSerializer.cs" />
-    <Compile Include="src\Serializers\Level\Objects\SwitchSerializer.cs" />
     <Compile Include="src\Serializers\SequenceSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoListSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\DataSizeSerializer.cs" />
