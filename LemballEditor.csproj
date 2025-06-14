@@ -92,6 +92,12 @@
     <Compile Include="src\Serializers\LevelDirectory\LevelListSerializer.cs" />
     <Compile Include="src\Serializers\DataBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\LevelMapSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\ItemBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\MineBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\PaintGlobeBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\EnemyPathNodesBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\GphsBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\EnemyBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\BomgBlockSerializer.cs" />
     <Compile Include="src\Serializers\SequenceSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoListSerializer.cs" />

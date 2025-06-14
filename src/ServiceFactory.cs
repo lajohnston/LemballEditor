@@ -1,13 +1,12 @@
-﻿using LemballEditor.Models;
+﻿using System;
+using System.Text;
+using LemballEditor.Models;
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
 using LemballEditor.Serializers.Level.Objects;
 using LemballEditor.Serializers.LevelDirectory;
 using LemballEditor.Serializers.Vsr;
-using System;
-using System.Data;
-using System.Text;
 
 namespace LemballEditor
 {
@@ -66,7 +65,14 @@ namespace LemballEditor
                 new UnusedNumberOfLemmingsSerializer(),
                 new FlagsRequiredIndicatorSerializer(),
                 new UnknownBSerializer(),
-                new LevelMapSerializer(CreateMapSerializer())
+                new LevelMapSerializer(CreateMapSerializer()),
+                new DataBlockSerializer<ILevel>("BOMG", new BomgBlockSerializer()),
+                new DataBlockSerializer<ILevel>("YMNE", new EnemyBlockSerializer()),
+                new DataBlockSerializer<ILevel>("GPHS", new GphsBlockSerializer()),
+                new DataBlockSerializer<ILevel>("EDON", new EnemyPathNodesBlockSerializer()),
+                new DataBlockSerializer<ILevel>("LLAB", new PaintGlobeBlockSerializer()),
+                new DataBlockSerializer<ILevel>("ENIM", new MineBlockSerializer()),
+                new DataBlockSerializer<ILevel>("LLOC", new ItemBlockSerializer()),
             }
         );
 
