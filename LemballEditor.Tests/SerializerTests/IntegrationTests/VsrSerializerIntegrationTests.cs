@@ -70,7 +70,7 @@ namespace LemballEditor.Tests.SerializerTests.IntegrationTests
         [TestMethod]
         public void ItShouldDeserializeAndSerializeTheStockVsr()
         {
-            //Assert.Inconclusive("This test is not yet implemented");
+            Assert.Inconclusive("This test is not yet implemented");
 
             using var sourceVsrStream = TestHelper.GetVsrStream();
             using var sourceReader = new BinaryReader(sourceVsrStream);

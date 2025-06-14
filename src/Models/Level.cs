@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using LemballEditor.Models.LevelObjects;
 
 namespace LemballEditor.Models
 {
@@ -10,7 +12,7 @@ namespace LemballEditor.Models
         private byte _flagsRequired;
         public byte FlagsRequired
         {
-            get => _flagsRequired;
+            get => this._flagsRequired;
             set
             {
                 if (value > 4)
@@ -18,7 +20,7 @@ namespace LemballEditor.Models
                     throw new ArgumentException($"Max FlagsRequired is 4. {value} given");
                 }
 
-                _flagsRequired = value;
+                this._flagsRequired = value;
             }
         }
 
@@ -34,7 +36,7 @@ namespace LemballEditor.Models
         private byte _numberOfLemmings;
         public byte NumberOfLemmings
         {
-            get => _numberOfLemmings;
+            get => this._numberOfLemmings;
             set
             {
                 if (value < 1 || value > 4)
@@ -42,7 +44,7 @@ namespace LemballEditor.Models
                     throw new ArgumentException($"NumberOfLemmings should be between 1-4. {value} given");
                 }
 
-                _numberOfLemmings = value;
+                this._numberOfLemmings = value;
             }
         }
 
@@ -57,7 +59,7 @@ namespace LemballEditor.Models
         private ushort? _timeLimitInSeconds;
         public ushort? TimeLimitInSeconds
         {
-            get => _timeLimitInSeconds;
+            get => this._timeLimitInSeconds;
             set
             {
                 if (value > 599)
@@ -65,7 +67,7 @@ namespace LemballEditor.Models
                     throw new ArgumentException("TimeLimitInSeconds should be no larger than 599");
                 }
 
-                _timeLimitInSeconds = value;
+                this._timeLimitInSeconds = value;
             }
         }
 
@@ -75,7 +77,7 @@ namespace LemballEditor.Models
         private byte _unknownA;
         public byte UnknownA
         {
-            get => _unknownA;
+            get => this._unknownA;
             set
             {
                 if (value != 6 && value != 7 && value != 9 && value != 10)
@@ -83,7 +85,7 @@ namespace LemballEditor.Models
                     throw new ArgumentException($"Expected UnknownA to be the value of 6, 7, 9 or 10. {value} given");
                 }
 
-                _unknownA = value;
+                this._unknownA = value;
             }
         }
 
@@ -93,16 +95,33 @@ namespace LemballEditor.Models
         public ushort UnknownB { get; set; }
 
         /// <summary>
+        /// List of all level objects
+        /// </summary>
+        private readonly List<ILevelObject> objects = new List<ILevelObject>();
+
+        /// <summary>
         /// Creates a new level instance with sensible defaults
         /// </summary>
         public Level(IMap map)
         {
-            FlagsRequired = 1;
-            NumberOfLemmings = 1;
-            Theme = LevelTheme.Grass;
-            TimeLimitInSeconds = null;
-            UnknownA = 10;
-            Map = map;
+            this.FlagsRequired = 1;
+            this.NumberOfLemmings = 1;
+            this.Theme = LevelTheme.Grass;
+            this.TimeLimitInSeconds = null;
+            this.UnknownA = 10;
+            this.Map = map;
+
+            this.objects = new List<ILevelObject>();
+        }
+
+        public void AddObject(ILevelObject levelObject)
+        {
+            if (levelObject == null)
+            {
+                throw new ArgumentNullException(nameof(levelObject), "Cannot add a null object to the level");
+            }
+
+            this.objects.Add(levelObject);
         }
     }
 }

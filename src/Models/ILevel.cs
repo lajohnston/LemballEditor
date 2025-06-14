@@ -1,4 +1,6 @@
-﻿namespace LemballEditor.Models
+﻿using LemballEditor.Models.LevelObjects;
+
+namespace LemballEditor.Models
 {
     /// <summary>
     /// The level's theme/graphical style
@@ -50,5 +52,10 @@
         /// An unknown value
         /// </summary>
         ushort UnknownB { get; set; }
+
+        /// <summary>
+        /// Add a level object to the level
+        /// </summary>
+        void AddObject(ILevelObject levelObject);
     }
 }

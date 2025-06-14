@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using LemballEditor.Models;
+using LemballEditor.Models.LevelObjects;
 using LemballEditor.Serializers;
 using LemballEditor.Serializers.Level;
 using LemballEditor.Serializers.Level.Map;
@@ -72,7 +73,10 @@ namespace LemballEditor
                 new DataBlockSerializer<ILevel>("EDON", new EnemyPathNodesBlockSerializer()),
                 new DataBlockSerializer<ILevel>("LLAB", new PaintGlobeBlockSerializer()),
                 new DataBlockSerializer<ILevel>("ENIM", new MineBlockSerializer()),
-                new DataBlockSerializer<ILevel>("LLOC", new ItemBlockSerializer()),
+                new DataBlockSerializer<ILevel>("LLOC", new ItemBlockSerializer(
+                    new PositionSerializer(CreatePosition),
+                    CreateFlag
+                ))
             }
         );
 
@@ -139,5 +143,15 @@ namespace LemballEditor
         /// Creates a serializer for the BOMG data block
         /// </summary>
         public static readonly Func<ISerializer<ILevel>> CreateBomgBlockSerializer = () => new DataBlockSerializer<ILevel>("BOMG", new BomgBlockSerializer());
+
+        /// <summary>
+        /// Creates an object positio instance with the given X and Y coordinates
+        /// </summary>
+        public static readonly Func<ushort, ushort, Position> CreatePosition = (x, y) => new Position(x, y);
+
+        /// <summary>
+        /// Creates a new Flag instance with the given position
+        /// </summary>
+        public static readonly Func<Position, Flag> CreateFlag = (position) => new Flag(position);
     }
 }

@@ -81,6 +81,9 @@
     <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
     <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedVSRException.cs" />
     <Compile Include="src\LegacyModels\VsrCompiler\VsrCompiler.cs" />
+    <Compile Include="src\Models\LevelObjects\Flag.cs" />
+    <Compile Include="src\Models\LevelObjects\ILevelObject.cs" />
+    <Compile Include="src\Models\LevelObjects\Position.cs" />
     <Compile Include="src\Models\ILevel.cs" />
     <Compile Include="src\Models\IMap.cs" />
     <Compile Include="src\Models\ITile.cs" />
@@ -99,6 +102,7 @@
     <Compile Include="src\Serializers\Level\Objects\GphsBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\EnemyBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\BomgBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\PositionSerializer.cs" />
     <Compile Include="src\Serializers\SequenceSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\AddressToFileInfoListSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\DataSizeSerializer.cs" />
