@@ -108,7 +108,7 @@
     <Compile Include="src\Serializers\LevelDirectory\DataSizeSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\FileNameListSerializer.cs" />
     <Compile Include="src\Serializers\LevelDirectory\LevelCountSerializer.cs" />
-    <Compile Include="src\Serializers\LevelDirectory\LevelDirectorySerializer.cs" />
+    <Compile Include="src\Serializers\LevelDirectory\PendingLevelGroup.cs" />
     <Compile Include="src\Serializers\Vsr\AssetBinarySerializer.cs" />
     <Compile Include="src\Serializers\Vsr\DirectoryPointerListSerializer.cs" />
     <Compile Include="src\Serializers\Vsr\FirstLevelFileIdSerializer.cs" />

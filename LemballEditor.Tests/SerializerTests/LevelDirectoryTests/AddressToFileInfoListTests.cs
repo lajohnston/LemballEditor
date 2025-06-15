@@ -10,7 +10,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         public void Deserialize_ShouldThrowAnInvalidDataExceptionIfTheValueIsNotValid()
         {
             var serializer = new AddressToFileInfoListSerializer();
-            var directory = new LevelDirectorySerializer()
+            var directory = new PendingLevelGroup()
             {
                 Address = 20000,
                 FixedLevelCount = 5
@@ -33,7 +33,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         public void Deserialize_ShouldReadPastThePointer_WhenTheValidIsValid()
         {
             var serializer = new AddressToFileInfoListSerializer();
-            var directory = new LevelDirectorySerializer()
+            var directory = new PendingLevelGroup()
             {
                 Address = 20000,
                 FixedLevelCount = 5
@@ -53,7 +53,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         public void Deserialize_ShouldReturnTheDirectory_WhenTheValueIsValid()
         {
             var serializer = new AddressToFileInfoListSerializer();
-            var directory = new LevelDirectorySerializer()
+            var directory = new PendingLevelGroup()
             {
                 Address = 50000,
                 FixedLevelCount = 4
@@ -72,7 +72,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         public void Serialize_ShouldWriteTheAddressBasedOnTheLevelCountAndBaseAddress()
         {
             var serializer = new AddressToFileInfoListSerializer();
-            var directory = new LevelDirectorySerializer
+            var directory = new PendingLevelGroup
             {
                 Address = 1000,
                 FixedLevelCount = 10

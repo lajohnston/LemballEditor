@@ -8,7 +8,7 @@ namespace LemballEditor.Serializers.LevelDirectory
     /// <summary>
     /// Serializes/Deserializes the levels in a level directory
     /// </summary>
-    public class LevelListSerializer : ISerializer<LevelDirectorySerializer>
+    public class LevelListSerializer : ISerializer<PendingLevelGroup>
     {
         private readonly ISerializer<ILevel> levelSerializer;
         private readonly Func<ILevel> levelFactory;
@@ -22,7 +22,7 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <summary>
         /// Deserializes each level in the directory and adds them to the level group
         /// </summary>
-        public LevelDirectorySerializer Deserialize(BinaryReader reader, LevelDirectorySerializer model)
+        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
         {
             for (var i = 0; i < model.FixedLevelCount; i++)
             {
@@ -38,7 +38,7 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <summary>
         /// Writes the serialized levels to the stream, including header information for each file
         /// </summary>
-        public void Serialize(LevelDirectorySerializer model, BinaryWriter writer)
+        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
         {
             foreach (var level in model.GetSerializedLevels())
             {

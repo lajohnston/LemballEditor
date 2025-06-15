@@ -12,16 +12,16 @@ namespace LemballEditor.Serializers.Vsr
         /// <summary>
         /// Serializer that serialises and deserialises data to and from a level pack
         /// </summary>
-        private readonly ISerializer<LevelDirectory.LevelDirectorySerializer> levelDirectorySerializer;
+        private readonly ISerializer<LevelDirectory.PendingLevelGroup> levelDirectorySerializer;
 
         /// <summary>
         /// Level directory factory that creates a new LevelDirectory containing a LevelGroup of the given type
         /// </summary>
-        private readonly Func<LevelGroupName?, LevelDirectory.LevelDirectorySerializer> levelDirectoryFactory;
+        private readonly Func<LevelGroupName?, LevelDirectory.PendingLevelGroup> levelDirectoryFactory;
 
         public LevelPackSerializer(
-            ISerializer<LevelDirectory.LevelDirectorySerializer> levelDirectorySerializer,
-            Func<LevelGroupName?, LevelDirectory.LevelDirectorySerializer> levelDirectoryFactory)
+            ISerializer<LevelDirectory.PendingLevelGroup> levelDirectorySerializer,
+            Func<LevelGroupName?, LevelDirectory.PendingLevelGroup> levelDirectoryFactory)
         {
             this.levelDirectorySerializer = levelDirectorySerializer;
             this.levelDirectoryFactory = levelDirectoryFactory;

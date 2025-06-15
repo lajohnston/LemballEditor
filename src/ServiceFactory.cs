@@ -96,12 +96,12 @@ namespace LemballEditor
         /// <summary>
         /// Creates a serializer to serialize and deserialize a level directory within a VSR file
         /// </summary>
-        public static readonly Func<ISerializer<LevelDirectorySerializer>> CreateLevelDirectorySerializer = () => new SequenceSerializer<LevelDirectorySerializer>(
-            new ISerializer<LevelDirectorySerializer>[] {
-                new ConstantSerializer<LevelDirectorySerializer>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
+        public static readonly Func<ISerializer<PendingLevelGroup>> CreateLevelDirectorySerializer = () => new SequenceSerializer<PendingLevelGroup>(
+            new ISerializer<PendingLevelGroup>[] {
+                new ConstantSerializer<PendingLevelGroup>(Encoding.ASCII.GetBytes("CRID"), "Invalid directory header"),
                 new DataSizeSerializer(),
                 new LevelCountSerializer(),
-                new ConstantSerializer<LevelDirectorySerializer>(BitConverter.GetBytes((uint) 3), "level directory '3' constant"),
+                new ConstantSerializer<PendingLevelGroup>(BitConverter.GetBytes((uint) 3), "level directory '3' constant"),
                 new AddressToFileInfoListSerializer(),
                 new FileNameListSerializer(),
                 new FileInfoListSerializer(),
@@ -127,9 +127,9 @@ namespace LemballEditor
         /// <summary>
         /// Creates a LevelDirectory model containing an optional level group for the given type
         /// </summary>
-        public static readonly Func<LevelGroupName?, LevelDirectorySerializer> CreateLevelDirectory = (LevelGroupName? levelGroupName) =>
+        public static readonly Func<LevelGroupName?, PendingLevelGroup> CreateLevelDirectory = (LevelGroupName? levelGroupName) =>
         {
-            var directory = new LevelDirectorySerializer();
+            var directory = new PendingLevelGroup();
 
             if (levelGroupName.HasValue)
             {

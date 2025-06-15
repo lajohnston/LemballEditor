@@ -9,17 +9,17 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
     [TestClass]
     public class LevelPackSerializerTests
     {
-        private (Serializers.Vsr.LevelPackSerializer, Mock<ISerializer<LevelDirectorySerializer>>, Mock<Func<LevelGroupName?, LevelDirectorySerializer>>) CreateSerializer()
+        private (Serializers.Vsr.LevelPackSerializer, Mock<ISerializer<PendingLevelGroup>>, Mock<Func<LevelGroupName?, PendingLevelGroup>>) CreateSerializer()
         {
-            Mock<ISerializer<LevelDirectorySerializer>> mockLevelDirectorySerializer = new();
-            Mock<Func<LevelGroupName?, LevelDirectorySerializer>> mockLevelDirectoryFactory = new();
+            Mock<ISerializer<PendingLevelGroup>> mockLevelDirectorySerializer = new();
+            Mock<Func<LevelGroupName?, PendingLevelGroup>> mockLevelDirectoryFactory = new();
 
             _ = mockLevelDirectorySerializer
                 .Setup(m => m.Deserialize(
                     It.IsAny<BinaryReader>(),
-                    It.IsAny<LevelDirectorySerializer>()
+                    It.IsAny<PendingLevelGroup>()
                 ))
-                .Returns((BinaryReader reader, LevelDirectorySerializer givenLevelDirectory) => givenLevelDirectory);
+                .Returns((BinaryReader reader, PendingLevelGroup givenLevelDirectory) => givenLevelDirectory);
 
             _ = mockLevelDirectoryFactory.Setup(m => m(It.IsAny<LevelGroupName>()))
                 .Returns((LevelGroupName levelGroupName) => ServiceFactory.CreateLevelDirectory(levelGroupName));
@@ -88,7 +88,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
                 mockLevelDirectoryFactory.Verify(m => m(levelGroupName), Times.Once);
                 mockLevelDirectorySerializer.Verify(m => m.Deserialize(
                     It.Is<BinaryReader>(r => r == reader),
-                    It.Is<LevelDirectorySerializer>(ld => ld.LevelGroup.LevelGroupName == levelGroupName)
+                    It.Is<PendingLevelGroup>(ld => ld.LevelGroup.LevelGroupName == levelGroupName)
                 ), Times.Once);
             }
         }
@@ -111,12 +111,12 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Deserialize(
                 It.IsAny<BinaryReader>(),
-                It.IsAny<LevelDirectorySerializer>())
-            ).Callback<BinaryReader, LevelDirectorySerializer>((r, ld) =>
+                It.IsAny<PendingLevelGroup>())
+            ).Callback<BinaryReader, PendingLevelGroup>((r, ld) =>
             {
                 resultAddresses[ld.LevelGroup.LevelGroupName] = ld.Address;
                 reader.BaseStream.Position += 100;
-            }).Returns((BinaryReader reader, LevelDirectorySerializer ld) => ld);
+            }).Returns((BinaryReader reader, PendingLevelGroup ld) => ld);
 
             _ = serializer.Deserialize(reader, (vsr, new Models.LevelPack()));
 
@@ -147,11 +147,11 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Deserialize(
                 It.IsAny<BinaryReader>(),
-                It.IsAny<LevelDirectorySerializer>())
-            ).Callback<BinaryReader, LevelDirectorySerializer>((r, ld) =>
+                It.IsAny<PendingLevelGroup>())
+            ).Callback<BinaryReader, PendingLevelGroup>((r, ld) =>
             {
                 resultFixedLevelCounts[ld.LevelGroup.LevelGroupName] = ld.FixedLevelCount;
-            }).Returns((BinaryReader reader, LevelDirectorySerializer ld) => ld);
+            }).Returns((BinaryReader reader, PendingLevelGroup ld) => ld);
 
             _ = serializer.Deserialize(reader, models);
 
@@ -176,10 +176,10 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Deserialize(
                 It.IsAny<BinaryReader>(),
-                It.IsAny<LevelDirectorySerializer>())
-            ).Returns((BinaryReader reader, LevelDirectorySerializer givenLevelDirectory) =>
+                It.IsAny<PendingLevelGroup>())
+            ).Returns((BinaryReader reader, PendingLevelGroup givenLevelDirectory) =>
             {
-                var levelDirectory = new LevelDirectorySerializer
+                var levelDirectory = new PendingLevelGroup
                 {
                     LevelGroup = levelGroupOrder.Dequeue()
                 };
@@ -202,8 +202,8 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
         {
             var (serializer, mockLevelDirectorySerializer, mockLevelDirectoryFactory) = this.CreateSerializer();
 
-            var levelDirectories = Enumerable.Range(0, 5).Select(_ => new LevelDirectorySerializer()).ToArray();
-            var levelDirectoryCreationOrder = new Queue<LevelDirectorySerializer>(levelDirectories);
+            var levelDirectories = Enumerable.Range(0, 5).Select(_ => new PendingLevelGroup()).ToArray();
+            var levelDirectoryCreationOrder = new Queue<PendingLevelGroup>(levelDirectories);
 
             _ = mockLevelDirectoryFactory.Setup(m => m(null)).Returns(levelDirectoryCreationOrder.Dequeue);
 
@@ -215,7 +215,7 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             foreach (var levelDirectory in levelDirectories)
             {
                 mockLevelDirectorySerializer.Verify(m => m.Serialize(
-                    It.Is<LevelDirectorySerializer>(ld => ld == levelDirectory),
+                    It.Is<PendingLevelGroup>(ld => ld == levelDirectory),
                     It.IsAny<BinaryWriter>()
                 ), Times.Once);
             }
@@ -230,9 +230,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             var givenLevelDirectoryAddresses = new List<uint>();
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Serialize(
-                It.IsAny<LevelDirectorySerializer>(),
+                It.IsAny<PendingLevelGroup>(),
                 It.IsAny<BinaryWriter>()))
-                .Callback<LevelDirectorySerializer, BinaryWriter>((levelDirectory, writer) =>
+                .Callback<PendingLevelGroup, BinaryWriter>((levelDirectory, writer) =>
                 {
                     givenLevelDirectoryAddresses.Add(levelDirectory.Address);
                     writer.BaseStream.Position += 100;
@@ -268,9 +268,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             };
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Serialize(
-                It.IsAny<LevelDirectorySerializer>(),
+                It.IsAny<PendingLevelGroup>(),
                 It.IsAny<BinaryWriter>()))
-                .Callback<LevelDirectorySerializer, BinaryWriter>((levelDirectory, writer) =>
+                .Callback<PendingLevelGroup, BinaryWriter>((levelDirectory, writer) =>
                 {
                     writer.BaseStream.Position += 100;
                 });
@@ -301,9 +301,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             var givenLevelGroups = new List<LevelGroup>();
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Serialize(
-                It.IsAny<LevelDirectorySerializer>(),
+                It.IsAny<PendingLevelGroup>(),
                 It.IsAny<BinaryWriter>()))
-                .Callback<LevelDirectorySerializer, BinaryWriter>((levelDirectory, writer) =>
+                .Callback<PendingLevelGroup, BinaryWriter>((levelDirectory, writer) =>
                 {
                     givenLevelGroups.Add(levelDirectory.LevelGroup);
                 });
@@ -334,9 +334,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             var givenFirstFileIds = new Dictionary<LevelGroupName, byte>();
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Serialize(
-                It.IsAny<LevelDirectorySerializer>(),
+                It.IsAny<PendingLevelGroup>(),
                 It.IsAny<BinaryWriter>()))
-                .Callback<LevelDirectorySerializer, BinaryWriter>((levelDirectory, writer) =>
+                .Callback<PendingLevelGroup, BinaryWriter>((levelDirectory, writer) =>
                 {
                     givenFirstFileIds[levelDirectory.LevelGroup.LevelGroupName] = levelDirectory.FixedLevelCount;
                 });
@@ -367,9 +367,9 @@ namespace LemballEditor.Tests.SerializerTests.Vsr
             var givenFirstFileIds = new Dictionary<LevelGroupName, uint>();
 
             _ = mockLevelDirectorySerializer.Setup(m => m.Serialize(
-                It.IsAny<LevelDirectorySerializer>(),
+                It.IsAny<PendingLevelGroup>(),
                 It.IsAny<BinaryWriter>()))
-                .Callback<LevelDirectorySerializer, BinaryWriter>((levelDirectory, writer) =>
+                .Callback<PendingLevelGroup, BinaryWriter>((levelDirectory, writer) =>
                 {
                     givenFirstFileIds[levelDirectory.LevelGroup.LevelGroupName] = levelDirectory.FirstFileId;
                 });

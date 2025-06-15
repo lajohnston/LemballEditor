@@ -5,12 +5,12 @@ using LemballEditor.Models;
 namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
 {
     [TestClass]
-    public class LevelDirectoryTests
+    public class PendingLevelGroupTests
     {
         [TestMethod]
         public void ItShouldStoreTheFixedLevelCount()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.FixedLevelCount = 5;
             levelDirectory.FixedLevelCount.Should().Be(5);
         }
@@ -18,7 +18,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void ItShouldStoreTheFirstFileId()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.FirstFileId = 100;
             levelDirectory.FirstFileId.Should().Be(100);
         }
@@ -26,7 +26,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void ItShouldStoreTheDirectoryAddress()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.Address = 2000;
             levelDirectory.Address.Should().Be(2000);
         }
@@ -34,7 +34,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void ItShouldStoreTheLevelGroup()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             var levelGroup = new LevelGroup(LevelGroupName.Fun);
             levelDirectory.LevelGroup = levelGroup;
             levelDirectory.LevelGroup.Should().Be(levelGroup);
@@ -43,7 +43,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void AddSerializedLevel_ShouldThrowAnExceptionIfTheLevelsExceedTheFixedAmount()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.FixedLevelCount = 1;
 
             levelDirectory.AddSerializedLevel(new byte[10]);
@@ -56,7 +56,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void GetSerializedLevels_ShouldReturnTheAddedLevelsInOrder()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.FixedLevelCount = 3;
 
             var levels = new byte[][] {
@@ -76,7 +76,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void GetSerializedLevels_ShouldReturnBlankLevelsToFillTheFixedSize()
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.FixedLevelCount = 3;
 
             var level = new byte[10];
@@ -96,7 +96,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(new int[] { 100, 200 }, 5, 300 + (396 * 3))]
         public void GetDataSizeInBytes_ShouldReturnTheSizeOfAllTheLevelsIncludingBlankLevelsInBytes(int[] levelSizes, int fixedNumberOfLevels, int expectedSize)
         {
-            var levelDirectory = new LevelDirectorySerializer();
+            var levelDirectory = new PendingLevelGroup();
             levelDirectory.FixedLevelCount = (byte)fixedNumberOfLevels;
 
             foreach (uint levelSize in levelSizes)

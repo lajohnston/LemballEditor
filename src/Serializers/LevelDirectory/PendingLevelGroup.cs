@@ -7,12 +7,12 @@ namespace LemballEditor.Serializers.LevelDirectory
     /// <summary>
     /// Gathers temporary serialized data for deserializing a LevelGroup
     /// </summary>
-    public class LevelDirectorySerializer
+    public class PendingLevelGroup
     {
         /// <summary>
         /// Blank level data used to fill up the directory to the hardcoded number of levels
         /// </summary>
-        private readonly static byte[] BLANK_LEVEL = Convert.FromBase64String("ICBJQRIAAAAJAAAAWAIBAAEAAABGU0RHEgAAAAEAAQAJAgAAAAAAAEJPTUcMAAAAAAAAAFlNTkUKAAAAAAAAAEdQSFMKAAAAAAAAAEVET04KAAAAAAAAAExMQUIKAAAAAAAAAEVOSU0KAAAAAAAAAExMT0MKAAAAAAAAAE1JTkEKAAAAAAAAAFRGSUwKAAAAAAAAAFJPT0QKAAAAAAAAAEtDT1IKAAAAAAAAAEROQUgKAAAAAAAAAFJTQUwKAAAAAAAAAE5PT0IiAAAADwBapVqlWqVapVqlWqVapVqlWqVapVqlWqUAAEVNQU4oAAAAKEJsYW5rKQC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7tNQVJUCgAAAAAAAAAgRUNJCgAAAAAAAABFVk9NCgAAAAAAAABOVUdQCgAAAAAAAAAxU0xQDAAAAAAACQJHQUxGDAAAAAEAAgBURkVEDAAAAAYCAABLTkxTCgAAAAAAAABTVk5JCgAAAAAAAABXVEVOCgAAAAAAAAA/RE5F");
+        private static readonly byte[] BLANK_LEVEL = Convert.FromBase64String("ICBJQRIAAAAJAAAAWAIBAAEAAABGU0RHEgAAAAEAAQAJAgAAAAAAAEJPTUcMAAAAAAAAAFlNTkUKAAAAAAAAAEdQSFMKAAAAAAAAAEVET04KAAAAAAAAAExMQUIKAAAAAAAAAEVOSU0KAAAAAAAAAExMT0MKAAAAAAAAAE1JTkEKAAAAAAAAAFRGSUwKAAAAAAAAAFJPT0QKAAAAAAAAAEtDT1IKAAAAAAAAAEROQUgKAAAAAAAAAFJTQUwKAAAAAAAAAE5PT0IiAAAADwBapVqlWqVapVqlWqVapVqlWqVapVqlWqUAAEVNQU4oAAAAKEJsYW5rKQC7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7tNQVJUCgAAAAAAAAAgRUNJCgAAAAAAAABFVk9NCgAAAAAAAABOVUdQCgAAAAAAAAAxU0xQDAAAAAAACQJHQUxGDAAAAAEAAgBURkVEDAAAAAYCAABLTkxTCgAAAAAAAABTVk5JCgAAAAAAAABXVEVOCgAAAAAAAAA/RE5F");
 
         /// <summary>
         /// The absolute address of the LevelDirectory within the VSR file
@@ -29,7 +29,7 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <summary>
         /// The ID of the first level in the directory
         /// </summary>
-        public uint FirstFileId {  get; set; }
+        public uint FirstFileId { get; set; }
 
         /// <summary>
         /// The LevelGroup which will hold the levels
@@ -39,11 +39,11 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <summary>
         /// A collection of serialized levels
         /// </summary>
-        private List<byte[]> serializedLevels;
+        private readonly List<byte[]> serializedLevels;
 
-        public LevelDirectorySerializer()
+        public PendingLevelGroup()
         {
-            serializedLevels = new List<byte[]>();
+            this.serializedLevels = new List<byte[]>();
         }
 
         /// <summary>
@@ -53,12 +53,12 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <exception cref="InvalidOperationException">If the level directory fixed capacity is exceeded</exception>
         public void AddSerializedLevel(byte[] level)
         {
-            if (serializedLevels.Count == this.FixedLevelCount)
+            if (this.serializedLevels.Count == this.FixedLevelCount)
             {
                 throw new InvalidOperationException("Level directory fixed size exceeded");
             }
 
-            serializedLevels.Add(level);
+            this.serializedLevels.Add(level);
         }
 
         /// <summary>
@@ -66,14 +66,14 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// </summary>
         public IEnumerable<byte[]> GetSerializedLevels()
         {
-            foreach (var level in serializedLevels)
+            foreach (var level in this.serializedLevels)
             {
                 yield return level;
             }
 
-            if (serializedLevels.Count < this.FixedLevelCount)
+            if (this.serializedLevels.Count < this.FixedLevelCount)
             {
-                for (int i = serializedLevels.Count; i < this.FixedLevelCount; i++)
+                for (var i = this.serializedLevels.Count; i < this.FixedLevelCount; i++)
                 {
                     yield return BLANK_LEVEL;
                 }

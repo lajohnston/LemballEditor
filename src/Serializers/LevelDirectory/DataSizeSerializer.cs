@@ -5,16 +5,16 @@ namespace LemballEditor.Serializers.LevelDirectory
     /// <summary>
     /// Serializes/Deserializes the directory size uint
     /// </summary>
-    public class DataSizeSerializer : ISerializer<LevelDirectorySerializer>
+    public class DataSizeSerializer : ISerializer<PendingLevelGroup>
     {
-        public LevelDirectorySerializer Deserialize(BinaryReader reader, LevelDirectorySerializer model)
+        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
         {
             _ = reader.ReadUInt32();
 
             return model;
         }
 
-        public void Serialize(LevelDirectorySerializer model, BinaryWriter writer)
+        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
         {
             writer.Write((uint)0);
         }

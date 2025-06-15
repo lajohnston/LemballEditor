@@ -2,9 +2,9 @@
 
 namespace LemballEditor.Serializers.LevelDirectory
 {
-    public class LevelCountSerializer : ISerializer<LevelDirectorySerializer>
+    public class LevelCountSerializer : ISerializer<PendingLevelGroup>
     {
-        public LevelDirectorySerializer Deserialize(BinaryReader reader, LevelDirectorySerializer model)
+        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
         {
             var levelCount = reader.ReadUInt32();
 
@@ -18,7 +18,7 @@ namespace LemballEditor.Serializers.LevelDirectory
             return model;
         }
 
-        public void Serialize(LevelDirectorySerializer model, BinaryWriter writer)
+        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
         {
             writer.Write((uint)model.FixedLevelCount);
         }

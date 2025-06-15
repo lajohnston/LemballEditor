@@ -3,9 +3,9 @@ using System.Text;
 
 namespace LemballEditor.Serializers.LevelDirectory
 {
-    public class FileInfoListSerializer : ISerializer<LevelDirectorySerializer>
+    public class FileInfoListSerializer : ISerializer<PendingLevelGroup>
     {
-        public LevelDirectorySerializer Deserialize(BinaryReader reader, LevelDirectorySerializer model)
+        public PendingLevelGroup Deserialize(BinaryReader reader, PendingLevelGroup model)
         {
             _ = reader.BaseStream.Seek(model.FixedLevelCount * 36, SeekOrigin.Current);
 
@@ -15,7 +15,7 @@ namespace LemballEditor.Serializers.LevelDirectory
         /// <summary>
         /// Writes the file header information to the stream
         /// </summary>
-        public void Serialize(LevelDirectorySerializer model, BinaryWriter writer)
+        public void Serialize(PendingLevelGroup model, BinaryWriter writer)
         {
             var levels = model.GetSerializedLevels();
 

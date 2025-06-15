@@ -13,7 +13,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(12, 12 * 36)]
         public void Deserialize_ShouldSkipOverTheFileInfoDataAndReturnTheModel(int numberOfFiles, int expectedResultPosition)
         {
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 FixedLevelCount = (byte)numberOfFiles
             };
@@ -32,7 +32,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(1200)]
         public void Serialize_ShouldWriteTheFileNameAddressForEachLevel(int directoryAddress)
         {
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 Address = (uint)directoryAddress,
                 FixedLevelCount = 3
@@ -61,7 +61,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow((uint)600)]
         public void Serialize_ShouldWriteTheIncrementingFileIdForEachLevel(uint firstFileId)
         {
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 FixedLevelCount = 3,
                 FirstFileId = firstFileId
@@ -88,7 +88,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Serialize_ShouldWriteTheBinStringForEachLevel()
         {
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 FixedLevelCount = 3
             };
@@ -118,7 +118,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         {
             var directoryHeaderSize = 20 + (12 * levelSizes.Length) + (36 * levelSizes.Length);
 
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 Address = (uint)(firstLevelAddress - directoryHeaderSize),
                 FixedLevelCount = (byte)levelSizes.Length
@@ -151,7 +151,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [DataRow(new uint[] { 1000, 1020 })]
         public void Serialize_ShouldWriteTheFileSizesForEachLevel(uint[] levelSizes)
         {
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 FixedLevelCount = (byte)levelSizes.Length
             };
@@ -181,7 +181,7 @@ namespace LemballEditor.Tests.SerializerTests.LevelDirectoryTests
         [TestMethod]
         public void Serialize_ShouldPadEachFileDataTo36Bytes()
         {
-            var levelDirectory = new LevelDirectorySerializer
+            var levelDirectory = new PendingLevelGroup
             {
                 FixedLevelCount = 3
             };
