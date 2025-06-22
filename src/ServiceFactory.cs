@@ -85,7 +85,7 @@ namespace LemballEditor
                 new DataBlockSerializer<PendingObjectList>("EDON", new EnemyPathNodesBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("LLAB", new PaintGlobeBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("ENIM", new MineBlockSerializer()),
-                new DataBlockSerializer<PendingObjectList>("LLOC", new ItemBlockSerializer(
+                new DataBlockSerializer<PendingObjectList>("LLOC", new CollectableBlockSerializer(
                     new PositionSerializer(CreatePosition),
                     CreateFlag
                 ))

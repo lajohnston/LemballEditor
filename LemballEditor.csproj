@@ -96,7 +96,7 @@
     <Compile Include="src\Serializers\DataBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\LevelMapSerializer.cs" />
     <Compile Include="src\Serializers\Level\ObjectListSerializer.cs" />
-    <Compile Include="src\Serializers\Level\Objects\ItemBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\CollectableBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\PendingObject.cs" />
     <Compile Include="src\Serializers\Level\Objects\PendingObjectList.cs" />
     <Compile Include="src\Serializers\Level\Objects\MineBlockSerializer.cs" />

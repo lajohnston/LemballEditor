@@ -4,13 +4,13 @@ using LemballEditor.Models.LevelObjects;
 
 namespace LemballEditor.Serializers.Level.Objects
 {
-    public class ItemBlockSerializer : ISerializer<PendingObjectList>
+    public class CollectableBlockSerializer : ISerializer<PendingObjectList>
     {
         private readonly Func<Position, Flag> createFlag;
 
         private readonly ISerializer<Position> positionSerializer;
 
-        public ItemBlockSerializer(ISerializer<Position> positionSerializer, Func<Position, Flag> createFlag)
+        public CollectableBlockSerializer(ISerializer<Position> positionSerializer, Func<Position, Flag> createFlag)
         {
             this.positionSerializer = positionSerializer;
             this.createFlag = createFlag;
