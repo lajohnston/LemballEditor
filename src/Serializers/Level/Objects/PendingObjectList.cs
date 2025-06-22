@@ -80,5 +80,29 @@ namespace LemballEditor.Serializers.Level.Objects
                 handler(pendingObject);
             }
         }
+
+        /// <summary>
+        /// Returns all PendingObjects whose LevelObject is an instance of any of the specified types.
+        /// </summary>
+        public IEnumerable<PendingObject> GetObjectsOfTypes(params Type[] types)
+        {
+            if (types == null || types.Length == 0)
+            {
+                yield break;
+            }
+
+            foreach (var pendingObject in this.pendingObjects)
+            {
+                var objType = pendingObject.LevelObject.GetType();
+                foreach (var type in types)
+                {
+                    if (type.IsAssignableFrom(objType))
+                    {
+                        yield return pendingObject;
+                        break;
+                    }
+                }
+            }
+        }
     }
 }

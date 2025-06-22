@@ -5,6 +5,32 @@ using Moq;
 
 namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
 {
+    public class FakeObjectClassA : ILevelObject
+    {
+        public Position GetPosition()
+        {
+            return new Position(0, 0);
+        }
+
+        public ILevelObject SetPosition(Position position)
+        {
+            return this;
+        }
+    }
+
+    public class FakeObjectClassB : ILevelObject
+    {
+        public Position GetPosition()
+        {
+            return new Position(0, 0);
+        }
+
+        public ILevelObject SetPosition(Position position)
+        {
+            return this;
+        }
+    }
+
     [TestClass]
     public class PendingObjectListTests
     {
@@ -86,6 +112,56 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
             _ = pendingObjects.Should().HaveCount(2);
             _ = pendingObjects[0].Id.Should().Be(0);
             _ = pendingObjects[1].Id.Should().Be(1);
+        }
+
+        [TestMethod]
+        public void GetObjectsOfTypes_ShouldReturnOnlyObjectsOfTheSpecifiedType()
+        {
+            var list = new PendingObjectList();
+
+            var matchingObjectA = new Mock<FakeObjectClassA>().Object;
+            var matchingObjectB = new Mock<FakeObjectClassA>().Object;
+
+            var otherObject = new Mock<ILevelObject>().Object;
+
+            list.Add(matchingObjectA, 1);
+            list.Add(matchingObjectB, 2);
+            list.Add(otherObject, 3);
+
+            var result = list.GetObjectsOfTypes(typeof(FakeObjectClassA)).ToArray();
+
+            _ = result.Length.Should().Be(2);
+
+            _ = result[0].LevelObject.Should().Be(matchingObjectA);
+            _ = result[0].Id.Should().Be(1);
+
+            _ = result[1].LevelObject.Should().Be(matchingObjectB);
+            _ = result[1].Id.Should().Be(2);
+        }
+
+        [TestMethod]
+        public void GetObjectsOfTypes_ShouldReturnOnlyObjectsThatIsOneOfTheSpecifiedTypes()
+        {
+            var list = new PendingObjectList();
+
+            var matchingObjectA = new Mock<FakeObjectClassA>().Object;
+            var matchingObjectB = new Mock<FakeObjectClassB>().Object;
+
+            var otherObject = new Mock<ILevelObject>().Object;
+
+            list.Add(matchingObjectA, 1);
+            list.Add(matchingObjectB, 2);
+            list.Add(otherObject, 3);
+
+            var result = list.GetObjectsOfTypes(typeof(FakeObjectClassA), typeof(FakeObjectClassB)).ToArray();
+
+            _ = result.Length.Should().Be(2);
+
+            _ = result[0].LevelObject.Should().Be(matchingObjectA);
+            _ = result[0].Id.Should().Be(1);
+
+            _ = result[1].LevelObject.Should().Be(matchingObjectB);
+            _ = result[1].Id.Should().Be(2);
         }
     }
 }
