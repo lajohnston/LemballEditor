@@ -67,13 +67,25 @@ namespace LemballEditor
                 new FlagsRequiredIndicatorSerializer(),
                 new UnknownBSerializer(),
                 new LevelMapSerializer(CreateMapSerializer()),
-                new DataBlockSerializer<ILevel>("BOMG", new BomgBlockSerializer()),
-                new DataBlockSerializer<ILevel>("YMNE", new EnemyBlockSerializer()),
-                new DataBlockSerializer<ILevel>("GPHS", new GphsBlockSerializer()),
-                new DataBlockSerializer<ILevel>("EDON", new EnemyPathNodesBlockSerializer()),
-                new DataBlockSerializer<ILevel>("LLAB", new PaintGlobeBlockSerializer()),
-                new DataBlockSerializer<ILevel>("ENIM", new MineBlockSerializer()),
-                new DataBlockSerializer<ILevel>("LLOC", new ItemBlockSerializer(
+                new ObjectListSerializer(
+                    () => new PendingObjectList(),
+                    CreatePendingObjectListSerializer()
+                )
+            }
+        );
+
+        /// <summary>
+        /// Create a serializer to serialize and deserialize the level objects to and from a PendingObjectList, ready to be added to a level
+        /// </summary>
+        public static readonly Func<ISerializer<PendingObjectList>> CreatePendingObjectListSerializer = () => new SequenceSerializer<PendingObjectList>(
+            new ISerializer<PendingObjectList>[] {
+                new DataBlockSerializer<PendingObjectList>("BOMG", new BomgBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("YMNE", new EnemyBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("GPHS", new GphsBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("EDON", new EnemyPathNodesBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("LLAB", new PaintGlobeBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("ENIM", new MineBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("LLOC", new ItemBlockSerializer(
                     new PositionSerializer(CreatePosition),
                     CreateFlag
                 ))
@@ -138,11 +150,6 @@ namespace LemballEditor
 
             return directory;
         };
-
-        /// <summary>
-        /// Creates a serializer for the BOMG data block
-        /// </summary>
-        public static readonly Func<ISerializer<ILevel>> CreateBomgBlockSerializer = () => new DataBlockSerializer<ILevel>("BOMG", new BomgBlockSerializer());
 
         /// <summary>
         /// Creates an object positio instance with the given X and Y coordinates

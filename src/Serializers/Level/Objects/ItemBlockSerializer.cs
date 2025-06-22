@@ -1,11 +1,10 @@
 ﻿using System;
 using System.IO;
-using LemballEditor.Models;
 using LemballEditor.Models.LevelObjects;
 
 namespace LemballEditor.Serializers.Level.Objects
 {
-    public class ItemBlockSerializer : ISerializer<ILevel>
+    public class ItemBlockSerializer : ISerializer<PendingObjectList>
     {
         private readonly Func<Position, Flag> createFlag;
 
@@ -17,7 +16,7 @@ namespace LemballEditor.Serializers.Level.Objects
             this.createFlag = createFlag;
         }
 
-        public ILevel Deserialize(BinaryReader reader, ILevel level)
+        public PendingObjectList Deserialize(BinaryReader reader, PendingObjectList list)
         {
             var itemCount = reader.ReadInt16();
 
@@ -32,7 +31,7 @@ namespace LemballEditor.Serializers.Level.Objects
                 {
                     case 12:
                         var flag = this.createFlag(position);
-                        level.AddObject(flag);
+                        _ = list.Add(flag);
                         break;
                     default:
                         var address = reader.BaseStream.Position - 6;
@@ -40,10 +39,10 @@ namespace LemballEditor.Serializers.Level.Objects
                 }
             }
 
-            return level;
+            return list;
         }
 
-        public void Serialize(ILevel model, BinaryWriter writer)
+        public void Serialize(PendingObjectList model, BinaryWriter writer)
         {
             throw new NotImplementedException("Item block serialization is not implemented yet.");
         }

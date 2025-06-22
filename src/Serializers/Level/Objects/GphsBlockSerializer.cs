@@ -1,16 +1,15 @@
 ﻿using System.IO;
-using LemballEditor.Models;
 
 namespace LemballEditor.Serializers.Level.Objects
 {
-    public class GphsBlockSerializer : ISerializer<ILevel>
+    public class GphsBlockSerializer : ISerializer<PendingObjectList>
     {
-        public ILevel Deserialize(BinaryReader reader, ILevel model)
+        public PendingObjectList Deserialize(BinaryReader reader, PendingObjectList list)
         {
-            return model;
+            return list;
         }
 
-        public void Serialize(ILevel model, BinaryWriter writer)
+        public void Serialize(PendingObjectList model, BinaryWriter writer)
         {
 
         }

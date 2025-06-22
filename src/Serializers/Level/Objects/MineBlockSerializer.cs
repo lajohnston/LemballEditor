@@ -1,19 +1,18 @@
 ﻿using System;
 using System.IO;
-using LemballEditor.Models;
 
 namespace LemballEditor.Serializers.Level.Objects
 {
-    public class MineBlockSerializer : ISerializer<ILevel>
+    public class MineBlockSerializer : ISerializer<PendingObjectList>
     {
-        public ILevel Deserialize(BinaryReader reader, ILevel model)
+        public PendingObjectList Deserialize(BinaryReader reader, PendingObjectList list)
         {
             var objectCount = reader.ReadInt16();
 
-            return objectCount > 0 ? throw new NotImplementedException("Mine block deserialization for objects is not implemented yet.") : model;
+            return objectCount > 0 ? throw new NotImplementedException("Mine block deserialization for objects is not implemented yet.") : list;
         }
 
-        public void Serialize(ILevel model, BinaryWriter writer)
+        public void Serialize(PendingObjectList list, BinaryWriter writer)
         {
             writer.Write((ushort)0); // object count
         }

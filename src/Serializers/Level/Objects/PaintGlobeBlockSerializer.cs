@@ -1,19 +1,18 @@
 ﻿using System;
 using System.IO;
-using LemballEditor.Models;
 
 namespace LemballEditor.Serializers.Level.Objects
 {
-    public class PaintGlobeBlockSerializer : ISerializer<ILevel>
+    public class PaintGlobeBlockSerializer : ISerializer<PendingObjectList>
     {
-        public ILevel Deserialize(BinaryReader reader, ILevel model)
+        public PendingObjectList Deserialize(BinaryReader reader, PendingObjectList list)
         {
             var objectCount = reader.ReadInt16();
 
-            return objectCount > 0 ? throw new NotImplementedException("LLAB deserialization for objects is not implemented yet.") : model;
+            return objectCount > 0 ? throw new NotImplementedException("LLAB deserialization for objects is not implemented yet.") : list;
         }
 
-        public void Serialize(ILevel model, BinaryWriter writer)
+        public void Serialize(PendingObjectList list, BinaryWriter writer)
         {
             writer.Write((ushort)0); // object count
         }

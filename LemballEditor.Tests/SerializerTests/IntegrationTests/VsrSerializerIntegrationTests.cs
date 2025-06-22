@@ -6,33 +6,6 @@ namespace LemballEditor.Tests.SerializerTests.IntegrationTests
     public class VsrSerializerIntegrationTests
     {
         [TestMethod]
-        public void ItShouldSerializeAndDeserializeAllBomgBlocksInTheStockVsr()
-        {
-            Assert.Inconclusive("This behaviour is not yet implemented");
-
-            using var sourceVsrStream = TestHelper.GetVsrStream();
-            using var sourceReader = new BinaryReader(sourceVsrStream);
-
-            var serializer = ServiceFactory.CreateBomgBlockSerializer();
-
-            foreach (var (blockData, position, index) in TestHelper.GetBlocks(sourceReader, "BOMG"))
-            {
-                using var blockReader = new BinaryReader(new MemoryStream(blockData));
-
-                var deserializeAct = () => serializer.Deserialize(blockReader, ServiceFactory.CreateLevel(1, 1));
-                var deserializedLevel = deserializeAct.Should().NotThrow($"BOMG block {index} at position {position} should be deserialized").Subject;
-
-                using var blockWriter = new BinaryWriter(new MemoryStream());
-                serializer.Serialize(deserializedLevel, blockWriter);
-
-                blockWriter.BaseStream.Position = 0;
-                var serializedBlock = ((MemoryStream)blockWriter.BaseStream).ToArray();
-
-                _ = serializedBlock.Should().BeEquivalentTo(blockData, $"BOMG block {index} at position {position} should match the original data");
-            }
-        }
-
-        [TestMethod]
         public void ItShouldDeserializeAndSerializeTheStockVsrLevels()
         {
             Assert.Inconclusive("This behaviour is not yet implemented");
