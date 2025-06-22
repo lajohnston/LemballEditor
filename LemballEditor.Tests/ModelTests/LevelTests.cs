@@ -1,5 +1,7 @@
 ﻿using FluentAssertions;
 using LemballEditor.Models;
+using LemballEditor.Models.LevelObjects;
+using Moq;
 
 namespace LemballEditor.Tests.ModelTests
 {
@@ -89,7 +91,8 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldNotAllowTimeLimitValuesAbove599()
         {
-            var level = ServiceFactory.CreateLevel(1, 1); ;
+            var level = ServiceFactory.CreateLevel(1, 1);
+            ;
             var act = () => level.TimeLimitInSeconds = 600;
             _ = act.Should().Throw<ArgumentException>().WithMessage("TimeLimitInSeconds should be no larger than 599");
         }
@@ -97,7 +100,8 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldNotAllowNumberOfLemmingsToBeZero()
         {
-            var level = ServiceFactory.CreateLevel(1, 1); ;
+            var level = ServiceFactory.CreateLevel(1, 1);
+            ;
             var act = () => level.NumberOfLemmings = 0;
             _ = act.Should().Throw<ArgumentException>().WithMessage("NumberOfLemmings should be between 1-4. 0 given");
         }
@@ -105,7 +109,8 @@ namespace LemballEditor.Tests.ModelTests
         [TestMethod]
         public void ShouldNotAllowNumberOfLemmingsToBeAboveFour()
         {
-            var level = ServiceFactory.CreateLevel(1, 1); ;
+            var level = ServiceFactory.CreateLevel(1, 1);
+            ;
             var act = () => level.NumberOfLemmings = 5;
             _ = act.Should().Throw<ArgumentException>().WithMessage("NumberOfLemmings should be between 1-4. 5 given");
         }
@@ -167,6 +172,33 @@ namespace LemballEditor.Tests.ModelTests
             level.Map = newMap;
 
             _ = level.Map.Should().Be(newMap);
+        }
+
+        [TestMethod]
+        public void AddObject_ShouldThrowArgumentNullException_WhenLevelObjectIsNull()
+        {
+            var level = ServiceFactory.CreateLevel(1, 1);
+            ILevelObject? nullObject = null;
+            var act = () => level.AddObject(nullObject);
+            _ = act.Should().Throw<ArgumentNullException>();
+        }
+
+        [TestMethod]
+        public void ShouldStoreAListOfLevelObjects()
+        {
+            var level = ServiceFactory.CreateLevel(1, 1);
+
+            var object1 = new Mock<ILevelObject>().Object;
+            var object2 = new Mock<ILevelObject>().Object;
+
+            level.AddObject(object1);
+            level.AddObject(object2);
+
+            var objects = level.GetObjects();
+            _ = objects.Should().HaveCount(2);
+
+            _ = objects.Should().Contain(object1);
+            _ = objects.Should().Contain(object2);
         }
     }
 }

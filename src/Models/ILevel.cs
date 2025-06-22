@@ -1,4 +1,5 @@
-﻿using LemballEditor.Models.LevelObjects;
+﻿using System.Collections.Generic;
+using LemballEditor.Models.LevelObjects;
 
 namespace LemballEditor.Models
 {
@@ -57,5 +58,11 @@ namespace LemballEditor.Models
         /// Add a level object to the level
         /// </summary>
         void AddObject(ILevelObject levelObject);
+
+        /// <summary>
+        /// Return a list of all objects in the level
+        /// </summary>
+        /// <returns></returns>
+        IReadOnlyList<ILevelObject> GetObjects();
     }
 }

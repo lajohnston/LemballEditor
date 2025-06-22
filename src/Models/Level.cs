@@ -123,5 +123,10 @@ namespace LemballEditor.Models
 
             this.objects.Add(levelObject);
         }
+
+        public IReadOnlyList<ILevelObject> GetObjects()
+        {
+            return this.objects.AsReadOnly();
+        }
     }
 }
