@@ -43,7 +43,7 @@ namespace LemballEditor.Serializers.Level
 
             foreach (var levelObject in model.GetObjects())
             {
-                var pendingObject = pendingObjectList.Add(levelObject);
+                pendingObjectList.Add(levelObject);
             }
 
             pendingObjectList.AssignIds();

@@ -22,7 +22,7 @@ namespace LemballEditor.Serializers.Level.Objects
 
             for (var i = 0; i < itemCount; i++)
             {
-                _ = reader.ReadInt16(); // item ID
+                var id = reader.ReadUInt16(); // item ID
                 var type = reader.ReadUInt16();
                 var position = this.positionSerializer.Deserialize(reader, null);
                 _ = reader.ReadUInt16(); // padding
@@ -31,7 +31,7 @@ namespace LemballEditor.Serializers.Level.Objects
                 {
                     case 12:
                         var flag = this.createFlag(position);
-                        _ = list.Add(flag);
+                        list.Add(flag, id);
                         break;
                     default:
                         var address = reader.BaseStream.Position - 6;

@@ -20,18 +20,16 @@ namespace LemballEditor.Serializers.Level.Objects
             this.pendingObjects = new List<PendingObject>();
         }
 
-        public PendingObject Add(ILevelObject levelObject)
+        public void Add(ILevelObject levelObject, ushort? id = null)
         {
             if (levelObject == null)
             {
                 throw new ArgumentNullException(nameof(levelObject));
             }
 
-            var pendingObject = new PendingObject(levelObject);
+            var pendingObject = new PendingObject(levelObject, id);
             this.pendingObjects.Add(pendingObject);
             this.Publish(pendingObject);
-
-            return pendingObject;
         }
 
         /// <summary>

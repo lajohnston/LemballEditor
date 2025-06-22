@@ -82,8 +82,8 @@ public class ObjectListSerializerTests
         var objectA = new Mock<ILevelObject>().Object;
         var objectB = new Mock<ILevelObject>().Object;
 
-        _ = this.pendingObjectList!.Add(objectA);
-        _ = this.pendingObjectList.Add(objectB);
+        this.pendingObjectList!.Add(objectA);
+        this.pendingObjectList!.Add(objectB);
 
         using var reader = new BinaryReader(new MemoryStream());
 
@@ -145,8 +145,8 @@ public class ObjectListSerializerTests
     {
         using var writer = BinaryWriter.Null;
 
-        _ = this.pendingObjectList!.Add(new Mock<ILevelObject>().Object);
-        _ = this.pendingObjectList!.Add(new Mock<ILevelObject>().Object);
+        this.pendingObjectList!.Add(new Mock<ILevelObject>().Object);
+        this.pendingObjectList!.Add(new Mock<ILevelObject>().Object);
 
         this.serializer!.Serialize(this.mockLevel!.Object, writer);
 

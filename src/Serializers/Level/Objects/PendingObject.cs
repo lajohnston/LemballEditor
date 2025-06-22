@@ -12,8 +12,9 @@ namespace LemballEditor.Serializers.Level.Objects
 
         public readonly ILevelObject LevelObject;
 
-        public PendingObject(ILevelObject levelObject)
+        public PendingObject(ILevelObject levelObject, ushort? id = null)
         {
+            this.Id = id;
             this.LevelObject = levelObject ?? throw new ArgumentNullException(nameof(levelObject));
         }
     }
