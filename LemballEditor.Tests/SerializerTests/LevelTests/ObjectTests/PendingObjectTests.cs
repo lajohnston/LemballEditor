@@ -22,10 +22,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
         {
             var pending = new PendingObject(new Mock<ILevelObject>().Object)
             {
-                Id = 42u
+                Id = 42
             };
 
-            _ = pending.Id.Should().Be(42u);
+            _ = pending.Id.Should().Be(42);
         }
 
         [TestMethod]

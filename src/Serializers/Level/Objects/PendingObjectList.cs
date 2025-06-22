@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using LemballEditor.Models.LevelObjects;
 
 namespace LemballEditor.Serializers.Level.Objects
@@ -38,7 +39,12 @@ namespace LemballEditor.Serializers.Level.Objects
         /// </summary>
         public void AssignIds()
         {
-            throw new NotImplementedException();
+            ushort nextId = 0;
+
+            foreach (var pendingObject in this.pendingObjects)
+            {
+                pendingObject.Id = nextId++;
+            }
         }
 
         /// <summary>
@@ -48,6 +54,14 @@ namespace LemballEditor.Serializers.Level.Objects
         public List<ILevelObject> GetLevelObjects()
         {
             return this.pendingObjects.ConvertAll(pendingObject => pendingObject.LevelObject);
+        }
+
+        /// <summary>
+        /// Returns the pending level objects
+        /// </summary>
+        public ReadOnlyCollection<PendingObject> GetPendingObjects()
+        {
+            return this.pendingObjects.AsReadOnly();
         }
 
         /// <summary>

@@ -8,7 +8,7 @@ namespace LemballEditor.Serializers.Level.Objects
     /// </summary>
     public class PendingObject
     {
-        public uint Id { get; set; }
+        public ushort? Id { get; set; }
 
         public readonly ILevelObject LevelObject;
 
