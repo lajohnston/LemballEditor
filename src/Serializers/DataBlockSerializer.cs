@@ -57,8 +57,8 @@ namespace LemballEditor.Serializers
             this.bodySerializer.Serialize(model, writer);
 
             // Set size
-            var size = writer.BaseStream.Position - startPosition;
             var endPosition = writer.BaseStream.Position;
+            var size = endPosition - startPosition;
             writer.BaseStream.Position = sizePointer;
             writer.Write(size);
             writer.BaseStream.Position = endPosition;

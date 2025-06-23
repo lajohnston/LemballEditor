@@ -88,7 +88,14 @@ namespace LemballEditor
                 new DataBlockSerializer<PendingObjectList>("LLOC", new CollectableBlockSerializer(
                     new PositionSerializer(CreatePosition),
                     CreateFlag
-                ))
+                )),
+                new DataBlockSerializer<PendingObjectList>("MINA", new AnimatedTileBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("TFIL", new LiftBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("ROOD", new GateBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("KCOR", new RocketBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("DNAH", new ClawBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("RSAL", new LaserBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("NOOB", new BalloonBlockSerializer()),
             }
         );
 
