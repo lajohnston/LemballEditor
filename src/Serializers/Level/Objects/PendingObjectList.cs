@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using LemballEditor.Models;
 using LemballEditor.Models.LevelObjects;
 
 namespace LemballEditor.Serializers.Level.Objects
@@ -15,8 +16,11 @@ namespace LemballEditor.Serializers.Level.Objects
 
         private readonly List<Action<PendingObject>> subscribers = new List<Action<PendingObject>>();
 
-        public PendingObjectList()
+        public readonly ILevel Level;
+
+        public PendingObjectList(ILevel level)
         {
+            this.Level = level;
             this.pendingObjects = new List<PendingObject>();
         }
 

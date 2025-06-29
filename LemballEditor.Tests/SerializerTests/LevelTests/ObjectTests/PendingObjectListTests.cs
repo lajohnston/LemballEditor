@@ -1,4 +1,5 @@
 using FluentAssertions;
+using LemballEditor.Models;
 using LemballEditor.Models.LevelObjects;
 using LemballEditor.Serializers.Level.Objects;
 using Moq;
@@ -34,11 +35,20 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
     [TestClass]
     public class PendingObjectListTests
     {
+        private Mock<ILevel>? mockLevel;
+        private PendingObjectList? list;
+
+        [TestInitialize]
+        public void TestInitialize()
+        {
+            this.mockLevel = new Mock<ILevel>();
+            this.list = new PendingObjectList(this.mockLevel.Object);
+        }
+
         [TestMethod]
         public void Add_ShouldThrowArgumentNullException_WhenLevelObjectIsNull()
         {
-            var list = new PendingObjectList();
-            var act = () => list.Add(null);
+            var act = () => this.list?.Add(null);
 
             _ = act.Should().Throw<ArgumentNullException>();
         }
@@ -47,12 +57,11 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
         public void Subscribe_ShouldNotifySubscribers_WhenObjectIsAdded()
         {
             var mockLevelObject = new Mock<ILevelObject>().Object;
-            var list = new PendingObjectList();
 
             PendingObject? received = null;
-            list.Subscribe(po => received = po);
+            this.list!.Subscribe(po => received = po);
 
-            list.Add(mockLevelObject, 123);
+            this.list.Add(mockLevelObject, 123);
 
             _ = received.Should().NotBeNull();
             _ = received.LevelObject.Should().Be(mockLevelObject);
@@ -65,11 +74,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
             var mockLevelObject1 = new Mock<ILevelObject>();
             var mockLevelObject2 = new Mock<ILevelObject>();
 
-            var list = new PendingObjectList();
-            list.Add(mockLevelObject1.Object);
-            list.Add(mockLevelObject2.Object);
+            this.list!.Add(mockLevelObject1.Object);
+            this.list.Add(mockLevelObject2.Object);
 
-            var levelObjects = list.GetLevelObjects();
+            var levelObjects = this.list.GetLevelObjects();
 
             _ = levelObjects.Should().HaveCount(2);
             _ = levelObjects.Should().Contain(mockLevelObject1.Object);
@@ -82,11 +90,10 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
             var mockLevelObject1 = new Mock<ILevelObject>().Object;
             var mockLevelObject2 = new Mock<ILevelObject>().Object;
 
-            var list = new PendingObjectList();
-            list.Add(mockLevelObject1, 123);
-            list.Add(mockLevelObject2, 456);
+            this.list!.Add(mockLevelObject1, 123);
+            this.list.Add(mockLevelObject2, 456);
 
-            var pendingObjects = list.GetPendingObjects();
+            var pendingObjects = this.list.GetPendingObjects();
             _ = pendingObjects.Should().HaveCount(2);
 
             _ = pendingObjects[0].LevelObject.Should().Be(mockLevelObject1);
@@ -99,16 +106,15 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
         [TestMethod]
         public void AssignIds_ShouldAssignAnIncrementingIdToEachPendingObject()
         {
-            var list = new PendingObjectList();
             var mockLevelObject1 = new Mock<ILevelObject>();
             var mockLevelObject2 = new Mock<ILevelObject>();
 
-            list.Add(mockLevelObject1.Object);
-            list.Add(mockLevelObject2.Object);
+            this.list!.Add(mockLevelObject1.Object);
+            this.list.Add(mockLevelObject2.Object);
 
-            list.AssignIds();
+            this.list.AssignIds();
 
-            var pendingObjects = list.GetPendingObjects();
+            var pendingObjects = this.list.GetPendingObjects();
             _ = pendingObjects.Should().HaveCount(2);
             _ = pendingObjects[0].Id.Should().Be(0);
             _ = pendingObjects[1].Id.Should().Be(1);
@@ -117,18 +123,16 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
         [TestMethod]
         public void GetObjectsOfTypes_ShouldReturnOnlyObjectsOfTheSpecifiedType()
         {
-            var list = new PendingObjectList();
-
             var matchingObjectA = new Mock<FakeObjectClassA>().Object;
             var matchingObjectB = new Mock<FakeObjectClassA>().Object;
 
             var otherObject = new Mock<ILevelObject>().Object;
 
-            list.Add(matchingObjectA, 1);
-            list.Add(matchingObjectB, 2);
-            list.Add(otherObject, 3);
+            this.list!.Add(matchingObjectA, 1);
+            this.list.Add(matchingObjectB, 2);
+            this.list.Add(otherObject, 3);
 
-            var result = list.GetObjectsOfTypes(typeof(FakeObjectClassA)).ToArray();
+            var result = this.list.GetObjectsOfTypes(typeof(FakeObjectClassA)).ToArray();
 
             _ = result.Length.Should().Be(2);
 
@@ -142,18 +146,16 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
         [TestMethod]
         public void GetObjectsOfTypes_ShouldReturnOnlyObjectsThatIsOneOfTheSpecifiedTypes()
         {
-            var list = new PendingObjectList();
-
             var matchingObjectA = new Mock<FakeObjectClassA>().Object;
             var matchingObjectB = new Mock<FakeObjectClassB>().Object;
 
             var otherObject = new Mock<ILevelObject>().Object;
 
-            list.Add(matchingObjectA, 1);
-            list.Add(matchingObjectB, 2);
-            list.Add(otherObject, 3);
+            this.list!.Add(matchingObjectA, 1);
+            this.list.Add(matchingObjectB, 2);
+            this.list.Add(otherObject, 3);
 
-            var result = list.GetObjectsOfTypes(typeof(FakeObjectClassA), typeof(FakeObjectClassB)).ToArray();
+            var result = this.list.GetObjectsOfTypes(typeof(FakeObjectClassA), typeof(FakeObjectClassB)).ToArray();
 
             _ = result.Length.Should().Be(2);
 

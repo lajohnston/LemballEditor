@@ -10,7 +10,7 @@ using Moq;
 public class ObjectListSerializerTests
 {
     private Mock<ILevel>? mockLevel;
-    private Mock<Func<PendingObjectList>>? mockCreatePendingObjectList;
+    private Mock<Func<ILevel, PendingObjectList>>? mockCreatePendingObjectList;
     private PendingObjectList? pendingObjectList;
     private Mock<ISerializer<PendingObjectList>>? mockPendingObjectListSerializer;
 
@@ -20,12 +20,12 @@ public class ObjectListSerializerTests
     public void TestInitialize()
     {
         this.mockLevel = new Mock<ILevel>();
-        this.pendingObjectList = new PendingObjectList();
-        this.mockCreatePendingObjectList = new Mock<Func<PendingObjectList>>();
+        this.pendingObjectList = new PendingObjectList(this.mockLevel.Object);
+        this.mockCreatePendingObjectList = new Mock<Func<ILevel, PendingObjectList>>();
         this.mockPendingObjectListSerializer = new Mock<ISerializer<PendingObjectList>>();
 
         _ = this.mockCreatePendingObjectList
-            .Setup(x => x())
+            .Setup(x => x(this.mockLevel.Object))
             .Returns(this.pendingObjectList);
 
         _ = this.mockPendingObjectListSerializer
@@ -69,6 +69,9 @@ public class ObjectListSerializerTests
 
         _ = this.serializer!.Deserialize(reader, this.mockLevel!.Object);
 
+        this.mockCreatePendingObjectList
+            !.Verify(x => x(this.mockLevel.Object));
+
         this.mockPendingObjectListSerializer
             !.Verify(x => x.Deserialize(
                 It.IsAny<BinaryReader>(),
@@ -107,17 +110,20 @@ public class ObjectListSerializerTests
         this.serializer!.Serialize(this.mockLevel!.Object, writer);
 
         this.mockCreatePendingObjectList!
-            .Verify(x => x(), Times.Once);
+            .Verify(x => x(this.mockLevel.Object), Times.Once);
 
         _ = this.pendingObjectList!.GetLevelObjects().Should().BeEquivalentTo([objectA, objectB]);
     }
 
     [TestMethod]
-    public void Serialize_ShouldPassThePendingObjectListToThePendingObjectListSerializer()
+    public void Serialize_ShouldCreateAndPassThePendingObjectListToThePendingObjectListSerializer()
     {
         using var writer = BinaryWriter.Null;
 
         this.serializer!.Serialize(this.mockLevel!.Object, writer);
+
+        this.mockCreatePendingObjectList!
+            .Verify(x => x(this.mockLevel.Object));
 
         this.mockPendingObjectListSerializer!
             .Verify(x => x.Serialize(

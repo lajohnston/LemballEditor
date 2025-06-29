@@ -10,10 +10,10 @@ namespace LemballEditor.Serializers.Level
     /// </summary>
     public class ObjectListSerializer : ISerializer<ILevel>
     {
-        private readonly Func<PendingObjectList> createPendingObjectList;
+        private readonly Func<ILevel, PendingObjectList> createPendingObjectList;
         private readonly ISerializer<PendingObjectList> pendingObjectListSerializer;
 
-        public ObjectListSerializer(Func<PendingObjectList> createObjectList, ISerializer<PendingObjectList> objectListSerializer)
+        public ObjectListSerializer(Func<ILevel, PendingObjectList> createObjectList, ISerializer<PendingObjectList> objectListSerializer)
         {
             this.createPendingObjectList = createObjectList ?? throw new ArgumentNullException(nameof(createObjectList));
             this.pendingObjectListSerializer = objectListSerializer;
@@ -22,26 +22,26 @@ namespace LemballEditor.Serializers.Level
         /// <summary>
         /// Deserializes a level's objects from the binary data and adds them to the level model.
         /// </summary>
-        public ILevel Deserialize(BinaryReader reader, ILevel model)
+        public ILevel Deserialize(BinaryReader reader, ILevel level)
         {
-            var objectList = this.pendingObjectListSerializer.Deserialize(reader, this.createPendingObjectList());
+            var objectList = this.pendingObjectListSerializer.Deserialize(reader, this.createPendingObjectList(level));
 
             foreach (var levelObject in objectList.GetLevelObjects())
             {
-                model.AddObject(levelObject);
+                level.AddObject(levelObject);
             }
 
-            return model;
+            return level;
         }
 
         /// <summary>
         /// Serializes the level's objects to binary data.
         /// </summary>
-        public void Serialize(ILevel model, BinaryWriter writer)
+        public void Serialize(ILevel level, BinaryWriter writer)
         {
-            var pendingObjectList = this.createPendingObjectList();
+            var pendingObjectList = this.createPendingObjectList(level);
 
-            foreach (var levelObject in model.GetObjects())
+            foreach (var levelObject in level.GetObjects())
             {
                 pendingObjectList.Add(levelObject);
             }

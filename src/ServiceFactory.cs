@@ -68,7 +68,7 @@ namespace LemballEditor
                 new UnknownBSerializer(),
                 new LevelMapSerializer(CreateMapSerializer()),
                 new ObjectListSerializer(
-                    () => new PendingObjectList(),
+                    (level) => new PendingObjectList(level),
                     CreatePendingObjectListSerializer()
                 )
             }
