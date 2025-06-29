@@ -95,6 +95,11 @@ namespace LemballEditor.Models
         public ushort UnknownB { get; set; }
 
         /// <summary>
+        /// The level's name
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// List of all level objects
         /// </summary>
         private readonly List<ILevelObject> objects = new List<ILevelObject>();

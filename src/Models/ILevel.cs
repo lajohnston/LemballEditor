@@ -64,5 +64,10 @@ namespace LemballEditor.Models
         /// </summary>
         /// <returns></returns>
         IReadOnlyList<ILevelObject> GetObjects();
+
+        /// <summary>
+        /// The level name
+        /// </summary>
+        string Name { get; set; }
     }
 }
