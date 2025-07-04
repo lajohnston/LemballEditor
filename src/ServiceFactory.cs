@@ -96,6 +96,7 @@ namespace LemballEditor
                 new DataBlockSerializer<PendingObjectList>("DNAH", new ClawBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("RSAL", new LaserBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("NOOB", new BalloonBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("EMAN", new NameBlockSerializer()),
             }
         );
 
