@@ -23,6 +23,11 @@ namespace LemballEditor.Models
         int TileCount { get; }
 
         /// <summary>
+        /// The tile reference used for out-of-bounds border tiles
+        /// </summary>
+        ushort OutOfBoundsTileRef { get; set; }
+
+        /// <summary>
         /// Returns an iterator that iterates through the tiles sequentially
         /// </summary>
         /// <returns></returns>

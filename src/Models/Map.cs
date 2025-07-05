@@ -18,7 +18,12 @@ namespace LemballEditor.Models
         /// <summary>
         /// Total number of tiles
         /// </summary>
-        public int TileCount => XTiles * YTiles;
+        public int TileCount => this.XTiles * this.YTiles;
+
+        /// <summary>
+        /// The tile ref used for the out-of-bounds border tiles.
+        /// </summary>
+        public ushort OutOfBoundsTileRef { get; set; } = 518;
 
         /// <summary>
         /// The map tiles
@@ -33,14 +38,14 @@ namespace LemballEditor.Models
         /// <param name="yTiles">The number of yTiles</param>
         public Map(Func<uint, byte, ITile> tileFactory, ushort xTiles, ushort yTiles)
         {
-            XTiles = xTiles;
-            YTiles = yTiles;
+            this.XTiles = xTiles;
+            this.YTiles = yTiles;
 
-            tiles = new ITile[xTiles * yTiles];
+            this.tiles = new ITile[xTiles * yTiles];
 
-            for (var index = 0; index < TileCount; index++)
+            for (var index = 0; index < this.TileCount; index++)
             {
-                tiles[index] = tileFactory(521, 0);
+                this.tiles[index] = tileFactory(521, 0);
             }
         }
 
@@ -52,17 +57,9 @@ namespace LemballEditor.Models
         /// <returns>The tile index in the tiles array</returns>
         private int GetIndex(ushort xTile, ushort yTile)
         {
-            if (xTile >= XTiles)
-            {
-                throw new IndexOutOfRangeException($"xTile {xTile} is out of bounds");
-            }
-
-            if (yTile >= YTiles)
-            {
-                throw new IndexOutOfRangeException($"yTile {yTile} is out of bounds");
-            }
-
-            return (yTile * XTiles) + xTile;
+            return xTile >= this.XTiles
+                ? throw new IndexOutOfRangeException($"xTile {xTile} is out of bounds")
+                : yTile >= this.YTiles ? throw new IndexOutOfRangeException($"yTile {yTile} is out of bounds") : (yTile * this.XTiles) + xTile;
         }
 
         /// <summary>
@@ -73,9 +70,9 @@ namespace LemballEditor.Models
         /// <param name="tile">The tile to place at the given position</param>
         public void SetTile(ushort xTile, ushort yTile, ITile tile)
         {
-            var index = GetIndex(xTile, yTile);
+            var index = this.GetIndex(xTile, yTile);
 
-            tiles[index] = tile ?? throw new ArgumentNullException();
+            this.tiles[index] = tile ?? throw new ArgumentNullException();
         }
 
         /// <summary>
@@ -86,9 +83,9 @@ namespace LemballEditor.Models
         /// <returns>Tile</returns>
         public ITile GetTile(ushort xTile, ushort yTile)
         {
-            var index = GetIndex(xTile, yTile);
+            var index = this.GetIndex(xTile, yTile);
 
-            return tiles[index];
+            return this.tiles[index];
         }
 
         /// <summary>
@@ -98,7 +95,7 @@ namespace LemballEditor.Models
         /// <returns></returns>
         public IEnumerable<ITile> GetTileIterator()
         {
-            foreach (var tile in tiles)
+            foreach (var tile in this.tiles)
             {
                 yield return tile;
             }

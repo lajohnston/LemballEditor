@@ -32,6 +32,22 @@ namespace LemballEditor.Tests.ModelTests
         }
 
         [TestMethod]
+        public void ShouldDefaultTheOutOfBoundsTileRefTo518()
+        {
+            var map = ServiceFactory.CreateMap(2, 4);
+            _ = map.OutOfBoundsTileRef.Should().Be(518);
+        }
+
+        [TestMethod]
+        public void ShouldGetAndSetTheOutOfBoundsTileRef()
+        {
+            var map = ServiceFactory.CreateMap(2, 4);
+
+            map.OutOfBoundsTileRef = 123;
+            _ = map.OutOfBoundsTileRef.Should().Be(123);
+        }
+
+        [TestMethod]
         public void SetTile_ShouldThrowAnExceptionIfTheXCoordinateIsOutOfBounds()
         {
             var map = ServiceFactory.CreateMap(10, 10);
