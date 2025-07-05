@@ -2,8 +2,8 @@
 {
     public interface ILevelObject
     {
-        Position GetPosition();
+        Position Position { get; }
 
-        ILevelObject SetPosition(Position position);
+        ILevelObject WithPosition(Position position);
     }
 }

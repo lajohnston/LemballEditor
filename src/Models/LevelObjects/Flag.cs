@@ -2,22 +2,16 @@
 {
     public class Flag : ILevelObject
     {
-        public Position _position;
+        public Position Position { get; }
 
         public Flag(Position position)
         {
-            this._position = position;
+            this.Position = position;
         }
 
-        public Position GetPosition()
+        public ILevelObject WithPosition(Position position)
         {
-            return this._position;
-        }
-
-        public ILevelObject SetPosition(Position position)
-        {
-            this._position = position;
-            return this;
+            return new Flag(position);
         }
     }
 }

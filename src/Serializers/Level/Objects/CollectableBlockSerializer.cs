@@ -72,7 +72,7 @@ namespace LemballEditor.Serializers.Level.Objects
 
                 writer.Write((ushort)collectable.Id);
                 writer.Write(typeId);
-                this.positionSerializer.Serialize(collectable.LevelObject.GetPosition(), writer);
+                this.positionSerializer.Serialize(collectable.LevelObject.Position, writer);
                 writer.Write((ushort)0); // padding
             }
         }

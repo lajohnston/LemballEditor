@@ -8,27 +8,21 @@ namespace LemballEditor.Tests.SerializerTests.LevelTests.ObjectTests
 {
     public class FakeObjectClassA : ILevelObject
     {
-        public Position GetPosition()
-        {
-            return new Position(0, 0);
-        }
+        public Position Position => new(0, 0);
 
-        public ILevelObject SetPosition(Position position)
+        public ILevelObject WithPosition(Position position)
         {
-            return this;
+            throw new NotImplementedException();
         }
     }
 
     public class FakeObjectClassB : ILevelObject
     {
-        public Position GetPosition()
-        {
-            return new Position(0, 0);
-        }
+        public Position Position => new(0, 0);
 
-        public ILevelObject SetPosition(Position position)
+        public ILevelObject WithPosition(Position position)
         {
-            return this;
+            throw new NotImplementedException();
         }
     }
 
