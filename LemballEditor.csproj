@@ -81,6 +81,7 @@
     <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedLevelPackFormatException.cs" />
     <Compile Include="src\LegacyModels\VsrCompiler\UnsupportedVSRException.cs" />
     <Compile Include="src\LegacyModels\VsrCompiler\VsrCompiler.cs" />
+    <Compile Include="src\Models\LevelObjects\Entrance.cs" />
     <Compile Include="src\Models\LevelObjects\Flag.cs" />
     <Compile Include="src\Models\LevelObjects\ILevelObject.cs" />
     <Compile Include="src\Models\LevelObjects\Position.cs" />
