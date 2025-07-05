@@ -100,6 +100,7 @@
     <Compile Include="src\Serializers\Level\Objects\LaserBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\ClawBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\NameBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\OutOfBoundsTileSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\RocketBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\GateBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\LiftBlockSerializer.cs" />
