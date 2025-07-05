@@ -98,6 +98,10 @@ namespace LemballEditor
                 new DataBlockSerializer<PendingObjectList>("NOOB", new BalloonBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("EMAN", new NameBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("TFED", new OutOfBoundsTileBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("MART", new TrampolineBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("NUGP", new PgunBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>(" ECI", new IceBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("EVOM", new MovingPlatformBlockSerializer()),
             }
         );
 

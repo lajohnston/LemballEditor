@@ -97,6 +97,10 @@
     <Compile Include="src\Serializers\Level\LevelMapSerializer.cs" />
     <Compile Include="src\Serializers\Level\ObjectListSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\BalloonBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\MovingPlatformBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\IceBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\PgunBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\TrampolineBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\LaserBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\ClawBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\NameBlockSerializer.cs" />
