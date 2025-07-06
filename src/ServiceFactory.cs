@@ -102,6 +102,10 @@ namespace LemballEditor
                 new DataBlockSerializer<PendingObjectList>("NUGP", new PgunBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>(" ECI", new IceBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("EVOM", new MovingPlatformBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("1SLP", new EntranceBlockSerializer(
+                    new PositionSerializer(CreatePosition),
+                    (position, numberOfLemmings) => new Entrance(position, numberOfLemmings)
+                )),
             }
         );
 
