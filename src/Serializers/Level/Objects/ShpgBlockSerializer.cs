@@ -2,7 +2,8 @@
 
 namespace LemballEditor.Serializers.Level.Objects
 {
-    public class GphsBlockSerializer : ISerializer<PendingObjectList>
+    public class ShpgBlockSerializer
+        : ISerializer<PendingObjectList>
     {
         public PendingObjectList Deserialize(BinaryReader reader, PendingObjectList list)
         {

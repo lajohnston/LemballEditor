@@ -70,7 +70,8 @@ namespace LemballEditor
                 new ObjectListSerializer(
                     (level) => new PendingObjectList(level),
                     CreatePendingObjectListSerializer()
-                )
+                ),
+                new ConstantSerializer<ILevel>(Encoding.ASCII.GetBytes("?DNE"), "End of level data"),
             }
         );
 
@@ -81,7 +82,7 @@ namespace LemballEditor
             new ISerializer<PendingObjectList>[] {
                 new DataBlockSerializer<PendingObjectList>("BOMG", new BomgBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("YMNE", new EnemyBlockSerializer()),
-                new DataBlockSerializer<PendingObjectList>("GPHS", new GphsBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("GPHS", new ShpgBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("EDON", new EnemyPathNodesBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("LLAB", new PaintGlobeBlockSerializer()),
                 new DataBlockSerializer<PendingObjectList>("ENIM", new MineBlockSerializer()),
@@ -106,6 +107,10 @@ namespace LemballEditor
                     new PositionSerializer(CreatePosition),
                     (position, numberOfLemmings) => new Entrance(position, numberOfLemmings)
                 )),
+                new DataBlockSerializer<PendingObjectList>("KNLS", new SlnkBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("SVNI", new InvsBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("WTEN", new NetworkBlockSerializer()),
+                new DataBlockSerializer<PendingObjectList>("GALF", new RequiredFlagsBlockSerializer()),
             }
         );
 

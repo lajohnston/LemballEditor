@@ -98,6 +98,10 @@
     <Compile Include="src\Serializers\Level\LevelMapSerializer.cs" />
     <Compile Include="src\Serializers\Level\ObjectListSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\BalloonBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\RequiredFlagsBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\NetworkBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\InvsBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\SlnkBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\EntranceBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\MovingPlatformBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\IceBlockSerializer.cs" />
@@ -117,7 +121,7 @@
     <Compile Include="src\Serializers\Level\Objects\MineBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\PaintGlobeBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\EnemyPathNodesBlockSerializer.cs" />
-    <Compile Include="src\Serializers\Level\Objects\GphsBlockSerializer.cs" />
+    <Compile Include="src\Serializers\Level\Objects\ShpgBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\EnemyBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\BomgBlockSerializer.cs" />
     <Compile Include="src\Serializers\Level\Objects\PositionSerializer.cs" />
