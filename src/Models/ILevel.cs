@@ -25,6 +25,11 @@ namespace LemballEditor.Models
         byte FlagsRequired { get; set; }
 
         /// <summary>
+        /// An unknown flag indicator. This is always 1 or 2 in the official levels.
+        /// </summary>
+        byte UnknownFlagIndicator { get; set; }
+
+        /// <summary>
         /// The level map/terrain
         /// </summary>
         IMap Map { get; set; }

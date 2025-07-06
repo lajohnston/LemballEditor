@@ -25,6 +25,11 @@ namespace LemballEditor.Models
         }
 
         /// <summary>
+        /// An unknown value that indicates some kind of flag requirement.
+        /// </summary>
+        public byte UnknownFlagIndicator { get; set; }
+
+        /// <summary>
         /// The level map/terrain
         /// </summary>
         public IMap Map { get; set; }
@@ -115,6 +120,7 @@ namespace LemballEditor.Models
             this.TimeLimitInSeconds = null;
             this.UnknownA = 10;
             this.Map = map;
+            this.UnknownFlagIndicator = 1;
 
             this.objects = new List<ILevelObject>();
         }

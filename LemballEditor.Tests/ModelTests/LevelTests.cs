@@ -18,6 +18,7 @@ namespace LemballEditor.Tests.ModelTests
             _ = level.TimeLimitInSeconds.Should().BeNull();
             _ = level.UnknownA.Should().Be(10);
             _ = level.UnknownB.Should().Be(0);
+            _ = level.UnknownFlagIndicator.Should().Be(1);
         }
 
         [TestMethod]
@@ -152,6 +153,15 @@ namespace LemballEditor.Tests.ModelTests
 
             level.FlagsRequired = 4;
             _ = level.FlagsRequired.Should().Be(4);
+        }
+
+        [TestMethod]
+        public void ShouldStoreTheUnknownFlagIndicatorValue()
+        {
+            var level = ServiceFactory.CreateLevel(1, 1);
+
+            level.UnknownFlagIndicator = 2;
+            _ = level.UnknownFlagIndicator.Should().Be(2);
         }
 
         [TestMethod]
